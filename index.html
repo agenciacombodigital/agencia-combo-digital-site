@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combo Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #000;
+        color: #fff;
+        cursor: none;
+      }
+      .font-manrope {
+        font-family: 'Manrope', sans-serif;
+      }
+      /* Custom scrollbar for a more refined look */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #fb5626;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #ff7a50;
+      }
+      .combo-gradient-text {
+        background: linear-gradient(90deg, #00a1ff, #fb5626, #fcc017);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+      }
+      
+      /* Portfolio Masonry Grid */
+      .portfolio-grid {
+        column-count: 1;
+        column-gap: 2rem;
+      }
+      @media (min-width: 768px) {
+        .portfolio-grid {
+          column-count: 2;
+        }
+      }
+      @media (min-width: 1024px) {
+        .portfolio-grid {
+          column-count: 3;
+        }
+      }
+      .portfolio-item-container {
+        break-inside: avoid;
+        margin-bottom: 2rem;
+        perspective: 1000px;
+      }
+      .portfolio-item-inner {
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        transform-style: preserve-3d;
+      }
+      .group:hover .portfolio-item-inner {
+        transform: rotateY(-10deg) rotateX(10deg) scale(1.05);
+      }
+
+      /* Contact Page BG */
+      .contact-bg {
+        position: relative;
+        overflow: hidden;
+      }
+      .contact-bg::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 161, 255, 0.08), transparent 40%),
+                    radial-gradient(circle at top left, rgba(251, 86, 38, 0.08), transparent 50%),
+                    radial-gradient(circle at bottom right, rgba(252, 192, 23, 0.08), transparent 50%);
+        transform: translate(-50%, -50%);
+        animation: rotate-gradient 30s linear infinite;
+        z-index: 0;
+      }
+
+      @keyframes rotate-gradient {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      /* Featured Project Card Gradient */
+      .projeto-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,0.95) 100%);
+        z-index: 1;
+        transition: background 0.3s ease;
+      }
+      .projeto-card:hover::before {
+        background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,1) 100%);
+      }
+
+      /* --- Estilo da Sidebar Inovadora --- */
+      :root {
+        --sidebar-width: 80px;
+        --cor-fundo: #0d1117;
+        --cor-sidebar: #000;
+        --cor-borda: #30363d;
+        --cor-icone: #a0a0a0;
+        --cor-icone-hover: #ffffff;
+        --cor-principal: #00a1ff; /* Azul da sua paleta */
+      }
+
+      /* Ajusta o corpo para dar espaço à sidebar no desktop */
+      @media (min-width: 769px) {
+        body {
+          padding-left: var(--sidebar-width);
+          transition: padding-left 0.4s ease;
+        }
+      }
+
+      .sidebar-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--sidebar-width);
+        height: 100vh;
+        background-color: var(--cor-sidebar);
+        border-right: 1px solid var(--cor-borda);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        z-index: 1000;
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .sidebar-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .sidebar-nav ul a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        color: var(--cor-icone);
+        border-radius: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        position: relative; /* Essencial para o tooltip */
+      }
+
+      .sidebar-nav ul a:hover {
+        background-color: var(--cor-principal);
+        color: var(--cor-icone-hover);
+      }
+
+      .sidebar-nav ul a.active {
+        color: var(--cor-icone-hover);
+      }
+
+      /* Estilo dos Tooltips (Micro-interação) */
+      .sidebar-nav ul a[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: calc(100% + 15px); /* Posição à direita do ícone */
+        top: 50%;
+        transform: translateY(-50%) scale(0.95);
+        padding: 6px 12px;
+        background-color: #000;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 6px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition-delay: 0.2s; /* Pequeno atraso para aparecer */
+      }
+
+      @media (min-width: 769px) {
+          .sidebar-nav ul a[data-tooltip]:hover::after {
+              opacity: 1;
+              visibility: visible;
+              transform: translateY(-50%) scale(1);
+          }
+      }
+
+      /* --- Responsividade para Mobile --- */
+      .mobile-menu-toggle {
+        display: none; /* Escondido no desktop */
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background-color: var(--cor-sidebar);
+        border: 1px solid var(--cor-borda);
+        color: var(--cor-icone-hover);
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-left: 0; /* Remove o espaço da sidebar */
+        }
+
+        /* Faz a sidebar sair da tela */
+        .sidebar-nav {
+          transform: translateX(-100%);
+        }
+
+        /* Classe que será adicionada via JS para mostrar o menu */
+        .sidebar-nav.is-open {
+          transform: translateX(0);
+        }
+
+        .mobile-menu-toggle {
+          display: flex; /* Mostra o botão "hamburger" */
+        }
+
+        /* Estilos para o menu de gaveta mobile */
+        .sidebar-nav {
+          width: 280px; /* Largura da gaveta */
+          align-items: flex-start;
+          padding: 20px;
+          justify-content: flex-start;
+        }
+
+        .sidebar-nav ul {
+          width: 100%;
+          align-items: flex-start;
+          gap: 5px;
+        }
+
+        .sidebar-nav ul a {
+          width: 100%;
+          justify-content: flex-start;
+          padding: 12px 15px;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+
+        .sidebar-nav ul a i {
+          margin-right: 15px;
+        }
+        
+        /* Adiciona o texto do tooltip ao lado do ícone */
+        .sidebar-nav ul a::after {
+          content: attr(data-tooltip);
+          position: static;
+          transform: none;
+          opacity: 1;
+          visibility: visible;
+          background: none;
+          color: inherit;
+          padding: 0;
+          font-size: inherit;
+          font-weight: inherit;
+          transition: none;
+          pointer-events: auto;
+        }
+
+        /* Overlay for when mobile menu is open */
+        .mobile-menu-overlay {
+          position: fixed;
+          inset: 0;
+          background-color: rgba(0,0,0,0.6);
+          backdrop-filter: blur(4px);
+          z-index: 999;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu-overlay.is-open {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+  }
+}
+</script>
+<script src="https://unpkg.com/feather-icons"></script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
