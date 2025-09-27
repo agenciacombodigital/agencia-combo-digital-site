@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Page, PortfolioItem } from '../../types';
 import { useInView } from '../../hooks/useInView';
 import { COLORS } from '../../constants';
 import AiServices from '../AiServices';
 import FeaturedProjects from '../FeaturedProjects';
+import Testimonials from '../Testimonials';
 
 interface HomeProps {
     setCurrentPage: (page: Page) => void;
@@ -78,6 +78,9 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
 
       {/* AI Services Section */}
       <AiServices />
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Featured Projects Section */}
       <FeaturedProjects setCurrentPage={setCurrentPage} showPortfolioItem={showPortfolioItem} />
