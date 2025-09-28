@@ -37,8 +37,8 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
         </div>
         <div className="text-center z-20 px-4">
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none">
-            <span className="block animate-fade-in-up" style={{ animationDelay: '0.2s' }}>TESTE DE DEPLOY</span>
-            <span className="block combo-gradient-text animate-fade-in-up" style={{ animationDelay: '0.5s' }}>VERCEL FUNCIONA?</span>
+            <span className="block animate-fade-in-up" style={{ animationDelay: '0.2s' }}>Nós não seguimos</span>
+            <span className="block combo-gradient-text animate-fade-in-up" style={{ animationDelay: '0.5s' }}>Nós criamos.</span>
           </h1>
           <p className="max-w-2xl mx-auto mt-6 text-lg text-gray-300 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
             A Combo Digital é uma agência criativa que une ideias audaciosas com tecnologia de ponta para construir experiências digitais exclusivas.
