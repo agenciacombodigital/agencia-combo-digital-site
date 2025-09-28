@@ -45,7 +45,7 @@ const CustomCursor: React.FC = () => {
   return (
     <>
       <div
-        className="fixed pointer-events-none z-50 transition-all duration-150 ease-out rounded-full flex items-center justify-center"
+        className="fixed pointer-events-none z-50 transition-all duration-400 ease-out rounded-full flex items-center justify-center"
         style={{
           left: position.x,
           top: position.y,
