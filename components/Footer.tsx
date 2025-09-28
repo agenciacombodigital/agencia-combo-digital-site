@@ -46,7 +46,7 @@ const Footer: React.FC<FooterProps> = ({ setCurrentPage }) => {
         <div className="container mx-auto px-6 py-20 footer-content">
             <AnimatedSection>
                 <div className="text-center mb-16">
-                    <img src="/Logo-ComboDigitalV2.svg" alt="Combo Digital Logo" className="w-16 h-16 mx-auto mb-6 footer-logo" />
+                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-16 h-16 mx-auto mb-6 footer-logo" />
                     <p className="text-2xl font-medium text-gray-300 max-w-2xl mx-auto">
                         Construindo o futuro digital com criatividade e tecnologia.
                     </p>

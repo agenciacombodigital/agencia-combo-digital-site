@@ -11,6 +11,7 @@ import LoadingScreen from './components/LoadingScreen';
 import ChatWidget from './components/ChatWidget';
 import WhatsAppBubble from './components/WhatsAppBubble';
 import Footer from './components/Footer';
+import HeadManager from './components/HeadManager'; // Importando o HeadManager
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
@@ -48,6 +49,7 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-black text-white min-h-screen font-manrope">
+      <HeadManager currentPage={currentPage} selectedPortfolioItem={selectedPortfolioItem} /> {/* Adicionando o HeadManager */}
       <CustomCursor />
       <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <main>

@@ -17,7 +17,7 @@ const LoadingScreen: React.FC = () => {
         <div className="absolute inset-0 flex items-center justify-center">
           <img 
             src="/Logo-ComboDigitalV2.svg" 
-            alt="Combo Digital Logo" 
+            alt="Logo Combo Digital animado" 
             className="w-24 h-24 animate-pulse" // Adicionando o logo e a animação de pulsação
             style={{ animationDuration: '2s', animationIterationCount: 'infinite' }}
           />

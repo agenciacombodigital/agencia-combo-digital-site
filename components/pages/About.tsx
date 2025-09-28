@@ -51,9 +51,9 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
       <section className="py-24 about-manifesto">
         <div className="container mx-auto px-6 text-center">
             <AnimatedSection>
-                <p className="text-4xl md:text-6xl font-bold max-w-4xl mx-auto leading-tight">
+                <h2 className="text-4xl md:text-6xl font-bold max-w-4xl mx-auto leading-tight">
                     Não seguimos tendências, <span className="combo-gradient-text">nós as criamos.</span>
-                </p>
+                </h2>
             </AnimatedSection>
         </div>
       </section>
@@ -71,7 +71,7 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
             </p>
           </div>
           <div>
-            <img src="https://picsum.photos/seed/philosophy/1000/1200" alt="Visual abstrato representando a filosofia da Combo" className="rounded-2xl shadow-2xl shadow-blue-500/10 w-full h-full object-cover" loading="lazy"/>
+            <img src="https://picsum.photos/seed/philosophy/1000/1200" alt="Visual abstrato representando a filosofia da Combo Digital" className="rounded-2xl shadow-2xl shadow-blue-500/10 w-full h-full object-cover" loading="lazy"/>
           </div>
         </div>
       </AnimatedSection>
@@ -114,10 +114,10 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
       <section className="dna-section">
         <div className="container mx-auto px-6">
             <AnimatedSection>
-                <img src="https://picsum.photos/seed/brain/600/600" alt="Cérebro digital representando o DNA da Combo" className="w-64 h-64 mx-auto mb-8" />
-                <p className="text-3xl md:text-5xl font-bold max-w-4xl mx-auto leading-tight">
+                <img src="https://picsum.photos/seed/brain/600/600" alt="Cérebro digital representando o DNA criativo da Combo Digital" className="w-64 h-64 mx-auto mb-8" />
+                <h2 className="text-3xl md:text-5xl font-bold max-w-4xl mx-auto leading-tight">
                     Mais que uma agência, somos um <span className="combo-gradient-text">coletivo criativo</span> que hackeia o futuro.
-                </p>
+                </h2>
             </AnimatedSection>
         </div>
       </section>

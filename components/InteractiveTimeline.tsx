@@ -107,7 +107,7 @@ const InteractiveTimeline: React.FC<InteractiveTimelineProps> = ({ setCurrentPag
           {TIMELINE_EVENTS.map((event, index) => (
             <div key={index} className="timeline-item-anim">
               <div className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}>
-                <div className="timeline-icon"></div>
+                <div className="timeline-icon" aria-hidden="true"></div>
                 <div className="timeline-content">
                   <h3 className="timeline-year">{event.year}</h3>
                   <h4 className="timeline-title">{event.title}</h4>
@@ -119,9 +119,9 @@ const InteractiveTimeline: React.FC<InteractiveTimelineProps> = ({ setCurrentPag
         </div>
 
         <div className="text-center mt-24 timeline-item-anim">
-          <p className="text-3xl font-bold text-white max-w-2xl mx-auto mb-8">
+          <h3 className="text-3xl font-bold text-white max-w-2xl mx-auto mb-8">
             O próximo marco? <span className="combo-gradient-text">Criar algo épico com você.</span>
-          </p>
+          </h3>
           <MagneticButton 
             onClick={() => setCurrentPage(Page.Contact)}
             className="footer-cta-button text-white font-bold py-4 px-10 rounded-full text-lg"

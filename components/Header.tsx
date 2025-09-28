@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                     data-cursor-pointer
                     aria-label="Página Inicial"
                 >
-                    <img src="/Logo-ComboDigitalV2.svg" alt="Combo Digital Logo" className="w-10 h-10" />
+                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
                 </a>
                 <ul>
                     {PAGES.map(page => (

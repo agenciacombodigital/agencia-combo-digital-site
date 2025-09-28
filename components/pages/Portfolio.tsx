@@ -36,7 +36,7 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
         </button>
         
         <div className="w-full md:w-3/5 h-1/2 md:h-full relative">
-          <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none" loading="lazy" />
+          <img src={item.imageUrl} alt={`Imagem do projeto ${item.title}`} className="w-full h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
         </div>
 
@@ -64,8 +64,8 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
       </div>
       
       {/* Navegação */}
-      <button onClick={() => navigate('prev')} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
-      <button onClick={() => navigate('next')} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+      <button onClick={() => navigate('prev')} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer aria-label="Projeto anterior"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+      <button onClick={() => navigate('next')} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer aria-label="Próximo projeto"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
     </div>
   );
 };
@@ -125,7 +125,7 @@ const Portfolio: React.FC = () => {
                 onClick={() => handleOpenModal(item, index)}
                 role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleOpenModal(item, index)}
               >
-                <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
+                <img src={item.imageUrl} alt={`Capa do projeto ${item.title}`} className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-all duration-500 group-hover:from-black/90"></div>
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   <div className="transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
