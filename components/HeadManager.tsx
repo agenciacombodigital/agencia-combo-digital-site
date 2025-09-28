@@ -91,47 +91,9 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
           }
           break;
         case Page.Contact:
-          title = "Contato | Combo Digital – Vamos Criar o Impossível";
-          description = "Fale com a Combo Digital. Sua próxima grande ideia começa com uma conversa. Entre em nosso portal futurista e crie experiências digitais únicas.";
+          title = "Contato — Vamos Criar o Impossível | Combo Digital";
+          description = "Entre em contato com a Combo Digital. Sua próxima grande ideia começa com uma conversa.";
           ogUrl = "https://combo.digital/contato";
-          
-          // ContactPage Schema.org
-          jsonLd.push({
-            "@context": "https://schema.org",
-            "@type": "ContactPage",
-            "url": "https://combo.digital/contato",
-            "name": "Contato | Combo Digital",
-            "description": "Entre em contato com a Combo Digital para iniciar seu próximo projeto digital.",
-            "mainContentOfPage": {
-              "@type": "WebPageElement",
-              "cssSelector": ".contact-form-card" // Selector for the contact form
-            },
-            "breadcrumb": {
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://combo.digital/" },
-                { "@type": "ListItem", "position": 2, "name": "Contato", "item": "https://combo.digital/contato" }
-              ]
-            },
-            "potentialAction": {
-              "@type": "CommunicateAction",
-              "target": {
-                "@type": "EntryPoint",
-                "actionPlatform": [
-                  "http://schema.org/Website",
-                  "http://schema.org/MobileApplication"
-                ]
-              },
-              "agent": {
-                "@type": "Organization",
-                "name": "Combo Digital"
-              },
-              "recipient": {
-                "@type": "Organization",
-                "name": "Combo Digital"
-              }
-            }
-          });
           break;
       }
 
