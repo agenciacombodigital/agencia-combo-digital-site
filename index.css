@@ -86,20 +86,86 @@ body {
   }
 }
 
-/* Featured Project Card Gradient */
-.projeto-card::before {
+/* --- Featured Projects Section --- */
+.section-projetos-destaque {
+  position: relative;
+  overflow: hidden;
+  background-color: #0d1117;
+}
+.section-projetos-destaque::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(135deg, rgba(251, 86, 38, 0.1) 0%, rgba(0, 161, 255, 0.1) 100%);
+  animation: animated-bg 30s ease infinite;
+  z-index: 0;
+}
+
+.projeto-card-container {
+  perspective: 1500px;
+}
+
+.projeto-card-content {
+  position: relative;
+  height: 24rem; /* 384px */
+  border-radius: 0.75rem; /* 12px */
+  overflow: hidden;
+  color: white;
+  display: flex;
+  padding: 2rem; /* 32px */
+  text-align: left;
+  border: 1px solid #30363d;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.projeto-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease-out;
+}
+
+.projeto-card-content:hover .projeto-card-bg {
+  transform: scale(1.1);
+}
+
+.projeto-card-overlay {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,0.95) 100%);
   z-index: 1;
-  transition: background 0.3s ease;
+  transition: background 0.4s ease;
 }
-.projeto-card:hover::before {
+
+.projeto-card-content:hover .projeto-card-overlay {
   background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,1) 100%);
+}
+
+.projeto-card-text-wrapper {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  transform: translateZ(50px); /* Give text some depth */
+}
+
+.projeto-card-text-wrapper > * {
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.projeto-card-content .reveal-on-hover {
+  opacity: 0;
+  transform: translateY(1rem);
+}
+
+.projeto-card-content:hover .reveal-on-hover {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* --- Estilo da Sidebar Inovadora --- */
@@ -482,7 +548,7 @@ body {
 
 /* Disable tilt on mobile */
 @media (hover: none) {
-  .pillar-card-content, .ai-service-card {
+  .pillar-card-content, .ai-service-card, .projeto-card-content {
     transform: none !important;
   }
 }
