@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useInView } from '../../hooks/useInView';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { COLORS } from '../../constants';
@@ -29,6 +29,33 @@ const ValueCard: React.FC<{title: string, description: string, icon: React.React
 
 const About: React.FC = () => {
   const scrollProgress = useScrollProgress();
+  const turbulenceRef = useRef<SVGFETurbulenceElement>(null);
+
+  useEffect(() => {
+    const turbulence = turbulenceRef.current;
+    if (!turbulence) return;
+
+    let frame = 0;
+    let animationFrameId: number;
+
+    const animate = () => {
+      // Use time to create a smooth, looping animation for the liquid effect
+      const time = frame * 0.005;
+      const freqX = 0.01 + Math.cos(time * 2) * 0.003;
+      const freqY = 0.005 + Math.sin(time * 3) * 0.002;
+      
+      turbulence.setAttribute('baseFrequency', `${freqX} ${freqY}`);
+      
+      frame++;
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   return (
     <div className="about-page-container bg-black text-white">
@@ -37,7 +64,14 @@ const About: React.FC = () => {
       {/* SVG Filter for Fluid Effect */}
       <svg className="absolute w-0 h-0">
         <filter id="fluid-distortion">
-          <feTurbulence baseFrequency="0.01 0.005" numOctaves="2" seed="2" stitchTiles="stitch" type="fractalNoise"/>
+          <feTurbulence 
+            ref={turbulenceRef} 
+            baseFrequency="0.01 0.005" 
+            numOctaves="2" 
+            seed="2" 
+            stitchTiles="stitch" 
+            type="fractalNoise"
+          />
           <feDisplacementMap in="SourceGraphic" scale="20" />
         </filter>
       </svg>

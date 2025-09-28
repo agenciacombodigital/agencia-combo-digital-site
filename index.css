@@ -731,11 +731,7 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.05em;
-  animation: fluid-text-animation 10s ease-in-out infinite;
-}
-@keyframes fluid-text-animation {
-  0%, 100% { filter: blur(0) url("#fluid-distortion"); }
-  50% { filter: blur(0.5px) url("#fluid-distortion"); }
+  filter: url("#fluid-distortion");
 }
 .about-manifesto {
   background-color: #050505;
