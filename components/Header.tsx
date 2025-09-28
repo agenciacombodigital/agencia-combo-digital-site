@@ -2,40 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { PAGES } from '../constants';
 
-// Declaration for feather icons script
-declare global {
-    interface Window {
-        feather: {
-            replace: () => void;
-        };
-    }
-}
-
 interface HeaderProps {
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
 }
 
-const iconMap: { [key: string]: string } = {
-  [Page.Home]: 'home',
-  [Page.About]: 'users',
-  [Page.Portfolio]: 'layers',
-  [Page.Contact]: 'send',
-};
-
 const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        // Run feather.replace() to render icons after component mounts or when menu opens/closes
-        if (window.feather) {
-            window.feather.replace();
-        }
-    }, [isOpen]);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
-        // Lock body scroll when mobile menu is open
-        if (isOpen) {
+        if (mobileMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
@@ -43,53 +28,87 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
         return () => {
             document.body.style.overflow = 'auto';
         };
-    }, [isOpen]);
+    }, [mobileMenuOpen]);
 
     const handleNavigate = (page: Page) => {
         setCurrentPage(page);
-        setIsOpen(false); // Close menu on navigation
+        setMobileMenuOpen(false);
     };
 
-    return (
-        <>
-            <div 
-                className={`mobile-menu-overlay ${isOpen ? 'is-open' : ''}`}
-                onClick={() => setIsOpen(false)}
-                aria-hidden="true"
-            ></div>
-            <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Abrir menu" aria-expanded={isOpen} data-cursor-pointer>
-                <i data-feather={isOpen ? 'x' : 'menu'}></i>
-            </button>
-
-            <nav className={`sidebar-nav ${isOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
-                <a 
-                    href="#" 
-                    onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
-                    className="block mb-20 md:mb-0 px-[15px] py-[12px] md:p-0"
-                    data-cursor-pointer
-                    aria-label="Página Inicial"
-                >
-                    <img src="/Logo-ComboDigitalV2.svg" alt="Combo Digital Logo" className="w-10 h-10" />
-                </a>
-                <ul>
-                    {PAGES.map(page => (
-                        <li key={page.name}>
-                            <a 
-                                href="#" 
-                                data-tooltip={page.name} 
-                                aria-label={page.name}
+    const MobileMenu = () => (
+        <div className="mobile-nav-overlay animate-fade-in-up">
+            <nav>
+                <ul className="flex flex-col items-center space-y-8">
+                    {PAGES.map((page, index) => (
+                        <li key={page.name} className="animate-fade-in-up" style={{ animationDelay: `${150 * (index + 1)}ms` }}>
+                            <a
+                                href="#"
                                 onClick={(e) => { e.preventDefault(); handleNavigate(page.name); }}
                                 className={currentPage === page.name ? 'active' : ''}
                                 data-cursor-pointer
                             >
-                                <i data-feather={iconMap[page.name]}></i>
+                                {page.name}
                             </a>
                         </li>
                     ))}
                 </ul>
-                {/* Spacer for vertical alignment on desktop */}
-                <div className="hidden md:block w-10 h-10"></div>
             </nav>
+        </div>
+    );
+
+    return (
+        <>
+            <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
+                <div className="container mx-auto flex justify-between items-center">
+                    {/* Logo */}
+                    <a
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
+                        className="header-logo"
+                        data-cursor-pointer
+                        aria-label="Página Inicial"
+                    >
+                        <img src="/Logo-ComboDigitalV2.svg" alt="Combo Digital Logo" className="w-10 h-10" />
+                    </a>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center space-x-8 header-nav">
+                        {PAGES.map(page => (
+                            <a
+                                key={page.name}
+                                href="#"
+                                onClick={(e) => { e.preventDefault(); handleNavigate(page.name); }}
+                                className={currentPage === page.name ? 'active' : ''}
+                                data-cursor-pointer
+                            >
+                                {page.name}
+                            </a>
+                        ))}
+                    </nav>
+
+                    {/* CTA Button */}
+                     <button 
+                        onClick={() => handleNavigate(Page.Contact)}
+                        className="hidden md:block px-6 py-2 text-white font-semibold rounded-full header-cta"
+                        data-cursor-hover
+                    >
+                        Vamos Criar
+                    </button>
+
+                    {/* Mobile Menu Toggle */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="md:hidden text-white mobile-nav-toggle"
+                        aria-label="Abrir menu"
+                        data-cursor-pointer
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+            {mobileMenuOpen && <MobileMenu />}
         </>
     );
 };
