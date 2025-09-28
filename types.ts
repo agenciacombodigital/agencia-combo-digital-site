@@ -18,4 +18,6 @@ export interface PortfolioItem {
   description: string;
   featured?: boolean;
   metric?: string;
+  technologies: string[];
+  colorPalette: string[];
 }

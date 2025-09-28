@@ -20,50 +20,62 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
     id: 1,
     title: 'Projeto Alfa',
-    category: 'Branding & Web Design',
-    imageUrl: 'https://picsum.photos/seed/alpha/800/600',
-    description: 'Um rebranding completo para uma startup de tecnologia, com foco em uma estética futurista e limpa.',
+    category: 'Web',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Um rebranding completo e um novo site para uma startup de tecnologia, com foco em uma estética futurista e limpa que impulsionou a aquisição de usuários.',
     featured: true,
-    metric: '+300% conversões'
+    metric: '+300% conversões',
+    technologies: ['React', 'WebGL', 'GSAP', 'Figma'],
+    colorPalette: ['#00a1ff', '#0d1117', '#ffffff', '#30363d']
   },
   {
     id: 2,
     title: 'Salto Quântico',
-    category: 'Campanha Digital',
-    imageUrl: 'https://picsum.photos/seed/quantum/800/600',
-    description: 'Uma campanha imersiva de mídia social que gerou milhões de impressões.'
+    category: 'Motion',
+    imageUrl: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Uma campanha imersiva de mídia social que utilizou motion graphics e storytelling para gerar milhões de impressões e engajamento viral.',
+    technologies: ['After Effects', 'Cinema 4D', 'Lottie'],
+    colorPalette: ['#fb5626', '#fcc017', '#000000', '#ffffff']
   },
   {
     id: 3,
     title: 'Campos Elíseos',
-    category: 'Marketing de Experiência',
-    imageUrl: 'https://picsum.photos/seed/elysian/800/600',
-    description: 'Um evento pop-up que mesclou realidades físicas e digitais para uma marca de luxo.',
+    category: 'Branding',
+    imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Um evento pop-up que mesclou realidades físicas e digitais para uma marca de luxo, criando uma experiência de marca inesquecível e exclusiva.',
     featured: true,
-    metric: '+450% vendas online'
+    metric: '+450% vendas online',
+    technologies: ['Identidade Visual', 'TouchDesigner', 'Marketing de Experiência'],
+    colorPalette: ['#fcc017', '#1a1a1a', '#ffffff', '#e0e0e0']
   },
   {
     id: 4,
     title: 'Viajante Estelar',
-    category: 'UI/UX de App Mobile',
-    imageUrl: 'https://picsum.photos/seed/stellar/800/600',
-    description: 'Projetando uma interface intuitiva e deslumbrante para um aplicativo de viagens.'
+    category: 'Web',
+    imageUrl: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Projetando uma interface intuitiva e deslumbrante para um aplicativo de viagens, focada em microinterações e uma experiência de usuário fluida.',
+    technologies: ['React Native', 'Figma', 'Lottie', 'GraphQL'],
+    colorPalette: ['#00a1ff', '#161b22', '#ffffff', '#a0a0a0']
   },
     {
     id: 5,
     title: 'Sonhos Cibernéticos',
-    category: '3D & Motion Graphics',
-    imageUrl: 'https://picsum.photos/seed/cyber/800/600',
-    description: 'Criação de assets visuais e animações impressionantes para o trailer de um videogame.',
+    category: 'Motion',
+    imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Criação de assets visuais e animações 3D impressionantes para o trailer de um videogame, definindo a estética visual do projeto.',
     featured: true,
-    metric: '1M+ downloads'
+    metric: '1M+ downloads',
+    technologies: ['Unreal Engine', 'Blender', 'Houdini', 'DaVinci Resolve'],
+    colorPalette: ['#fb5626', '#00a1ff', '#050505', '#fcc017']
   },
   {
     id: 6,
     title: 'Iniciativa Oráculo',
-    category: 'Plataforma com IA',
-    imageUrl: 'https://picsum.photos/seed/oracle/800/600',
-    description: 'Desenvolvimento de um motor de recomendação de conteúdo inteligente para um gigante da mídia.'
+    category: 'Web',
+    imageUrl: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    description: 'Desenvolvimento de um motor de recomendação de conteúdo inteligente com IA para um gigante da mídia, personalizando a experiência para milhões de usuários.',
+    technologies: ['Python', 'TensorFlow', 'React', 'AWS'],
+    colorPalette: ['#00a1ff', '#0d1117', '#84CC16', '#ffffff']
   }
 ];
 
