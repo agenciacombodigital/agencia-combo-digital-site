@@ -1,10 +1,10 @@
 import React from 'react';
 import { Page, PortfolioItem } from '../../types';
 import { useInView } from '../../hooks/useInView';
-import { COLORS } from '../../constants';
 import AiServices from '../AiServices';
 import FeaturedProjects from '../FeaturedProjects';
 import Testimonials from '../Testimonials';
+import InteractivePillars from '../InteractivePillars';
 
 interface HomeProps {
     setCurrentPage: (page: Page) => void;
@@ -54,27 +54,8 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
         </div>
       </section>
 
-      {/* Highlights Section */}
-      <section className="py-24 bg-black">
-        <div className="container mx-auto px-6">
-            <AnimatedSection>
-                <div className="grid md:grid-cols-3 gap-12 text-center">
-                    <div className="p-8 border border-gray-800 rounded-xl hover:border-blue-500/50 hover:bg-gray-900/50 transition-all duration-300">
-                        <h3 className="text-2xl font-bold text-blue-400">Estratégia</h3>
-                        <p className="mt-4 text-gray-400">Criando estratégias baseadas em dados que ressoam com o público e entregam resultados mensuráveis.</p>
-                    </div>
-                    <div className="p-8 border border-gray-800 rounded-xl hover:border-orange-500/50 hover:bg-gray-900/50 transition-all duration-300">
-                        <h3 className="text-2xl font-bold text-orange-400">Design</h3>
-                        <p className="mt-4 text-gray-400">Criando identidades visuais e interfaces de usuário premiadas que cativam e convertem.</p>
-                    </div>
-                    <div className="p-8 border border-gray-800 rounded-xl hover:border-yellow-500/50 hover:bg-gray-900/50 transition-all duration-300">
-                        <h3 className="text-2xl font-bold text-yellow-400">Tecnologia</h3>
-                        <p className="mt-4 text-gray-400">Aproveitando tecnologias imersivas como IA e WebGL para construir experiências inesquecíveis.</p>
-                    </div>
-                </div>
-            </AnimatedSection>
-        </div>
-      </section>
+      {/* Interactive Pillars Section */}
+      <InteractivePillars />
 
       {/* AI Services Section */}
       <AiServices />
