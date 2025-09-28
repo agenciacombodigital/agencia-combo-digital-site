@@ -1,6 +1,5 @@
 import React from 'react';
 import { useInView } from '../../hooks/useInView';
-import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { COLORS } from '../../constants';
 import { Page } from '../../types';
 import InteractiveTimeline from '../InteractiveTimeline';
@@ -34,11 +33,11 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
-  const scrollProgress = useScrollProgress();
+  // Removed: const scrollProgress = useScrollProgress();
 
   return (
     <div className="about-page-container bg-black text-white">
-      <div className="scroll-progress-bar" style={{ height: `${scrollProgress}%` }}></div>
+      {/* Removed: <div className="scroll-progress-bar" style={{ height: `${scrollProgress}%` }}></div> */}
 
       {/* Hero Section */}
       <section className="about-hero">

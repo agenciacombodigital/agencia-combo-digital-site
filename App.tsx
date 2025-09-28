@@ -11,12 +11,15 @@ import LoadingScreen from './components/LoadingScreen';
 import ChatWidget from './components/ChatWidget';
 import WhatsAppBubble from './components/WhatsAppBubble';
 import Footer from './components/Footer';
-import HeadManager from './components/HeadManager'; // Importando o HeadManager
+import HeadManager from './components/HeadManager';
+import { useScrollProgress } from './hooks/useScrollProgress'; // Importando o hook
+import AmbientAudioPlayer from './components/AmbientAudioPlayer'; // Importando o player de áudio
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState<PortfolioItem | null>(null);
+  const scrollProgress = useScrollProgress(); // Usando o hook de progresso de scroll
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500); // Simulate loading time
@@ -49,8 +52,9 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-black text-white min-h-screen font-manrope">
-      <HeadManager currentPage={currentPage} selectedPortfolioItem={selectedPortfolioItem} /> {/* Adicionando o HeadManager */}
+      <HeadManager currentPage={currentPage} selectedPortfolioItem={selectedPortfolioItem} />
       <CustomCursor />
+      <div className="scroll-progress-bar" style={{ height: `${scrollProgress}%` }}></div> {/* Barra de progresso global */}
       <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <main>
         {renderPage()}
@@ -58,6 +62,7 @@ const App: React.FC = () => {
       <Footer setCurrentPage={setCurrentPage} />
       <ChatWidget />
       <WhatsAppBubble />
+      <AmbientAudioPlayer src="/audio/futuristic-ambience.mp3" /> {/* Adicionando o player de áudio */}
     </div>
   );
 };
