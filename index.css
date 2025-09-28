@@ -29,106 +29,6 @@ body {
   text-fill-color: transparent;
 }
 
-/* --- Header --- */
-.site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 50;
-    padding: 1.5rem 2rem;
-    transition: background-color 0.4s ease, backdrop-filter 0.4s ease, border-bottom-color 0.4s ease;
-    border-bottom: 1px solid transparent;
-}
-.site-header.scrolled {
-    background-color: rgba(13, 17, 23, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom-color: #30363d;
-}
-.header-logo {
-    transition: transform 0.3s ease;
-}
-.header-logo:hover {
-    transform: rotateY(15deg) scale(1.1);
-}
-.header-nav a {
-    position: relative;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    color: #e6edf3;
-    padding: 0.5rem 0;
-    transition: color 0.3s ease;
-}
-.header-nav a:hover {
-    color: #fff;
-}
-.header-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, #00a1ff, #fb5626);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.header-nav a:hover::after,
-.header-nav a.active::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-.header-cta {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-.header-cta:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(0, 161, 255, 0.5);
-}
-
-/* Mobile Menu */
-.mobile-nav-toggle {
-    z-index: 1001;
-}
-.mobile-nav-overlay {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(0, 161, 255, 0.2), transparent 50%),
-                radial-gradient(circle at bottom left, rgba(251, 86, 38, 0.2), transparent 50%),
-                #0d1117;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.mobile-nav-overlay ul a {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #e6edf3;
-    transition: color 0.3s ease;
-}
-.mobile-nav-overlay ul a:hover,
-.mobile-nav-overlay ul a.active {
-    color: #fff;
-    background: linear-gradient(90deg, #00a1ff, #fb5626, #fcc017);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-@keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-    animation: fade-in-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-
-
 /* --- Hero Section --- */
 .section-hero-combo {
   position: relative;
@@ -340,6 +240,198 @@ body {
 .projeto-card-content:hover .reveal-on-hover {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* --- Estilo da Sidebar Inovadora --- */
+:root {
+  --sidebar-width: 80px;
+  --cor-fundo: #0d1117;
+  --cor-sidebar: #000;
+  --cor-borda: #30363d;
+  --cor-icone: #a0a0a0;
+  --cor-icone-hover: #ffffff;
+  --cor-principal: #00a1ff; /* Azul da sua paleta */
+}
+
+/* Ajusta o corpo para dar espaço à sidebar no desktop */
+@media (min-width: 769px) {
+  body {
+    padding-left: var(--sidebar-width);
+    transition: padding-left 0.4s ease;
+  }
+}
+
+.sidebar-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--cor-sidebar);
+  border-right: 1px solid var(--cor-borda);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-nav ul a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  color: var(--cor-icone);
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative; /* Essencial para o tooltip */
+}
+
+.sidebar-nav ul a:hover {
+  background-color: var(--cor-principal);
+  color: var(--cor-icone-hover);
+}
+
+.sidebar-nav ul a.active {
+  color: var(--cor-icone-hover);
+}
+
+/* Estilo dos Tooltips (Micro-interação) */
+.sidebar-nav ul a[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 15px); /* Posição à direita do ícone */
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  padding: 6px 12px;
+  background-color: #000;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition-delay: 0.2s; /* Pequeno atraso para aparecer */
+}
+
+@media (min-width: 769px) {
+    .sidebar-nav ul a[data-tooltip]:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+/* --- Responsividade para Mobile --- */
+.mobile-menu-toggle {
+  display: none; /* Escondido no desktop */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background-color: var(--cor-sidebar);
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-icone-hover);
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-left: 0; /* Remove o espaço da sidebar */
+  }
+
+  /* Faz a sidebar sair da tela */
+  .sidebar-nav {
+    transform: translateX(-100%);
+  }
+
+  /* Classe que será adicionada via JS para mostrar o menu */
+  .sidebar-nav.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-toggle {
+    display: flex; /* Mostra o botão "hamburger" */
+  }
+
+  /* Estilos para o menu de gaveta mobile */
+  .sidebar-nav {
+    width: 280px; /* Largura da gaveta */
+    align-items: flex-start;
+    padding: 20px;
+    justify-content: flex-start;
+  }
+
+  .sidebar-nav ul {
+    width: 100%;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .sidebar-nav ul a {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .sidebar-nav ul a i {
+    margin-right: 15px;
+  }
+  
+  /* Adiciona o texto do tooltip ao lado do ícone */
+  .sidebar-nav ul a::after {
+    content: attr(data-tooltip);
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    transition: none;
+    pointer-events: auto;
+  }
+
+  /* Overlay for when mobile menu is open */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .mobile-menu-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* Utility to hide scrollbar */
