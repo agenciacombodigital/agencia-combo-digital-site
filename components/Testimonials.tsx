@@ -49,6 +49,8 @@ const Testimonials: React.FC = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLDivElement>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -63,20 +65,47 @@ const Testimonials: React.FC = () => {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
+    const checkScrollability = () => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            const scrollableWidth = container.scrollWidth - container.clientWidth;
+            setCanScrollLeft(container.scrollLeft > 5); // Buffer de 5px
+            setCanScrollRight(container.scrollLeft < scrollableWidth - 5); // Buffer de 5px
+        }
+    };
+
     const handleScroll = () => {
         const container = scrollContainerRef.current;
         if (container) {
             const scrollableWidth = container.scrollWidth - container.clientWidth;
             const progress = scrollableWidth > 0 ? (container.scrollLeft / scrollableWidth) * 100 : 0;
             setScrollProgress(progress);
+            checkScrollability();
         }
     };
 
     useEffect(() => {
         const container = scrollContainerRef.current;
+        checkScrollability(); // Checagem inicial
         container?.addEventListener('scroll', handleScroll, { passive: true });
-        return () => container?.removeEventListener('scroll', handleScroll);
+        window.addEventListener('resize', checkScrollability); // Checagem no redimensionamento da janela
+
+        return () => {
+            container?.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', checkScrollability);
+        }
     }, []);
+
+    const scroll = (direction: 'left' | 'right') => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            const scrollAmount = container.clientWidth * 0.7;
+            container.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     return (
         <section 
@@ -90,7 +119,11 @@ const Testimonials: React.FC = () => {
                 <AnimatedSection>
                     <div className="text-center mb-16">
                         <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-                            <span style={{color: COLORS.yellow}}>Vozes</span> que Marcam
+                            <span style={{
+                                background: `linear-gradient(90deg, ${COLORS.yellow}, ${COLORS.orange})`,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }}>Vozes</span> que Marcam
                         </h2>
                         <p className="text-lg text-gray-400 max-w-2xl mx-auto">
                             O que nossos parceiros dizem sobre a experiência de criar o futuro conosco.
@@ -100,13 +133,35 @@ const Testimonials: React.FC = () => {
             </div>
             
             <AnimatedSection>
-                <div 
-                    ref={scrollContainerRef}
-                    className="flex gap-8 pl-[10vw] md:pl-[20vw] lg:pl-[27.5vw] pr-[10vw] md:pr-[20vw] lg:pr-[27.5vw] overflow-x-auto no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
-                >
-                    {TESTIMONIALS.map((testimonial, index) => (
-                        <TestimonialCard key={index} {...testimonial} />
-                    ))}
+                <div className="relative group">
+                    <div 
+                        ref={scrollContainerRef}
+                        className="flex gap-8 pl-[10vw] md:pl-[20vw] lg:pl-[27.5vw] pr-[10vw] md:pr-[20vw] lg:pr-[27.5vw] overflow-x-auto no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+                    >
+                        {TESTIMONIALS.map((testimonial, index) => (
+                            <TestimonialCard key={index} {...testimonial} />
+                        ))}
+                    </div>
+
+                    {/* Navigation Arrows */}
+                    <button 
+                        onClick={() => scroll('left')}
+                        disabled={!canScrollLeft}
+                        className="absolute top-1/2 left-4 md:left-12 -translate-y-1/2 w-12 h-12 bg-black/20 backdrop-blur-sm border border-gray-700 rounded-full text-white hover:bg-white/10 disabled:opacity-0 disabled:cursor-not-allowed opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
+                        aria-label="Depoimento anterior"
+                        data-cursor-pointer
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button 
+                        onClick={() => scroll('right')}
+                        disabled={!canScrollRight}
+                        className="absolute top-1/2 right-4 md:right-12 -translate-y-1/2 w-12 h-12 bg-black/20 backdrop-blur-sm border border-gray-700 rounded-full text-white hover:bg-white/10 disabled:opacity-0 disabled:cursor-not-allowed opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
+                        aria-label="Próximo depoimento"
+                        data-cursor-pointer
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    </button>
                 </div>
 
                 <div className="container mx-auto px-6 mt-16">
