@@ -13,7 +13,6 @@ import WhatsAppBubble from './components/WhatsAppBubble';
 import Footer from './components/Footer';
 import HeadManager from './components/HeadManager';
 import { useScrollProgress } from './hooks/useScrollProgress'; // Importando o hook
-import AmbientAudioPlayer from './components/AmbientAudioPlayer'; // Importando o player de áudio
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
@@ -62,7 +61,6 @@ const App: React.FC = () => {
       <Footer setCurrentPage={setCurrentPage} />
       <ChatWidget />
       <WhatsAppBubble />
-      <AmbientAudioPlayer src="/audio/futuristic-ambience.mp3" /> {/* Adicionando o player de áudio */}
     </div>
   );
 };

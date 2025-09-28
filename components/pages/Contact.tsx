@@ -81,28 +81,24 @@ const Contact: React.FC<ContactProps> = ({ setCurrentPage }) => {
       }
     }, []);
 
-    const playClickSound = useCallback(() => {
-      const audio = new Audio('/audio/futuristic-click.mp3'); // Placeholder for a futuristic click sound
-      audio.volume = 0.5;
-      audio.play().catch(e => console.error("Failed to play sound:", e));
-    }, []);
+    // Removed playClickSound function
 
     const handleCopyClick = useCallback(async (text: string) => {
       try {
         await navigator.clipboard.writeText(text);
         setStatus('Copiado para a área de transferência!');
         setShowToast(true);
-        playClickSound();
+        // Removed playClickSound() call
       } catch (err) {
         console.error('Failed to copy: ', err);
         setStatus('Falha ao copiar.');
         setShowToast(true);
       }
-    }, [playClickSound]);
+    }, []); // Removed playClickSound from dependency array
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        playClickSound();
+        // Removed playClickSound() call
         setStatus('Enviando...');
         setShowToast(false); // Hide previous toast if any
 
