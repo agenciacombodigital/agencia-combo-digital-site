@@ -731,7 +731,6 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.05em;
-  filter: url("#fluid-distortion");
 }
 .about-manifesto {
   background-color: #050505;
