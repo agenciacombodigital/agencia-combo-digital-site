@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Page, PortfolioItem } from './types';
 import { PAGES } from './constants';
@@ -11,6 +10,7 @@ import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
 import ChatWidget from './components/ChatWidget';
 import WhatsAppBubble from './components/WhatsAppBubble';
+import Footer from './components/Footer';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
@@ -53,6 +53,7 @@ const App: React.FC = () => {
       <main>
         {renderPage()}
       </main>
+      <Footer setCurrentPage={setCurrentPage} />
       <ChatWidget />
       <WhatsAppBubble />
     </div>
