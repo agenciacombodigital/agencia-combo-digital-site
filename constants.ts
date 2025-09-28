@@ -93,3 +93,26 @@ export const TESTIMONIALS = [
         imageUrl: "https://picsum.photos/seed/marcos/100/100"
     }
 ];
+
+export const TIMELINE_EVENTS = [
+  {
+    year: '2018',
+    title: 'O Início',
+    description: 'A Combo Digital nasce de uma visão: fundir criatividade audaciosa com tecnologia de ponta. Começamos em uma pequena sala, com grandes sonhos.',
+  },
+  {
+    year: '2020',
+    title: 'Primeiro Prêmio',
+    description: 'Nosso projeto "Salto Quântico" é reconhecido, validando nossa abordagem inovadora e nos colocando no mapa das agências criativas.',
+  },
+  {
+    year: '2022',
+    title: 'Expansão IA',
+    description: 'Integramos Inteligência Artificial em nossos serviços, automatizando processos e gerando insights preditivos para nossos clientes.',
+  },
+  {
+    year: 'Hoje',
+    title: 'Arquitetos do Futuro',
+    description: 'Consolidados como uma agência de vanguarda, continuamos a explorar novas fronteiras, do WebGL a experiências imersivas.',
+  },
+];

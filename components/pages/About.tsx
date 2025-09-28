@@ -2,6 +2,8 @@ import React from 'react';
 import { useInView } from '../../hooks/useInView';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { COLORS } from '../../constants';
+import { Page } from '../../types';
+import InteractiveTimeline from '../InteractiveTimeline';
 
 const AnimatedSection: React.FC<{children: React.ReactNode, className?: string}> = ({ children, className }) => {
     const [ref, isInView] = useInView({ threshold: 0.2, triggerOnce: true });
@@ -27,7 +29,11 @@ const ValueCard: React.FC<{title: string, description: string, icon: React.React
     </div>
 );
 
-const About: React.FC = () => {
+interface AboutProps {
+  setCurrentPage: (page: Page) => void;
+}
+
+const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
   const scrollProgress = useScrollProgress();
 
   return (
@@ -100,6 +106,9 @@ const About: React.FC = () => {
             </AnimatedSection>
         </div>
       </section>
+
+      {/* Interactive Timeline Section */}
+      <InteractiveTimeline setCurrentPage={setCurrentPage} />
 
       {/* DNA Section */}
       <section className="dna-section">

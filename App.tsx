@@ -32,7 +32,7 @@ const App: React.FC = () => {
       case Page.Home:
         return <Home setCurrentPage={setCurrentPage} showPortfolioItem={showPortfolioItem} />;
       case Page.About:
-        return <About />;
+        return <About setCurrentPage={setCurrentPage} />;
       case Page.Portfolio:
         return <Portfolio initialItem={selectedPortfolioItem} clearInitialItem={() => setSelectedPortfolioItem(null)} />;
       case Page.Contact:
