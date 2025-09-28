@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useInView } from '../hooks/useInView';
-import { COLORS } from '../constants';
+import { COLORS, TESTIMONIALS } from '../constants';
 
 interface TestimonialProps {
     quote: string;
@@ -8,17 +8,21 @@ interface TestimonialProps {
     title: string;
 }
 
+const QuoteIcon: React.FC = () => (
+    <svg width="60" height="45" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-2 left-2" style={{ color: COLORS.yellow, opacity: 0.15 }}>
+        <path d="M18 0L24 12V36H0V12L6 0H18ZM42 0L48 12V36H24V12L30 0H42Z" fill="currentColor"/>
+    </svg>
+);
+
 const TestimonialCard: React.FC<TestimonialProps> = ({ quote, author, title }) => (
-    <div className="bg-[#161b22] p-8 rounded-xl border border-gray-800 transition-all duration-300 hover:-translate-y-1.5 hover:border-orange-500">
-        <p className="text-lg text-gray-300 mb-6 italic leading-relaxed">"{quote}"</p>
-        <div className="flex items-center">
-            <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mr-4 text-white text-xl font-bold">
-                {author.charAt(0)}
-            </div>
-            <div>
-                <h4 className="text-white font-bold text-lg">{author}</h4>
-                <p className="text-gray-400 text-sm">{title}</p>
-            </div>
+    <div className="relative w-[90vw] md:w-[480px] flex-shrink-0 bg-[#0d1117] p-10 rounded-2xl border border-gray-800 snap-start flex flex-col">
+        <QuoteIcon />
+        <p className="text-lg text-gray-300 mb-8 italic leading-relaxed z-10 relative flex-grow">
+            “{quote}”
+        </p>
+        <div className="mt-auto z-10 relative">
+            <h4 className="text-white font-bold text-lg">{author}</h4>
+            <p className="text-gray-400 text-sm">{title}</p>
         </div>
     </div>
 );
@@ -35,44 +39,68 @@ const AnimatedSection: React.FC<{children: React.ReactNode}> = ({ children }) =>
     );
 };
 
-const testimonials = [
-    {
-        quote: "A Combo Digital transformou nossa presença online. O design é impecável e a estratégia de IA realmente impulsionou nossos resultados.",
-        author: "Ana Paula S.",
-        title: "CEO, Tech Solutions"
-    },
-    {
-        quote: "Nunca vi uma agência tão dedicada e inovadora. O projeto superou todas as nossas expectativas e o suporte foi excepcional.",
-        author: "Roberto M.",
-        title: "Diretor de Marketing, Global Corp"
-    },
-    {
-        quote: "Desde o branding até a campanha de lançamento, a Combo Digital entregou excelência. Nossos clientes adoraram a nova identidade!",
-        author: "Carla V.",
-        title: "Fundadora, Creative Brands"
-    }
-];
-
 const Testimonials: React.FC = () => {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    const handleScroll = () => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            const scrollableWidth = container.scrollWidth - container.clientWidth;
+            if (scrollableWidth > 0) {
+                const progress = (container.scrollLeft / scrollableWidth) * 100;
+                setScrollProgress(progress);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        container?.addEventListener('scroll', handleScroll, { passive: true });
+        return () => container?.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <section className="py-24 bg-black">
+        <section className="py-24 bg-black overflow-hidden">
             <div className="container mx-auto px-6">
                 <AnimatedSection>
                     <div className="text-center mb-16">
                         <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-                            O Que Nossos <span style={{color: COLORS.blue}}>Clientes</span> Dizem
+                            <span style={{color: COLORS.yellow}}>Vozes</span> que Marcam
                         </h2>
-                        <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-                            Histórias de sucesso e parcerias que nos inspiram a ir além.
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {testimonials.map((testimonial, index) => (
-                            <TestimonialCard key={index} {...testimonial} />
-                        ))}
                     </div>
                 </AnimatedSection>
             </div>
+            
+            <AnimatedSection>
+                <div 
+                    ref={scrollContainerRef}
+                    className="flex gap-8 pl-6 md:pl-24 pr-6 md:pr-24 overflow-x-auto no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+                >
+                    {TESTIMONIALS.map((testimonial, index) => (
+                        <TestimonialCard key={index} {...testimonial} />
+                    ))}
+                </div>
+
+                <div className="container mx-auto px-6 mt-16">
+                    <div className="w-full max-w-lg mx-auto bg-gray-800 rounded-full h-1.5 relative">
+                        <div 
+                            className="h-1.5 rounded-full"
+                            style={{ width: `${scrollProgress}%`, backgroundColor: COLORS.orange }}
+                        ></div>
+                        <div 
+                            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2"
+                            style={{ 
+                                left: `calc(${scrollProgress}% - 8px)`, 
+                                backgroundColor: COLORS.black,
+                                borderColor: COLORS.blue
+                            }}
+                        >
+                           <div className="w-full h-full rounded-full scale-75" style={{backgroundColor: COLORS.blue}}></div>
+                        </div>
+                    </div>
+                </div>
+            </AnimatedSection>
         </section>
     );
 };

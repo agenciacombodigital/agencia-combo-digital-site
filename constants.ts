@@ -1,4 +1,3 @@
-
 import { Page, NavLink, PortfolioItem } from './types';
 
 export const COLORS = {
@@ -66,4 +65,27 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     imageUrl: 'https://picsum.photos/seed/oracle/800/600',
     description: 'Desenvolvimento de um motor de recomendação de conteúdo inteligente para um gigante da mídia.'
   }
+];
+
+export const TESTIMONIALS = [
+    {
+        quote: "A parceria com a Combo no projeto Campos Elíseos foi um divisor de águas. A fusão de realidades físicas e digitais resultou em um aumento de 450% nas vendas online. Eles não seguem tendências, eles as criam.",
+        author: "Ana Souza",
+        title: "Diretora de Marketing - Elysian Fields Lux"
+    },
+    {
+        quote: "O rebranding do Projeto Alfa foi executado com maestria. A nova identidade visual e o web design futurista foram cruciais para o aumento de 300% em nossas conversões. Uma agência que realmente entende de tecnologia e estética.",
+        author: "Carlos Pereira",
+        title: "CEO - Alpha Startup"
+    },
+    {
+        quote: "A equipe da Combo é o motor criativo que toda marca precisa. Eles transformaram nossa visão em uma realidade digital impactante, superando todas as metas.",
+        author: "Juliana V.",
+        title: "Chefe de Inovação - Quantum Dynamics"
+    },
+    {
+        quote: "Trabalhar com a Combo Digital elevou nosso jogo. A abordagem deles para UI/UX no nosso aplicativo móvel foi revolucionária, resultando em um engajamento recorde.",
+        author: "Marcos Andrade",
+        title: "CTO - Viajante Estelar App"
+    }
 ];
