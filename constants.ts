@@ -71,21 +71,25 @@ export const TESTIMONIALS = [
     {
         quote: "A parceria com a Combo no projeto Campos Elíseos foi um divisor de águas. A fusão de realidades físicas e digitais resultou em um aumento de 450% nas vendas online. Eles não seguem tendências, eles as criam.",
         author: "Ana Souza",
-        title: "Diretora de Marketing - Elysian Fields Lux"
+        title: "Diretora de Marketing - Elysian Fields Lux",
+        imageUrl: "https://picsum.photos/seed/ana/100/100"
     },
     {
         quote: "O rebranding do Projeto Alfa foi executado com maestria. A nova identidade visual e o web design futurista foram cruciais para o aumento de 300% em nossas conversões. Uma agência que realmente entende de tecnologia e estética.",
         author: "Carlos Pereira",
-        title: "CEO - Alpha Startup"
+        title: "CEO - Alpha Startup",
+        imageUrl: "https://picsum.photos/seed/carlos/100/100"
     },
     {
         quote: "A equipe da Combo é o motor criativo que toda marca precisa. Eles transformaram nossa visão em uma realidade digital impactante, superando todas as metas.",
         author: "Juliana V.",
-        title: "Chefe de Inovação - Quantum Dynamics"
+        title: "Chefe de Inovação - Quantum Dynamics",
+        imageUrl: "https://picsum.photos/seed/juliana/100/100"
     },
     {
         quote: "Trabalhar com a Combo Digital elevou nosso jogo. A abordagem deles para UI/UX no nosso aplicativo móvel foi revolucionária, resultando em um engajamento recorde.",
         author: "Marcos Andrade",
-        title: "CTO - Viajante Estelar App"
+        title: "CTO - Viajante Estelar App",
+        imageUrl: "https://picsum.photos/seed/marcos/100/100"
     }
 ];
