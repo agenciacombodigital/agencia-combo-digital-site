@@ -73,10 +73,25 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
 // --- Componente Principal ---
 const FILTERS = ['Todos', 'Web', 'Branding', 'Motion'];
 
-const Portfolio: React.FC = () => {
+interface PortfolioProps {
+  initialItem: PortfolioItem | null;
+  clearInitialItem: () => void;
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem }) => {
   const [selectedItem, setSelectedItem] = useState<{ item: PortfolioItem; index: number } | null>(null);
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [ref, isInView] = useInView({ threshold: 0.1, triggerOnce: true });
+
+  useEffect(() => {
+    if (initialItem) {
+      const index = PORTFOLIO_ITEMS.findIndex(p => p.id === initialItem.id);
+      if (index !== -1) {
+        setSelectedItem({ item: initialItem, index });
+      }
+      clearInitialItem();
+    }
+  }, [initialItem, clearInitialItem]);
 
   const filteredItems = useMemo(() => 
     activeFilter === 'Todos' 
@@ -85,9 +100,11 @@ const Portfolio: React.FC = () => {
     [activeFilter]
   );
 
-  const handleOpenModal = (item: PortfolioItem, index: number) => {
+  const handleOpenModal = (item: PortfolioItem) => {
     const originalIndex = PORTFOLIO_ITEMS.findIndex(p => p.id === item.id);
-    setSelectedItem({ item, index: originalIndex });
+    if (originalIndex !== -1) {
+      setSelectedItem({ item, index: originalIndex });
+    }
   };
 
   return (
@@ -117,13 +134,13 @@ const Portfolio: React.FC = () => {
         </div>
 
         <div className="portfolio-grid">
-          {filteredItems.map((item, index) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="portfolio-item-container">
               <div
                 className="group portfolio-card-3d"
                 data-cursor-hover
-                onClick={() => handleOpenModal(item, index)}
-                role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleOpenModal(item, index)}
+                onClick={() => handleOpenModal(item)}
+                role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleOpenModal(item)}
               >
                 <img src={item.imageUrl} alt={`Capa do projeto ${item.title}`} className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-all duration-500 group-hover:from-black/90"></div>
