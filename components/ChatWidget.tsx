@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { supabase } from '@/src/lib/supabase'; // Caminho de importação corrigido
+import { supabase, isSupabaseConfigured } from '@/src/lib/supabase'; // Importamos a nova flag
 
 type Message = {
   sender: 'user' | 'bot';
@@ -12,7 +12,7 @@ const ChatWidget: React.FC = () => {
     { sender: 'bot', text: "Olá! Sou o Combo Jam, assistente virtual da Combo. Como posso te ajudar a criar o impossível hoje?" }
   ]);
   const [userInput, setUserInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Estado de carregamento
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -33,7 +33,6 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Chama a Edge Function 'chat-ai'
       const { data, error } = await supabase.functions.invoke('chat-ai', {
         body: { message: userInput },
       });
@@ -53,6 +52,11 @@ const ChatWidget: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // Se o Supabase não estiver configurado, simplesmente não renderizamos o widget.
+  if (!isSupabaseConfigured) {
+    return null;
+  }
 
   return (
     <>
