@@ -6,7 +6,6 @@ import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Portfolio from './components/pages/Portfolio';
 import Contact from './components/pages/Contact';
-import AuthPage from './src/components/pages/AuthPage'; // Caminho corrigido
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
 import ChatWidget from './components/ChatWidget';
@@ -39,8 +38,6 @@ const App: React.FC = () => {
         return <Portfolio initialItem={selectedPortfolioItem} clearInitialItem={() => setSelectedPortfolioItem(null)} />;
       case Page.Contact:
         return <Contact />;
-      case Page.Auth: // Nova rota para a página de autenticação
-        return <AuthPage />;
       default:
         return <Home setCurrentPage={setCurrentPage} showPortfolioItem={showPortfolioItem} />;
     }

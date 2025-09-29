@@ -95,11 +95,6 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
           description = "Entre em contato com a Combo Digital. Sua próxima grande ideia começa com uma conversa.";
           ogUrl = "https://combo.digital/contato";
           break;
-        case Page.Auth: // Metadados para a página de autenticação
-          title = "Autenticação — Acesse sua Conta | Combo Digital";
-          description = "Faça login ou crie sua conta na Combo Digital para acessar recursos exclusivos.";
-          ogUrl = "https://combo.digital/auth";
-          break;
       }
 
       document.title = title;

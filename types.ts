@@ -3,7 +3,6 @@ export enum Page {
   About = 'Quem Somos',
   Portfolio = 'Portfólio',
   Contact = 'Contato',
-  Auth = 'Autenticação', // Nova página para autenticação
 }
 
 export interface NavLink {
