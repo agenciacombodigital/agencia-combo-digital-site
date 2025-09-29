@@ -5,8 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ATUALIZADO: Voltando para o modelo gemini-pro (alias para gemini-1.0-pro) e a versão v1 da API para maior estabilidade e compatibilidade com generateContent.
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
+// CORRIGIDO: Alterando a versão da API de 'v1' para 'v1beta' para garantir a compatibilidade com o modelo gemini-pro.
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
 const SYSTEM_PROMPT = `
 Você é um assistente virtual da Combo Digital, uma agência de marketing e publicidade de vanguarda.
