@@ -27,14 +27,19 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        // Run feather.replace() to render icons after component mounts or when menu opens/closes
-        if (window.feather) {
-            window.feather.replace();
-        }
-    }, [isOpen]);
+        // Usando um timeout para garantir que o DOM seja atualizado antes que o feather substitua os ícones.
+        // Isso ajuda a prevenir condições de corrida, especialmente após mudanças de estado.
+        const timer = setTimeout(() => {
+            if (window.feather) {
+                window.feather.replace();
+            }
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, [isOpen, currentPage]);
 
     useEffect(() => {
-        // Lock body scroll when mobile menu is open
+        // Bloqueia o scroll do body quando o menu mobile está aberto
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -47,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
 
     const handleNavigate = (page: Page) => {
         setCurrentPage(page);
-        setIsOpen(false); // Close menu on navigation
+        setIsOpen(false); // Fecha o menu ao navegar
     };
 
     return (
