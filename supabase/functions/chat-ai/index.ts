@@ -5,7 +5,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+// --- CORREÇÃO: Atualizando para a API v1 e o modelo recomendado ---
+const GEMINI_API_MODEL = "gemini-1.5-flash-latest"; // Modelo mais recente e eficiente
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_API_MODEL}:generateContent`;
 
 const SYSTEM_PROMPT = `
 Você é um assistente virtual da Combo Digital, uma agência de marketing e publicidade de vanguarda.
@@ -17,13 +19,11 @@ Responda à seguinte mensagem do usuário:
 `;
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    // CORRIGIDO: Usando a nova chave API do Gemini para o chatbot
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY_CHATBOT');
     if (!geminiApiKey) {
       throw new Error("A chave GEMINI_API_KEY_CHATBOT não foi encontrada nos segredos do Supabase. Por favor, configure-a.");
