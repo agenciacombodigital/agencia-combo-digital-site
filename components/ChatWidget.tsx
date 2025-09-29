@@ -11,7 +11,7 @@ const ChatWidget: React.FC = () => {
     { sender: 'bot', text: "Olá! Sou o assistente da Combo. Como posso ajudar você hoje?" }
   ]);
   const [userInput, setUserInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Estado de carregamento
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -32,34 +32,31 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Chama a API do Gemini diretamente
+      // Invoca a função Edge do Supabase para se comunicar com a API do Gemini
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+        `https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/chat-ai`, // URL da sua função Edge
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{ text: userInput }]
-            }]
-          }),
+          body: JSON.stringify({ message: userInput }),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`Erro na API do Gemini: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(`Erro na função Edge: ${errorData.error || response.statusText}`);
       }
 
       const data = await response.json();
-      const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, não consegui processar sua resposta.";
+      const botResponseText = data.reply || "Desculpe, não consegui processar sua resposta.";
 
       const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
 
     } catch (error) {
-      console.error("Erro ao chamar a API do Gemini:", error);
+      console.error("Erro ao chamar a função Edge:", error);
       const errorResponse: Message = { sender: 'bot', text: "Ocorreu um erro. Por favor, tente novamente mais tarde." };
       setMessages(prev => [...prev, errorResponse]);
     } finally {
