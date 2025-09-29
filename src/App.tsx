@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Page, PortfolioItem } from './types';
-import { PAGES } from './constants';
-import Header from './components/Header';
-import Home from './components/pages/Home';
-import About from './components/pages/About';
-import Portfolio from './components/pages/Portfolio';
-import Contact from './components/pages/Contact';
-import CustomCursor from './components/CustomCursor';
-import LoadingScreen from './components/LoadingScreen';
-import ChatWidget from './components/ChatWidget';
-import WhatsAppBubble from './components/WhatsAppBubble';
-import Footer from './components/Footer';
-import HeadManager from './components/HeadManager';
+import { Page, PortfolioItem } from '@/types';
+import Header from '@/components/Header';
+import Home from '@/components/pages/Home';
+import About from '@/components/pages/About';
+import Portfolio from '@/components/pages/Portfolio';
+import Contact from '@/components/pages/Contact';
+import CustomCursor from '@/components/CustomCursor';
+import LoadingScreen from '@/components/LoadingScreen';
+import ChatWidget from '@/components/ChatWidget';
+import WhatsAppBubble from '@/components/WhatsAppBubble';
+import Footer from '@/components/Footer';
+import HeadManager from '@/components/HeadManager';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
