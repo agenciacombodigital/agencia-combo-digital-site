@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
     const [status, setStatus] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus('Enviando...');
+        // Simula uma chamada de API
         setTimeout(() => {
             setStatus('Obrigado! Sua mensagem foi enviada com sucesso.');
-            e.currentTarget.reset();
+            // Reseta os campos do formulário redefinindo o estado
+            setName('');
+            setEmail('');
+            setMessage('');
             setTimeout(() => setStatus(''), 3000);
         }, 2000);
     };
@@ -50,16 +57,15 @@ const Contact: React.FC = () => {
             <form onSubmit={handleSubmit} className="md:col-span-3">
                 <div className="space-y-10">
                     <div className="relative">
-                        <input type="text" name="name" id="name" placeholder=" " required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" />
+                        <input type="text" name="name" id="name" placeholder=" " required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" value={name} onChange={(e) => setName(e.target.value)} />
                         <label htmlFor="name" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Seu Nome</label>
                     </div>
                     <div className="relative">
-                        <input type="email" name="email" id="email" placeholder=" " required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" />
+                        <input type="email" name="email" id="email" placeholder=" " required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <label htmlFor="email" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Seu Email</label>
                     </div>
                     <div className="relative">
-                        <textarea name="message" id="message" placeholder=" " rows={4} required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300"></textarea>
-                        {/* Fix: changed closing tag from </dabel> to </label> to fix typo */}
+                        <textarea name="message" id="message" placeholder=" " rows={4} required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
                         <label htmlFor="message" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Sua Mensagem</label>
                     </div>
                     <div>
