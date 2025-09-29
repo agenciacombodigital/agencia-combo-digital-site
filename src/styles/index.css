@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './base.css';
+@import './animations.css';
+@import './pages/home.css';
+@import './pages/about.css';
+@import './pages/portfolio.css';
+@import './pages/contact.css';
+@import './components/header.css';
+@import './components/footer.css';
+@import './components/featured-projects.css';
+@import './components/testimonials.css';
+@import './components/interactive-pillars.css';
+@import './components/ai-services.css';
+@import './components/interactive-timeline.css';
