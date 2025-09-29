@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { supabase } from '../lib/supabase'; // Importando o cliente Supabase
 
 type Message = {
   sender: 'user' | 'bot';
@@ -33,20 +32,34 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Chama a Edge Function 'chat-ai'
-      const { data, error } = await supabase.functions.invoke('chat-ai', {
-        body: { message: userInput },
-      });
+      // Chama a API do Gemini diretamente
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ text: userInput }]
+            }]
+          }),
+        }
+      );
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        throw new Error(`Erro na API do Gemini: ${response.statusText}`);
       }
 
-      const botResponse: Message = { sender: 'bot', text: data.reply || "Desculpe, não consegui processar sua resposta." };
+      const data = await response.json();
+      const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, não consegui processar sua resposta.";
+
+      const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
 
     } catch (error) {
-      console.error("Erro ao chamar a Edge Function:", error);
+      console.error("Erro ao chamar a API do Gemini:", error);
       const errorResponse: Message = { sender: 'bot', text: "Ocorreu um erro. Por favor, tente novamente mais tarde." };
       setMessages(prev => [...prev, errorResponse]);
     } finally {
