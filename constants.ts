@@ -14,6 +14,7 @@ export const PAGES: NavLink[] = [
   { name: Page.About, path: '/about' },
   { name: Page.Portfolio, path: '/portfolio' },
   { name: Page.Contact, path: '/contact' },
+  { name: Page.Auth, path: '/auth' }, // Nova página de autenticação
 ];
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { PAGES } from '../constants';
-import { Home, Users, Layers, Send, Menu, X } from 'react-feather';
+import { Home, Users, Layers, Send, Menu, X, LogIn } from 'react-feather'; // Importando LogIn
 
 interface HeaderProps {
   currentPage: Page;
@@ -13,6 +13,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   [Page.About]: Users,
   [Page.Portfolio]: Layers,
   [Page.Contact]: Send,
+  [Page.Auth]: LogIn, // Mapeando o ícone LogIn para a página Auth
 };
 
 const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
