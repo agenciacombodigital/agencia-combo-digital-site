@@ -5,8 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ATUALIZADO: Alterado para usar o modelo gemini-1.5-flash e a versão v1 da API, conforme a sugestão do Gemini.
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
+// ATUALIZADO: Voltando para o modelo gemini-pro (alias para gemini-1.0-pro) e a versão v1 da API para maior estabilidade e compatibilidade com generateContent.
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
 
 const SYSTEM_PROMPT = `
 Você é um assistente virtual da Combo Digital, uma agência de marketing e publicidade de vanguarda.
@@ -26,7 +26,7 @@ serve(async (req) => {
   try {
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
     if (!geminiApiKey) {
-      throw new Error("A chave GEMINI_API_KEY não foi encontrada nos segredos do Supabase.");
+      throw new Error("A chave GEMINI_API_KEY não foi encontrada nos segredos do Supabase. Por favor, configure-a.");
     }
 
     const { message } = await req.json();
@@ -52,7 +52,6 @@ serve(async (req) => {
     if (!geminiResponse.ok) {
       const errorMessage = responseData.error?.message || `Erro ${geminiResponse.status} - ${geminiResponse.statusText}`;
       console.error("Erro da API do Gemini:", JSON.stringify(responseData));
-      // Return the specific error from Google to the client
       return new Response(JSON.stringify({ error: `A API do Google retornou um erro: "${errorMessage}"` }), {
         status: geminiResponse.status,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
