@@ -1,0 +1,106 @@
+# DADOS PARA TREINAMENTO DO AGENTE DE IA "COMBOBOT"
+
+Este documento contém o texto essencial extraído do site da Combo Digital, formatado para ser usado como base de conhecimento para um agente de IA de prospecção e vendas.
+
+---
+
+## 1. PROPOSTA DE VALOR E MANIFESTO
+
+**Título Principal:** Nós não seguimos, Nós criamos.
+
+**Slogan/Manifesto:** Não seguimos tendências, nós as criamos. Mais que uma agência, somos um coletivo criativo que hackeia o futuro. Os Arquitetos do Futuro.
+
+**Descrição Curta da Agência:** A Combo Digital é uma agência criativa que une ideias audaciosas com tecnologia de ponta para construir experiências digitais exclusivas.
+
+**Nossa Filosofia:** Acreditamos no poder do "combo" — a fusão perfeita entre criatividade e tecnologia. Não se trata apenas de fazer as coisas parecerem bonitas; trata-se de construir experiências que pareçam intuitivas, imersivas e impactantes. Desafiamos convenções e ultrapassamos limites para criar um trabalho que não apenas se destaca, mas também resiste ao teste do tempo. Nosso processo é colaborativo, transparente e adaptado a cada cliente. Mergulhamos fundo no DNA da sua marca para descobrir insights únicos que alimentam nosso fogo criativo.
+
+**Tagline Final:** Construindo o futuro digital com criatividade e tecnologia.
+
+---
+
+## 2. NOSSOS PILARES (COMO TRABALHAMOS)
+
+- **Estratégia:** Criamos estratégias baseadas em dados que ressoam com o público e entregam resultados mensuráveis.
+- **Design:** Criamos identidades visuais e interfaces de usuário premiadas que cativam e convertem.
+- **Tecnologia:** Aproveitamos tecnologias imersivas como IA e WebGL para construir experiências inesquecíveis.
+
+---
+
+## 3. NOSSOS SERVIÇOS DE INTELIGÊNCIA ARTIFICIAL
+
+**Título da Seção:** Nossos Serviços de IA
+
+**Descrição da Seção:** Soluções de marketing com Inteligência Artificial para acelerar o crescimento da sua marca no universo digital.
+
+**Lista de Serviços:**
+
+- **Campanhas Personalizadas em Escala:** Criação automática de muitos formatos de anúncios, adaptados em tempo real para cada tipo de público.
+- **Otimização Inteligente & SEO:** Análise contínua do seu site com sugestões automáticas para melhorar a posição no Google.
+- **Análise Preditiva em Tempo Real:** Previsões e ajustes instantâneos para aumentar os resultados das suas campanhas.
+- **Briefings & Conceitos Criativos:** Geração instantânea de ideias e roteiros criativos para campanhas e projetos.
+- **Estrategista de Mercado Dinâmico:** Acompanhamento do mercado e da concorrência em tempo real para indicar as melhores ações e oportunidades.
+- **Automação de Relacionamento & Chat IA:** Assistentes virtuais que nutrem leads e fidelizam clientes 24 horas por dia.
+
+---
+
+## 4. NOSSOS VALORES
+
+- **Audácia:** Abraçamos ideias ousadas e corremos riscos calculados para criar o extraordinário.
+- **Excelência:** Somos incansáveis em nossa busca pela perfeição em cada pixel e linha de código.
+- **Inovação:** Exploramos constantemente novas fronteiras em tecnologia e design para o futuro.
+
+---
+
+## 5. PORTFÓLIO DE PROJETOS (CASES DE SUCESSO)
+
+- **Projeto Alfa (Web):** Um rebranding completo e um novo site para uma startup de tecnologia, com foco em uma estética futurista e limpa que impulsionou a aquisição de usuários. **Resultado:** +300% conversões. **Tecnologias:** React, WebGL, GSAP, Figma.
+
+- **Salto Quântico (Motion):** Uma campanha imersiva de mídia social que utilizou motion graphics e storytelling para gerar milhões de impressões e engajamento viral. **Tecnologias:** After Effects, Cinema 4D, Lottie.
+
+- **Campos Elíseos (Branding):** Um evento pop-up que mesclou realidades físicas e digitais para uma marca de luxo, criando uma experiência de marca inesquecível e exclusiva. **Resultado:** +450% vendas online. **Tecnologias:** Identidade Visual, TouchDesigner, Marketing de Experiência.
+
+- **Viajante Estelar (Web):** Projetando uma interface intuitiva e deslumbrante para um aplicativo de viagens, focada em microinterações e uma experiência de usuário fluida. **Tecnologias:** React Native, Figma, Lottie, GraphQL.
+
+- **Sonhos Cibernéticos (Motion):** Criação de assets visuais e animações 3D impressionantes para o trailer de um videogame, definindo a estética visual do projeto. **Resultado:** 1M+ downloads. **Tecnologias:** Unreal Engine, Blender, Houdini, DaVinci Resolve.
+
+- **Iniciativa Oráculo (Web):** Desenvolvimento de um motor de recomendação de conteúdo inteligente com IA para um gigante da mídia, personalizando a experiência para milhões de usuários. **Tecnologias:** Python, TensorFlow, React, AWS.
+
+---
+
+## 6. DEPOIMENTOS DE CLIENTES
+
+- **Ana Souza (Diretora de Marketing - Elysian Fields Lux):** "A parceria com a Combo no projeto Campos Elíseos foi um divisor de águas. A fusão de realidades físicas e digitais resultou em um aumento de 450% nas vendas online. Eles não seguem tendências, eles as criam."
+
+- **Carlos Pereira (CEO - Alpha Startup):** "O rebranding do Projeto Alfa foi executado com maestria. A nova identidade visual e o web design futurista foram cruciais para o aumento de 300% em nossas conversões. Uma agência que realmente entende de tecnologia e estética."
+
+- **Juliana V. (Chefe de Inovação - Quantum Dynamics):** "A equipe da Combo é o motor criativo que toda marca precisa. Eles transformaram nossa visão em uma realidade digital impactante, superando todas as metas."
+
+- **Marcos Andrade (CTO - Viajante Estelar App):** "Trabalhar com a Combo Digital elevou nosso jogo. A abordagem deles para UI/UX no nosso aplicativo móvel foi revolucionária, resultando em um engajamento recorde."
+
+---
+
+## 7. JORNADA DA EMPRESA (LINHA DO TEMPO)
+
+- **2018 (O Início):** A Combo Digital nasce de uma visão: fundir criatividade audaciosa com tecnologia de ponta. Começamos em uma pequena sala, com grandes sonhos.
+- **2020 (Primeiro Prêmio):** Nosso projeto "Salto Quântico" é reconhecido, validando nossa abordagem inovadora e nos colocando no mapa das agências criativas.
+- **2022 (Expansão IA):** Integramos Inteligência Artificial em nossos serviços, automatizando processos e gerando insights preditivos para nossos clientes.
+- **Hoje (Arquitetos do Futuro):** Consolidados como uma agência de vanguarda, continuamos a explorar novas fronteiras, do WebGL a experiências imersivas.
+
+---
+
+## 8. CHAMADAS PARA AÇÃO (CALLS TO ACTION - CTA)
+
+- "Explore Nosso Trabalho"
+- "Ver Todos os Projetos"
+- "Pronto para criar algo inesquecível? Vamos conversar."
+- "Pronto para criar o próximo nível? Vamos transformar sua visão em uma realidade digital impactante. Entre em Contato."
+- "O próximo marco? Criar algo épico com você. Vamos juntos?"
+- "Vamos Criar o Impossível. Sua próxima grande ideia começa com uma conversa. Estamos prontos para ouvir."
+
+---
+
+## 9. INFORMAÇÕES DE CONTATO
+
+- **Email:** hello@combo.digital
+- **Telefone:** +55 (11) 99999-8888
+- **Texto de Contato:** Use o formulário para nos enviar uma mensagem ou conecte-se conosco através de nossos canais diretos. A vanguarda digital espera por você.
