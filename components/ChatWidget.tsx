@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { supabase } from '../lib/supabase'; // Importando o cliente Supabase
+import { supabase } from '@/src/lib/supabase'; // Caminho de importação corrigido
 
 type Message = {
   sender: 'user' | 'bot';
