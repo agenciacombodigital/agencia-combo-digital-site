@@ -5,7 +5,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// --- CORREÇÃO: Atualizando para a API v1 e o modelo recomendado ---
 const GEMINI_API_MODEL = "gemini-1.5-flash-latest"; // Modelo mais recente e eficiente
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_API_MODEL}:generateContent`;
 
@@ -25,6 +24,9 @@ serve(async (req) => {
 
   try {
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY_CHATBOT');
+    // LOG TEMPORÁRIO: Verifica se a chave foi encontrada (sem expor o valor)
+    console.log(`[chat-ai Edge Function] GEMINI_API_KEY_CHATBOT encontrada: ${!!geminiApiKey}`);
+
     if (!geminiApiKey) {
       throw new Error("A chave GEMINI_API_KEY_CHATBOT não foi encontrada nos segredos do Supabase. Por favor, configure-a.");
     }
