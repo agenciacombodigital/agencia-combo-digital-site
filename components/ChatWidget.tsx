@@ -32,9 +32,8 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Invoca a função Edge do Supabase para se comunicar com a API do Gemini
       const response = await fetch(
-        `https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/chat-ai`, // URL da sua função Edge
+        `https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/chat-ai`,
         {
           method: 'POST',
           headers: {
@@ -44,20 +43,22 @@ const ChatWidget: React.FC = () => {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Erro na função Edge: ${errorData.error || response.statusText}`);
+        // If response is not OK, 'data' contains the error object from the Edge Function
+        const errorMessage = data.error || "Não foi possível obter uma resposta. Verifique a configuração da sua API.";
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
       const botResponseText = data.reply || "Desculpe, não consegui processar sua resposta.";
-
       const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
 
     } catch (error) {
-      console.error("Erro ao chamar a função Edge:", error);
-      const errorResponse: Message = { sender: 'bot', text: "Ocorreu um erro. Por favor, tente novamente mais tarde." };
+      // Catch errors from fetch itself or the thrown error from a non-OK response
+      console.error("Erro ao se comunicar com o assistente:", error);
+      const errorResponse: Message = { sender: 'bot', text: (error as Error).message };
       setMessages(prev => [...prev, errorResponse]);
     } finally {
       setIsLoading(false);
