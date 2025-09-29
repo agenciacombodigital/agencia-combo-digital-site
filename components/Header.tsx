@@ -1,38 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { PAGES } from '../constants';
-
-// Declaration for feather icons script
-declare global {
-    interface Window {
-        feather: {
-            replace: () => void;
-        };
-    }
-}
+import { Home, Users, Layers, Send, Menu, X } from 'react-feather';
 
 interface HeaderProps {
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
 }
 
-const iconMap: { [key: string]: string } = {
-  [Page.Home]: 'home',
-  [Page.About]: 'users',
-  [Page.Portfolio]: 'layers',
-  [Page.Contact]: 'send',
+const iconMap: { [key: string]: React.ElementType } = {
+  [Page.Home]: Home,
+  [Page.About]: Users,
+  [Page.Portfolio]: Layers,
+  [Page.Contact]: Send,
 };
 
 const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        // Este efeito agora é executado após cada renderização, garantindo que os ícones sejam sempre processados.
-        // É uma maneira mais confiável de lidar com mutações do DOM de scripts externos.
-        if (window.feather) {
-            window.feather.replace();
-        }
-    }); // A ausência de um array de dependências faz com que seja executado em cada atualização.
 
     useEffect(() => {
         // Bloqueia o scroll do body quando o menu mobile está aberto
@@ -51,6 +35,8 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
         setIsOpen(false); // Fecha o menu ao navegar
     };
 
+    const MobileMenuIcon = isOpen ? X : Menu;
+
     return (
         <>
             <div 
@@ -59,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                 aria-hidden="true"
             ></div>
             <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Abrir menu" aria-expanded={isOpen} data-cursor-pointer>
-                <i data-feather={isOpen ? 'x' : 'menu'}></i>
+                <MobileMenuIcon />
             </button>
 
             <nav className={`sidebar-nav ${isOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
@@ -73,20 +59,23 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                     <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
                 </a>
                 <ul>
-                    {PAGES.map(page => (
-                        <li key={page.name}>
-                            <a 
-                                href="#" 
-                                data-tooltip={page.name} 
-                                aria-label={page.name}
-                                onClick={(e) => { e.preventDefault(); handleNavigate(page.name); }}
-                                className={currentPage === page.name ? 'active' : ''}
-                                data-cursor-pointer
-                            >
-                                <i data-feather={iconMap[page.name]}></i>
-                            </a>
-                        </li>
-                    ))}
+                    {PAGES.map(page => {
+                        const IconComponent = iconMap[page.name];
+                        return (
+                            <li key={page.name}>
+                                <a 
+                                    href="#" 
+                                    data-tooltip={page.name} 
+                                    aria-label={page.name}
+                                    onClick={(e) => { e.preventDefault(); handleNavigate(page.name); }}
+                                    className={currentPage === page.name ? 'active' : ''}
+                                    data-cursor-pointer
+                                >
+                                    {IconComponent && <IconComponent />}
+                                </a>
+                            </li>
+                        );
+                    })}
                 </ul>
                 {/* Spacer for vertical alignment on desktop */}
                 <div className="hidden md:block w-10 h-10"></div>
