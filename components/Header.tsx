@@ -27,16 +27,12 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        // Usando um timeout para garantir que o DOM seja atualizado antes que o feather substitua os ícones.
-        // Isso ajuda a prevenir condições de corrida, especialmente após mudanças de estado.
-        const timer = setTimeout(() => {
-            if (window.feather) {
-                window.feather.replace();
-            }
-        }, 0);
-
-        return () => clearTimeout(timer);
-    }, [isOpen, currentPage]);
+        // Este efeito agora é executado após cada renderização, garantindo que os ícones sejam sempre processados.
+        // É uma maneira mais confiável de lidar com mutações do DOM de scripts externos.
+        if (window.feather) {
+            window.feather.replace();
+        }
+    }); // A ausência de um array de dependências faz com que seja executado em cada atualização.
 
     useEffect(() => {
         // Bloqueia o scroll do body quando o menu mobile está aberto
