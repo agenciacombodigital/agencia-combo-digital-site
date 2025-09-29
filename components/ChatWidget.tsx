@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { supabase } from '../lib/supabase'; // Importando o cliente Supabase
 
 type Message = {
   sender: 'user' | 'bot';
@@ -11,6 +12,7 @@ const ChatWidget: React.FC = () => {
     { sender: 'bot', text: "Olá! Sou o assistente da Combo. Como posso ajudar você hoje?" }
   ]);
   const [userInput, setUserInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Estado de carregamento
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -21,18 +23,35 @@ const ChatWidget: React.FC = () => {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (userInput.trim() === '') return;
+    if (userInput.trim() === '' || isLoading) return;
 
     const newUserMessage: Message = { sender: 'user', text: userInput };
     setMessages(prev => [...prev, newUserMessage]);
     setUserInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const botResponse: Message = { sender: 'bot', text: "Obrigado por sua mensagem! Nossa equipe entrará em contato em breve. Enquanto isso, que tal explorar nosso portfólio?" };
+    try {
+      // Chama a Edge Function 'chat-ai'
+      const { data, error } = await supabase.functions.invoke('chat-ai', {
+        body: { message: userInput },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      const botResponse: Message = { sender: 'bot', text: data.reply || "Desculpe, não consegui processar sua resposta." };
       setMessages(prev => [...prev, botResponse]);
-    }, 1200);
+
+    } catch (error) {
+      console.error("Erro ao chamar a Edge Function:", error);
+      const errorResponse: Message = { sender: 'bot', text: "Ocorreu um erro. Por favor, tente novamente mais tarde." };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,6 +75,17 @@ const ChatWidget: React.FC = () => {
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="max-w-xs md:max-w-sm px-4 py-2 rounded-2xl bg-gray-700 text-gray-200 rounded-bl-none">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0s'}}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
@@ -66,10 +96,11 @@ const ChatWidget: React.FC = () => {
               type="text"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
-              placeholder="Digite sua mensagem..."
-              className="w-full bg-gray-800 border border-gray-600 rounded-full py-2 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              placeholder={isLoading ? "Aguarde..." : "Digite sua mensagem..."}
+              disabled={isLoading}
+              className="w-full bg-gray-800 border border-gray-600 rounded-full py-2 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
             />
-            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-orange-600 rounded-full hover:bg-orange-500 transition-colors" data-cursor-pointer aria-label="Enviar mensagem">
+            <button type="submit" disabled={isLoading} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-orange-600 rounded-full hover:bg-orange-500 transition-colors disabled:bg-gray-600" data-cursor-pointer aria-label="Enviar mensagem">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
             </button>
           </div>
