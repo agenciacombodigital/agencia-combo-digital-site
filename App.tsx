@@ -6,7 +6,7 @@ import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Portfolio from './components/pages/Portfolio';
 import Contact from './components/pages/Contact';
-import AuthPage from './components/pages/AuthPage'; // Importando a nova página de autenticação
+import AuthPage from './src/components/pages/AuthPage'; // Caminho corrigido
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
 import ChatWidget from './components/ChatWidget';
