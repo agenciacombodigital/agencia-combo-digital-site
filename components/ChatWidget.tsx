@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { supabase, isSupabaseConfigured } from '@/src/lib/supabase'; // Importamos a nova flag
+import { supabase, isSupabaseConfigured } from '../src/lib/supabase'; // Caminho corrigido
 
 type Message = {
   sender: 'user' | 'bot';
@@ -66,7 +66,7 @@ const ChatWidget: React.FC = () => {
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <h3 className="font-bold text-lg combo-gradient-text">Assistente Combo Jam</h3>
           <button onClick={toggleChat} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar chat">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            <svg xmlns="http://www.w.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
