@@ -37,7 +37,7 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
         <div className="text-center z-10 px-4">
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none kinetic-title">
             <span className="block">Nós não seguimos</span>
-            <span className="block combo-gradient-text">Nós criamos.</span>
+            <span className="block combo-gradient-text">Nós lideramos.</span>
           </h1>
           <p className="max-w-2xl mx-auto mt-6 text-lg text-gray-300 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
             A Combo Digital é uma agência criativa que une ideias audaciosas com tecnologia de ponta para construir experiências digitais exclusivas.
