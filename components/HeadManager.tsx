@@ -31,7 +31,7 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
         },
         "sameAs": [
           "https://twitter.com/combo_digital", // Placeholder, update with real links
-          "https://instagram.com/combo_digital", // Placeholder, update with real links
+          "https://www.instagram.com/agenciacombodigital/",
           "https://linkedin.com/company/combo-digital" // Placeholder, update with real links
         ]
       });
