@@ -1,0 +1,49 @@
+/* --- About Page --- */
+.about-page-container {
+  overflow-x: hidden;
+}
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #00a1ff, #fb5626);
+  z-index: 2000;
+  transition: height 0.1s ease-out;
+}
+.about-hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+.fluid-title {
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+}
+.about-manifesto {
+  background-color: #050505;
+}
+.value-card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.value-card-3d:hover {
+  transform: perspective(1000px) rotateY(-10deg) rotateX(10deg) scale(1.05);
+}
+.dna-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+.dna-section img {
+  filter: drop-shadow(0 0 30px rgba(0, 161, 255, 0.5));
+  animation: float-brain 8s ease-in-out infinite;
+}
