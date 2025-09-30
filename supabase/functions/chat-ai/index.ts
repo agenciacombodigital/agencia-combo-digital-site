@@ -5,7 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const GEMINI_API_MODEL = "gemini-pro"; // Garantindo que o modelo seja gemini-pro
+// Definimos o modelo Gemini-Pro, que é estável e amplamente disponível.
+const GEMINI_API_MODEL = "gemini-pro"; 
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_API_MODEL}:generateContent`;
 
 const SYSTEM_PROMPT = `
@@ -18,22 +19,25 @@ Responda à seguinte mensagem do usuário:
 `;
 
 serve(async (req) => {
+  // Lida com requisições OPTIONS para CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY_CHATBOT');
-    // LOG TEMPORÁRIO: Verifica se a chave foi encontrada (sem expor o valor)
-    console.log(`[chat-ai Edge Function] GEMINI_API_KEY_CHATBOT encontrada: ${!!geminiApiKey}`);
-
+    
     if (!geminiApiKey) {
-      throw new Error("A chave GEMINI_API_KEY_CHATBOT não foi encontrada nos segredos do Supabase. Por favor, configure-a.");
+      // Retorna um erro claro se a chave API não estiver configurada
+      return new Response(JSON.stringify({ error: "A chave GEMINI_API_KEY_CHATBOT não foi encontrada. Por favor, configure-a nos segredos do Supabase." }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const { message } = await req.json();
     if (!message) {
-      return new Response(JSON.stringify({ error: "A mensagem não pode estar vazia." }), {
+      return new Response(JSON.stringify({ error: "A mensagem do usuário não pode estar vazia." }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -52,9 +56,10 @@ serve(async (req) => {
     const responseData = await geminiResponse.json();
 
     if (!geminiResponse.ok) {
-      const errorMessage = responseData.error?.message || `Erro ${geminiResponse.status} - ${geminiResponse.statusText}`;
-      console.error("Erro da API do Gemini:", JSON.stringify(responseData));
-      return new Response(JSON.stringify({ error: `A API do Google retornou um erro: "${errorMessage}"` }), {
+      // Loga o erro completo da API do Gemini para depuração
+      console.error("Erro da API do Gemini:", JSON.stringify(responseData, null, 2));
+      const errorMessage = responseData.error?.message || `Erro desconhecido da API do Gemini (Status: ${geminiResponse.status})`;
+      return new Response(JSON.stringify({ error: `Falha ao se comunicar com o Gemini: ${errorMessage}` }), {
         status: geminiResponse.status,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -62,8 +67,8 @@ serve(async (req) => {
     
     const botResponseText = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!botResponseText) {
-        console.error("Formato de resposta inesperado da API do Gemini:", JSON.stringify(responseData));
-        throw new Error("Formato de resposta inválido da API do Gemini.");
+        console.error("Formato de resposta inesperado da API do Gemini:", JSON.stringify(responseData, null, 2));
+        throw new Error("A API do Gemini retornou uma resposta em um formato inesperado.");
     }
 
     return new Response(JSON.stringify({ reply: botResponseText }), {
@@ -72,7 +77,7 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("Erro na Função Edge 'chat-ai':", error.message);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: `Erro interno do servidor: ${error.message}` }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

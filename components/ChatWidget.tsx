@@ -8,7 +8,7 @@ type Message = {
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { sender: 'bot', text: "Olá! Sou o assistente da Combo. Como posso ajudar você hoje?" }
+    { sender: 'bot', text: "Olá! Sou o assistente da Combo Digital. Como posso ajudar você hoje?" }
   ]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +32,8 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // A URL da função Edge deve ser construída com o seu Project ID do Supabase
+      // Substitua 'sisvmbkwwmawnjhwydxh' pelo seu Project ID real se for diferente
       const response = await fetch(
         `https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/chat-ai`,
         {
@@ -46,8 +48,8 @@ const ChatWidget: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // If response is not OK, 'data' contains the error object from the Edge Function
-        const errorMessage = data.error || "Não foi possível obter uma resposta. Verifique a configuração da sua API.";
+        // Se a resposta não for OK, 'data' contém o objeto de erro da Função Edge
+        const errorMessage = data.error || "Não foi possível obter uma resposta. Erro desconhecido.";
         throw new Error(errorMessage);
       }
 
@@ -56,9 +58,8 @@ const ChatWidget: React.FC = () => {
       setMessages(prev => [...prev, botResponse]);
 
     } catch (error) {
-      // Catch errors from fetch itself or the thrown error from a non-OK response
       console.error("Erro ao se comunicar com o assistente:", error);
-      const errorResponse: Message = { sender: 'bot', text: (error as Error).message };
+      const errorResponse: Message = { sender: 'bot', text: `Ocorreu um erro: ${(error as Error).message}. Por favor, tente novamente.` };
       setMessages(prev => [...prev, errorResponse]);
     } finally {
       setIsLoading(false);

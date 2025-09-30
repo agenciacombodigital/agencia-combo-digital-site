@@ -8,7 +8,7 @@ import Portfolio from './components/pages/Portfolio';
 import Contact from './components/pages/Contact';
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
-import ChatWidget from './components/ChatWidget';
+import ChatWidget from './components/ChatWidget'; // Adicionado novamente
 import WhatsAppBubble from './components/WhatsAppBubble';
 import Footer from './components/Footer';
 import HeadManager from './components/HeadManager';
@@ -56,7 +56,7 @@ const App: React.FC = () => {
         {renderPage()}
       </main>
       <Footer setCurrentPage={setCurrentPage} />
-      <ChatWidget />
+      <ChatWidget /> {/* Adicionado novamente */}
       <WhatsAppBubble />
     </div>
   );
