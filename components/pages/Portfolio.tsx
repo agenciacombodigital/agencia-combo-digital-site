@@ -3,41 +3,74 @@ import { PORTFOLIO_ITEMS } from '../../constants';
 import { PortfolioItem, Page } from '../../types';
 import { useInView } from '../../hooks/useInView';
 
-// --- Modal Aprimorado ---
+// --- Modal Aprimorado com Galeria ---
 const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; onClose: () => void }> = ({ items, initialIndex, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
   const item = items[currentIndex];
+  const gallery = useMemo(() => [item.imageUrl, ...item.galleryImages], [item]);
 
   useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
+      if (event.key === 'ArrowRight') nextImage();
+      if (event.key === 'ArrowLeft') prevImage();
     };
-    window.addEventListener('keydown', handleEsc);
+    window.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [onClose]);
+  }, [onClose, currentIndex, currentImageIndex]);
 
-  const navigate = (direction: 'next' | 'prev') => {
-    if (direction === 'next') {
-      setCurrentIndex((prev) => (prev + 1) % items.length);
-    } else {
-      setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  useEffect(() => {
+    // Reseta a imagem para a capa sempre que o projeto mudar
+    setCurrentImageIndex(0);
+  }, [currentIndex]);
+
+  const navigateProject = (direction: 'next' | 'prev') => {
+    const newIndex = direction === 'next'
+      ? (currentIndex + 1) % items.length
+      : (currentIndex - 1 + items.length) % items.length;
+    setCurrentIndex(newIndex);
+  };
+
+  const nextImage = () => {
+    if (gallery.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (gallery.length > 1) {
+      setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
       <div className="bg-gray-900/50 border border-gray-800 rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col md:flex-row relative shadow-2xl shadow-blue-500/10" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-orange-500 transition-colors z-20" aria-label="Fechar modal" data-cursor-pointer>
+        <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-orange-500 transition-colors z-30" aria-label="Fechar modal" data-cursor-pointer>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
         
-        <div className="w-full md:w-3/5 h-1/2 md:h-full relative">
-          <img src={item.imageUrl} alt={`Imagem do projeto ${item.title}`} className="w-full h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none" loading="lazy" />
+        <div className="w-full md:w-3/5 h-1/2 md:h-full relative group overflow-hidden rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+          <img src={gallery[currentImageIndex]} alt={`Imagem ${currentImageIndex + 1} do projeto ${item.title}`} className="w-full h-full object-cover transition-opacity duration-300" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+          
+          {gallery.length > 1 && (
+            <>
+              <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 z-20" data-cursor-pointer aria-label="Imagem anterior"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+              <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 z-20" data-cursor-pointer aria-label="Próxima imagem"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {gallery.map((_, index) => (
+                  <button key={index} onClick={() => setCurrentImageIndex(index)} className={`w-2.5 h-2.5 rounded-full transition-colors ${index === currentImageIndex ? 'bg-white' : 'bg-white/50 hover:bg-white/75'}`} aria-label={`Ir para imagem ${index + 1}`}></button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="w-full md:w-2/5 h-1/2 md:h-full p-8 md:p-12 flex flex-col overflow-y-auto">
@@ -63,9 +96,9 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
         </div>
       </div>
       
-      {/* Navegação */}
-      <button onClick={() => navigate('prev')} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer aria-label="Projeto anterior"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
-      <button onClick={() => navigate('next')} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all" data-cursor-pointer aria-label="Próximo projeto"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+      {/* Navegação de Projetos */}
+      <button onClick={() => navigateProject('prev')} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all hidden md:block" data-cursor-pointer aria-label="Projeto anterior"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+      <button onClick={() => navigateProject('next')} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-all hidden md:block" data-cursor-pointer aria-label="Próximo projeto"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
     </div>
   );
 };
@@ -85,7 +118,7 @@ const Portfolio: React.FC = () => {
     [activeFilter]
   );
 
-  const handleOpenModal = (item: PortfolioItem, index: number) => {
+  const handleOpenModal = (item: PortfolioItem) => {
     const originalIndex = PORTFOLIO_ITEMS.findIndex(p => p.id === item.id);
     setSelectedItem({ item, index: originalIndex });
   };
@@ -117,13 +150,13 @@ const Portfolio: React.FC = () => {
         </div>
 
         <div className="portfolio-grid">
-          {filteredItems.map((item, index) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="portfolio-item-container">
               <div
                 className="group portfolio-card-3d"
                 data-cursor-hover
-                onClick={() => handleOpenModal(item, index)}
-                role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleOpenModal(item, index)}
+                onClick={() => handleOpenModal(item)}
+                role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleOpenModal(item)}
               >
                 <img src={item.imageUrl} alt={`Capa do projeto ${item.title}`} className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-all duration-500 group-hover:from-black/90"></div>
