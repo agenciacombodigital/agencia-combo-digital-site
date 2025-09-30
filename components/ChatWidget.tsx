@@ -5,30 +5,55 @@ type Message = {
   text: string;
 };
 
+type SessionContext = {
+  greeted: boolean;
+  timeOfDay: 'manhã' | 'tarde' | 'noite' | 'dia';
+};
+
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { sender: 'bot', text: "Olá! Sou o Combo Jam, da Combo Digital. Como posso te ajudar hoje?" } // Mensagem inicial atualizada
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]); // Começa vazio, a primeira mensagem virá do bot
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionContext, setSessionContext] = useState<SessionContext>({ greeted: false, timeOfDay: 'dia' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Determina a hora do dia para o contexto da sessão
+  useEffect(() => {
+    const hour = new Date().getHours();
+    let currentPartOfDay: SessionContext['timeOfDay'] = 'dia';
+    if (hour >= 5 && hour < 12) currentPartOfDay = 'manhã';
+    else if (hour >= 12 && hour < 18) currentPartOfDay = 'tarde';
+    else if (hour >= 18 || hour < 5) currentPartOfDay = 'noite';
+    setSessionContext(prev => ({ ...prev, timeOfDay: currentPartOfDay }));
+  }, []);
+
+  // Envia a primeira mensagem para o bot para iniciar a saudação inteligente
+  useEffect(() => {
+    if (isOpen && !sessionContext.greeted && messages.length === 0) {
+      handleSendMessage({ preventDefault: () => {} } as React.FormEvent, "Olá!");
+    }
+  }, [isOpen, sessionContext.greeted, messages.length]);
+
+
   useEffect(scrollToBottom, [messages]);
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent, predefinedMessage?: string) => {
     e.preventDefault();
-    if (userInput.trim() === '' || isLoading) return;
+    const messageToSend = predefinedMessage || userInput;
+    if (messageToSend.trim() === '' || isLoading) return;
 
-    const newUserMessage: Message = { sender: 'user', text: userInput };
+    const newUserMessage: Message = { sender: 'user', text: messageToSend };
     setMessages(prev => [...prev, newUserMessage]);
-    setUserInput('');
+    if (!predefinedMessage) { // Limpa o input apenas se não for uma mensagem predefinida
+      setUserInput('');
+    }
     setIsLoading(true);
 
     try {
@@ -39,7 +64,7 @@ const ChatWidget: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: userInput }),
+          body: JSON.stringify({ message: messageToSend, sessionContext }), // Envia sessionContext
         }
       );
 
@@ -53,6 +78,7 @@ const ChatWidget: React.FC = () => {
       const botResponseText = data.reply || "Desculpe, não consegui processar sua resposta.";
       const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
+      setSessionContext(prev => ({ ...prev, greeted: true })); // Marca como saudado após a primeira resposta do bot
 
     } catch (error) {
       console.error("Erro ao se comunicar com o assistente:", error);
@@ -69,7 +95,7 @@ const ChatWidget: React.FC = () => {
       <div className={`fixed bottom-28 left-4 md:left-24 w-[calc(100%-2rem)] max-w-sm h-[60vh] max-h-[500px] bg-gray-900/80 backdrop-blur-md rounded-xl shadow-2xl shadow-black/50 flex flex-col transition-all duration-500 ease-in-out z-30 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
-          <h3 className="font-bold text-lg combo-gradient-text">Combo Jam</h3> {/* Nome atualizado aqui */}
+          <h3 className="font-bold text-lg combo-gradient-text">Combo Jam</h3>
           <button onClick={toggleChat} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar chat">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -78,7 +104,7 @@ const ChatWidget: React.FC = () => {
         {/* Messages */}
         <div className="flex-1 p-4 overflow-y-auto space-y-4">
           {messages.map((msg, index) => (
-            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
               <div className={`max-w-xs md:max-w-sm px-4 py-2 rounded-2xl ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-700 text-gray-200 rounded-bl-none'}`}>
                 {msg.text}
               </div>
@@ -96,6 +122,26 @@ const ChatWidget: React.FC = () => {
             </div>
           )}
           <div ref={messagesEndRef} />
+        </div>
+
+        {/* Quick Actions */}
+        <div className="p-4 pt-0 flex justify-around gap-2">
+            <button
+                onClick={() => handleSendMessage({ preventDefault: () => {} } as React.FormEvent, "Gostaria de agendar uma call.")}
+                className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-full text-sm hover:bg-gray-600 transition-colors"
+                data-cursor-pointer
+                aria-label="Agendar uma call"
+            >
+                Agendar call
+            </button>
+            <button
+                onClick={() => handleSendMessage({ preventDefault: () => {} } as React.FormEvent, "Quero ver os serviços de vocês.")}
+                className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-full text-sm hover:bg-gray-600 transition-colors"
+                data-cursor-pointer
+                aria-label="Ver serviços"
+            >
+                Ver serviços
+            </button>
         </div>
 
         {/* Input */}
