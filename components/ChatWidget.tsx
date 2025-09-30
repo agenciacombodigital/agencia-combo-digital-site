@@ -10,35 +10,44 @@ type SessionContext = {
   timeOfDay: 'manhã' | 'tarde' | 'noite' | 'dia';
 };
 
+// Função para determinar a saudação com base na hora local
+const getSaudacao = () => {
+  const agora = new Date();
+  const hora = agora.getHours();
+  if (hora >= 5 && hora < 12) return "Bom dia";
+  if (hora >= 12 && hora < 18) return "Boa tarde";
+  return "Boa noite";
+};
+
+// Função para determinar a parte do dia para o contexto da sessão
+const getPartOfDay = (): SessionContext['timeOfDay'] => {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return 'manhã';
+  if (hour >= 12 && hour < 18) return 'tarde';
+  if (hour >= 18 || hour < 5) return 'noite';
+  return 'dia';
+};
+
 const ChatWidget: React.FC = () => {
+  const initialTimeOfDay = getPartOfDay();
+  const initialWelcomeMessage: Message = { 
+    sender: 'bot', 
+    text: `${getSaudacao()}! Sou o Combo Jam, seja bem-vindo à Combo Digital! Em que posso te ajudar?` 
+  };
+
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]); // Começa vazio, a primeira mensagem virá do bot
+  const [messages, setMessages] = useState<Message[]>([initialWelcomeMessage]); // Inicializa com a saudação automática
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionContext, setSessionContext] = useState<SessionContext>({ greeted: false, timeOfDay: 'dia' });
+  const [sessionContext, setSessionContext] = useState<SessionContext>({ 
+    greeted: true, // Já saudado pelo cliente
+    timeOfDay: initialTimeOfDay 
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  // Determina a hora do dia para o contexto da sessão
-  useEffect(() => {
-    const hour = new Date().getHours();
-    let currentPartOfDay: SessionContext['timeOfDay'] = 'dia';
-    if (hour >= 5 && hour < 12) currentPartOfDay = 'manhã';
-    else if (hour >= 12 && hour < 18) currentPartOfDay = 'tarde';
-    else if (hour >= 18 || hour < 5) currentPartOfDay = 'noite';
-    setSessionContext(prev => ({ ...prev, timeOfDay: currentPartOfDay }));
-  }, []);
-
-  // Envia a primeira mensagem para o bot para iniciar a saudação inteligente
-  useEffect(() => {
-    if (isOpen && !sessionContext.greeted && messages.length === 0) {
-      handleSendMessage({ preventDefault: () => {} } as React.FormEvent, "Olá!");
-    }
-  }, [isOpen, sessionContext.greeted, messages.length]);
-
 
   useEffect(scrollToBottom, [messages]);
 
@@ -51,7 +60,7 @@ const ChatWidget: React.FC = () => {
 
     const newUserMessage: Message = { sender: 'user', text: messageToSend };
     setMessages(prev => [...prev, newUserMessage]);
-    if (!predefinedMessage) { // Limpa o input apenas se não for uma mensagem predefinida
+    if (!predefinedMessage) {
       setUserInput('');
     }
     setIsLoading(true);
@@ -78,7 +87,7 @@ const ChatWidget: React.FC = () => {
       const botResponseText = data.reply || "Desculpe, não consegui processar sua resposta.";
       const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
-      setSessionContext(prev => ({ ...prev, greeted: true })); // Marca como saudado após a primeira resposta do bot
+      // sessionContext.greeted já é true, não precisa mudar aqui.
 
     } catch (error) {
       console.error("Erro ao se comunicar com o assistente:", error);
