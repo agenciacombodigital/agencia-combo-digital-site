@@ -8,7 +8,7 @@ type Message = {
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { sender: 'bot', text: "Olá! Sou o assistente da Combo Digital. Como posso ajudar você hoje?" }
+    { sender: 'bot', text: "Olá! Sou o Combo Jam, da Combo Digital. Como posso te ajudar hoje?" } // Mensagem inicial atualizada
   ]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +32,6 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // A URL da função Edge deve ser construída com o seu Project ID do Supabase
-      // Substitua 'sisvmbkwwmawnjhwydxh' pelo seu Project ID real se for diferente
       const response = await fetch(
         `https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/chat-ai`,
         {
@@ -48,7 +46,6 @@ const ChatWidget: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Se a resposta não for OK, 'data' contém o objeto de erro da Função Edge
         const errorMessage = data.error || "Não foi possível obter uma resposta. Erro desconhecido.";
         throw new Error(errorMessage);
       }
@@ -72,7 +69,7 @@ const ChatWidget: React.FC = () => {
       <div className={`fixed bottom-28 left-4 md:left-24 w-[calc(100%-2rem)] max-w-sm h-[60vh] max-h-[500px] bg-gray-900/80 backdrop-blur-md rounded-xl shadow-2xl shadow-black/50 flex flex-col transition-all duration-500 ease-in-out z-30 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
-          <h3 className="font-bold text-lg combo-gradient-text">Assistente Combo</h3>
+          <h3 className="font-bold text-lg combo-gradient-text">Combo Jam</h3> {/* Nome atualizado aqui */}
           <button onClick={toggleChat} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar chat">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
