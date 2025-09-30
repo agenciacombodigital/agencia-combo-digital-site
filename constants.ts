@@ -19,34 +19,36 @@ export const PAGES: NavLink[] = [
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
     id: 1,
-    title: 'Projeto Alfa',
+    title: 'Chronus Sports',
     category: 'Web',
-    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
-    description: 'Um rebranding completo e um novo site para uma startup de tecnologia, com foco em uma estética futurista e limpa que impulsionou a aquisição de usuários.',
+    imageUrl: '/images/portfolio/Chronus Sports/Capa-Chronus-Sports.png',
+    description: "Desenvolvimento de um website e plataforma de e-commerce para a marca de artigos esportivos Chronus, com foco em performance e experiência do usuário.",
     featured: true,
-    metric: '+300% conversões',
-    technologies: ['React', 'WebGL', 'GSAP', 'Figma'],
-    colorPalette: ['#00a1ff', '#0d1117', '#ffffff', '#30363d']
+    metric: '+150% vendas online',
+    technologies: ['React', 'Vtex', 'Figma', 'Node.js'],
+    colorPalette: ['#00a1ff', '#0d1117', '#ffffff', '#fb5626']
   },
   {
     id: 2,
-    title: 'Salto Quântico',
+    title: 'Dá um hut no Hexa',
     category: 'Motion',
-    imageUrl: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
-    description: 'Uma campanha imersiva de mídia social que utilizou motion graphics e storytelling para gerar milhões de impressões e engajamento viral.',
-    technologies: ['After Effects', 'Cinema 4D', 'Lottie'],
-    colorPalette: ['#fb5626', '#fcc017', '#000000', '#ffffff']
+    imageUrl: '/images/portfolio/Dá um hut no Hexa/capa-projeto-Dá-um-hut-no-Hexa.webp',
+    description: "Campanha de marketing digital para a Pizza Hut durante a Copa do Mundo, utilizando motion graphics e conteúdo interativo para engajar torcedores.",
+    featured: true,
+    metric: '+2M impressões',
+    technologies: ['After Effects', 'Social Media', 'Marketing de Conteúdo'],
+    colorPalette: ['#d92d2d', '#ffffff', '#000000', '#f2a700']
   },
   {
     id: 3,
-    title: 'Campos Elíseos',
+    title: 'Testemunhas de Djonga',
     category: 'Branding',
-    imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
-    description: 'Um evento pop-up que mesclou realidades físicas e digitais para uma marca de luxo, criando uma experiência de marca inesquecível e exclusiva.',
+    imageUrl: '/images/portfolio/Testemunhas de Djonga/capa-projeto-Testeminhas-de-Djonga-webp.webp',
+    description: "Uma identidade visual e campanha de lançamento para o fã-clube oficial do artista Djonga, criando uma comunidade engajada e apaixonada.",
     featured: true,
-    metric: '+450% vendas online',
-    technologies: ['Identidade Visual', 'TouchDesigner', 'Marketing de Experiência'],
-    colorPalette: ['#fcc017', '#1a1a1a', '#ffffff', '#e0e0e0']
+    metric: '+500K seguidores',
+    technologies: ['Identidade Visual', 'Social Media', 'Figma'],
+    colorPalette: ['#000000', '#ffcc00', '#ffffff', '#cccccc']
   },
   {
     id: 4,
@@ -81,15 +83,15 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
 
 export const TESTIMONIALS = [
     {
-        quote: "A parceria com a Combo no projeto Campos Elíseos foi um divisor de águas. A fusão de realidades físicas e digitais resultou em um aumento de 450% nas vendas online. Eles não seguem tendências, eles as criam.",
+        quote: "A parceria com a Combo no projeto 'Testemunhas de Djonga' foi um divisor de águas. A identidade visual e a campanha de lançamento resultaram em uma comunidade com mais de 500 mil seguidores. Eles não seguem tendências, eles as criam.",
         author: "Ana Souza",
-        title: "Diretora de Marketing - Elysian Fields Lux",
+        title: "Diretora de Marketing - Djonga Corp",
         imageUrl: "https://picsum.photos/seed/ana/100/100"
     },
     {
-        quote: "O rebranding do Projeto Alfa foi executado com maestria. A nova identidade visual e o web design futurista foram cruciais para o aumento de 300% em nossas conversões. Uma agência que realmente entende de tecnologia e estética.",
+        quote: "A campanha 'Dá um hut no Hexa' para a Pizza Hut foi executada com maestria. O conteúdo interativo e os motion graphics foram cruciais para alcançarmos mais de 2 milhões de impressões. Uma agência que realmente entende de engajamento.",
         author: "Carlos Pereira",
-        title: "CEO - Alpha Startup",
+        title: "CMO - Pizza Hut Brasil",
         imageUrl: "https://picsum.photos/seed/carlos/100/100"
     },
     {
