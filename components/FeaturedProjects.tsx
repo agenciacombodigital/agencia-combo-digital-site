@@ -50,7 +50,7 @@ const ProjectCard: React.FC<{ project: PortfolioItem; onClick: () => void }> = (
             data-cursor-hover
         >
             <div ref={cardRef} className="projeto-card-content">
-                <div className="projeto-card-bg" style={{ backgroundImage: `url(${project.imageUrl})` }}></div>
+                <img src={project.imageUrl} alt={`Capa do projeto ${project.title}`} className="projeto-card-bg" />
                 <div className="projeto-card-overlay"></div>
                 <div className="projeto-card-text-wrapper">
                     <span className="block text-sm font-semibold mb-2" style={{color: COLORS.yellow}}>{project.category}</span>
