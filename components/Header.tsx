@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { PAGES } from '../constants';
-import { Home, Users, Layers, Send, Menu, X } from 'react-feather';
+import { Home, Users, Layers, Send, Menu, X } from 'react-feather'; // Import X para o botão de fechar interno
 
 interface HeaderProps {
   currentPage: Page;
@@ -35,8 +35,6 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
         setIsOpen(false); // Fecha o menu ao navegar
     };
 
-    const MobileMenuIcon = isOpen ? X : Menu;
-
     return (
         <>
             <div 
@@ -44,15 +42,33 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
             ></div>
-            <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Abrir menu" aria-expanded={isOpen} data-cursor-pointer>
-                <MobileMenuIcon />
+            {/* Este botão sempre será o ícone de hambúrguer para abrir o menu */}
+            <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(true)} aria-label="Abrir menu" aria-expanded={isOpen} data-cursor-pointer>
+                <Menu /> {/* Sempre mostra o ícone de Menu */}
             </button>
 
             <nav className={`sidebar-nav ${isOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
+                {/* Cabeçalho Mobile - visível apenas no mobile, contém botão de fechar e logo */}
+                <div className="mobile-menu-header md:hidden flex justify-between items-center w-full p-4 pb-8">
+                    <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar menu">
+                        <X className="h-8 w-8" />
+                    </button>
+                    <a 
+                        href="#" 
+                        onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
+                        className="block"
+                        data-cursor-pointer
+                        aria-label="Página Inicial"
+                    >
+                        <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
+                    </a>
+                </div>
+
+                {/* Logo Desktop - escondido no mobile */}
                 <a 
                     href="#" 
                     onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
-                    className="block mb-20 md:mb-0 px-[15px] py-[12px] md:p-0"
+                    className="hidden md:block mb-20 px-[15px] py-[12px] md:p-0"
                     data-cursor-pointer
                     aria-label="Página Inicial"
                 >
@@ -72,12 +88,13 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                                     data-cursor-pointer
                                 >
                                     {IconComponent && <IconComponent />}
+                                    {/* No mobile, o texto é exibido ao lado do ícone, gerenciado via CSS */}
                                 </a>
                             </li>
                         );
                     })}
                 </ul>
-                {/* Spacer for vertical alignment on desktop */}
+                {/* Espaçador para alinhamento vertical no desktop */}
                 <div className="hidden md:block w-10 h-10"></div>
             </nav>
         </>
