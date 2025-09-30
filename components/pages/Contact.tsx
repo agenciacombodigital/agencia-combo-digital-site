@@ -1,23 +1,57 @@
 import React, { useState } from 'react';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 const Contact: React.FC = () => {
     const [status, setStatus] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [token, setToken] = useState<string>('');
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+
+    if (!siteKey) {
+        console.error("A chave do site do Turnstile (VITE_TURNSTILE_SITE_KEY) não está definida!");
+        // Você pode renderizar uma mensagem de erro para o usuário aqui se preferir
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
+        if (!token) {
+            setStatus('Por favor, complete a verificação de segurança.');
+            return;
+        }
+
         setStatus('Enviando...');
-        // Simula uma chamada de API
-        setTimeout(() => {
+        
+        try {
+            const response = await fetch('https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/submit-contact-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, message, token }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Ocorreu um erro ao enviar a mensagem.');
+            }
+
             setStatus('Obrigado! Sua mensagem foi enviada com sucesso.');
-            // Reseta os campos do formulário redefinindo o estado
             setName('');
             setEmail('');
             setMessage('');
-            setTimeout(() => setStatus(''), 3000);
-        }, 2000);
+            setToken(''); // Reseta o token
+            setTimeout(() => setStatus(''), 4000);
+
+        } catch (error) {
+            console.error("Erro no envio do formulário:", error);
+            setStatus((error as Error).message || 'Falha no envio. Tente novamente.');
+            setTimeout(() => setStatus(''), 4000);
+        }
     };
 
     const SocialLink: React.FC<{href: string, children: React.ReactNode}> = ({ href, children }) => (
@@ -68,13 +102,25 @@ const Contact: React.FC = () => {
                         <textarea name="message" id="message" placeholder=" " rows={4} required className="peer w-full bg-transparent border-b-2 border-gray-600 focus:border-blue-500 outline-none p-2 transition-colors duration-300" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
                         <label htmlFor="message" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Sua Mensagem</label>
                     </div>
+                    
+                    {siteKey && (
+                        <div className="flex justify-center">
+                            <Turnstile
+                                siteKey={siteKey}
+                                onSuccess={setToken}
+                                options={{ theme: 'dark' }}
+                            />
+                        </div>
+                    )}
+
                     <div>
                          <button 
                             type="submit"
-                            className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50"
+                            className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50 disabled:bg-gray-500 disabled:cursor-not-allowed"
                             data-cursor-hover
+                            disabled={status === 'Enviando...'}
                         >
-                            Enviar Proposta
+                            {status === 'Enviando...' ? 'Enviando...' : 'Enviar Proposta'}
                         </button>
                     </div>
                     {status && <p className="text-center text-yellow-400 font-semibold">{status}</p>}
