@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const GEMINI_API_MODEL = "gemini-pro"; // Alterado para um modelo mais estável
+const GEMINI_API_MODEL = "gemini-pro"; // Garantindo que o modelo seja gemini-pro
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_API_MODEL}:generateContent`;
 
 const SYSTEM_PROMPT = `
