@@ -2,12 +2,13 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-goog-api-key', // Adicionado x-goog-api-key
 }
 
 // Definimos o modelo Gemini-Pro, que é estável e amplamente disponível.
 const GEMINI_API_MODEL = "gemini-pro"; 
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_API_MODEL}:generateContent`;
+// Alterado para v1beta conforme o guia
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_API_MODEL}:generateContent`;
 
 const SYSTEM_PROMPT = `
 Você é um assistente virtual da Combo Digital, uma agência de marketing e publicidade de vanguarda.
@@ -27,6 +28,10 @@ serve(async (req) => {
   try {
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY_CHATBOT');
     
+    // LOG para verificar qual modelo e URL estão sendo usados na função implantada
+    console.log(`[chat-ai Edge Function] Usando modelo: ${GEMINI_API_MODEL}`);
+    console.log(`[chat-ai Edge Function] Chamando URL: ${GEMINI_API_URL}`);
+
     if (!geminiApiKey) {
       // Retorna um erro claro se a chave API não estiver configurada
       return new Response(JSON.stringify({ error: "A chave GEMINI_API_KEY_CHATBOT não foi encontrada. Por favor, configure-a nos segredos do Supabase." }), {
@@ -45,9 +50,12 @@ serve(async (req) => {
 
     const fullPrompt = `${SYSTEM_PROMPT}\n\nUsuário: "${message}"`;
 
-    const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${geminiApiKey}`, {
+    const geminiResponse = await fetch(GEMINI_API_URL, { // Removido ?key= da URL
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-goog-api-key': geminiApiKey, // Chave da API no header, conforme o guia
+      },
       body: JSON.stringify({
         contents: [{ parts: [{ text: fullPrompt }] }]
       })
