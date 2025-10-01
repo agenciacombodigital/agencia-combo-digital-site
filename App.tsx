@@ -23,6 +23,11 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Efeito para rolar para o topo ao mudar de página
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   const showPortfolioItem = (item: PortfolioItem) => {
     setSelectedPortfolioItem(item);
     setCurrentPage(Page.Portfolio);
