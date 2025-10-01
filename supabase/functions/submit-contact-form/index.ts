@@ -32,17 +32,17 @@ serve(async (req) => {
         });
     }
 
-    // Verify the token with Cloudflare
-    const formData = new FormData();
-    formData.append('secret', secretKey);
-    formData.append('response', token);
-    // Opcional: adicione o IP do cliente para maior segurança
-    // const remoteIp = req.headers.get('x-forwarded-for');
-    // if (remoteIp) formData.append('remoteip', remoteIp);
+    // Verify the token with Cloudflare using the correct 'application/x-www-form-urlencoded' format
+    const body = new URLSearchParams();
+    body.append('secret', secretKey);
+    body.append('response', token);
 
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        body: formData,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body.toString(),
     });
 
     const verificationData = await verificationResponse.json();
@@ -56,7 +56,6 @@ serve(async (req) => {
     }
 
     // Se a verificação for bem-sucedida, processe os dados do formulário
-    // Em um cenário real, você enviaria um email, salvaria no banco de dados, etc.
     console.log("Formulário verificado com sucesso! Dados:", { name, email, message });
 
     // Retorne uma resposta de sucesso
