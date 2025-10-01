@@ -8,7 +8,6 @@ const corsHeaders = {
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/api/v3/siteverify';
 
 serve(async (req) => {
-  // Handle CORS preflight request
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -26,45 +25,51 @@ serve(async (req) => {
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
         console.error("A chave secreta do Turnstile não foi encontrada.");
-        return new Response(JSON.stringify({ error: "Erro de configuração do servidor." }), {
+        return new Response(JSON.stringify({ error: "Erro de configuração do servidor: Chave secreta ausente." }), {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
     }
 
-    // Verify the token with Cloudflare using the correct 'application/x-www-form-urlencoded' format
     const body = new URLSearchParams();
     body.append('secret', secretKey);
     body.append('response', token);
 
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
     });
 
-    const verificationData = await verificationResponse.json();
-
-    if (!verificationData.success) {
-        console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
-        return new Response(JSON.stringify({ error: "Falha na verificação de segurança. Por favor, tente novamente." }), {
-            status: 403, // Forbidden
+    if (!verificationResponse.ok) {
+        const errorText = await verificationResponse.text();
+        console.error(`Cloudflare API returned an error: ${verificationResponse.status} ${verificationResponse.statusText}`, errorText);
+        return new Response(JSON.stringify({ error: `Erro de comunicação com o serviço de verificação. Status: ${verificationResponse.status}` }), {
+            status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
     }
 
-    // Se a verificação for bem-sucedida, processe os dados do formulário
+    const verificationData = await verificationResponse.json();
+    console.log("Resposta da verificação do Turnstile:", verificationData);
+
+    if (!verificationData.success) {
+        console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
+        const errorCodes = verificationData['error-codes']?.join(', ') || 'desconhecido';
+        return new Response(JSON.stringify({ error: `Falha na verificação de segurança. Código: ${errorCodes}` }), {
+            status: 403,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+    }
+
     console.log("Formulário verificado com sucesso! Dados:", { name, email, message });
 
-    // Retorne uma resposta de sucesso
     return new Response(JSON.stringify({ message: "Mensagem enviada com sucesso!" }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error("Erro na função 'submit-contact-form':", error.message);
+    console.error("Erro CRÍTICO na função 'submit-contact-form':", error);
     return new Response(JSON.stringify({ error: `Erro interno do servidor: ${error.message}` }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
