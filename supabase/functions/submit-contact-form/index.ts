@@ -31,16 +31,21 @@ serve(async (req) => {
         });
     }
 
-    // Usando FormData, exatamente como no exemplo da documentação da Cloudflare.
-    // Não definimos o Content-Type manualmente; o Deno/Fetch faz isso automaticamente.
-    const formData = new FormData();
-    formData.append('secret', secretKey);
-    formData.append('response', token);
-    // O 'remoteip' é opcional e não é necessário para a verificação funcionar.
+    const remoteip = req.headers.get('x-forwarded-for');
+
+    const body = new URLSearchParams();
+    body.append('secret', secretKey);
+    body.append('response', token);
+    if (remoteip) {
+      body.append('remoteip', remoteip);
+    }
 
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        body: formData,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body.toString(),
     });
 
     if (!verificationResponse.ok) {
