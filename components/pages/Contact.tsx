@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Turnstile } from '@marsidev/react-turnstile';
+import React, { useState, useRef } from 'react';
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 
 const Contact: React.FC = () => {
     const [status, setStatus] = useState('');
@@ -7,6 +7,7 @@ const Contact: React.FC = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [token, setToken] = useState<string>('');
+    const turnstileRef = useRef<TurnstileInstance>(null);
 
     // Chave do site vinda do arquivo .env
     const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
@@ -52,15 +53,20 @@ const Contact: React.FC = () => {
             setName('');
             setEmail('');
             setMessage('');
-            // Reseta o token para forçar a reinicialização do widget Turnstile
-            setToken(''); 
+            turnstileRef.current?.reset(); // Reseta o widget para o próximo envio
             setTimeout(() => setStatus(''), 4000);
 
         } catch (error) {
             console.error("Erro no envio do formulário:", error);
             setStatus((error as Error).message || 'Falha no envio. Tente novamente.');
+            turnstileRef.current?.reset(); // Reseta também em caso de erro
             setTimeout(() => setStatus(''), 4000);
         }
+    };
+
+    const handleTurnstileError = (errorCode: string) => {
+        console.error(`Erro no Turnstile: ${errorCode}`);
+        setStatus(`Falha na verificação de segurança. Por favor, atualize a página.`);
     };
 
     const SocialLink: React.FC<{href: string, children: React.ReactNode}> = ({ href, children }) => (
@@ -114,9 +120,10 @@ const Contact: React.FC = () => {
                     
                     <div className="flex justify-center">
                         <Turnstile
-                            key={token} // Adicionado para forçar a reinicialização
+                            ref={turnstileRef}
                             siteKey={siteKey}
                             onSuccess={setToken}
+                            onError={handleTurnstileError}
                             options={{ theme: 'dark' }}
                         />
                     </div>
