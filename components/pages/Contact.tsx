@@ -1,4 +1,4 @@
-import React, a useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 
 const Contact: React.FC = () => {
