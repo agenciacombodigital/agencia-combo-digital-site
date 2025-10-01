@@ -31,14 +31,16 @@ serve(async (req) => {
         });
     }
 
-    // Enviando a verificação para a Cloudflare usando o formato JSON
+    // Usando FormData, exatamente como no exemplo da documentação da Cloudflare.
+    // Não definimos o Content-Type manualmente; o Deno/Fetch faz isso automaticamente.
+    const formData = new FormData();
+    formData.append('secret', secretKey);
+    formData.append('response', token);
+    // O 'remoteip' é opcional e não é necessário para a verificação funcionar.
+
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            secret: secretKey,
-            response: token,
-        }),
+        body: formData,
     });
 
     if (!verificationResponse.ok) {
