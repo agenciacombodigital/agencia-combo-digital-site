@@ -21,16 +21,16 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 1,
     title: 'Salgueiro, Nossa Terra, Nossa Pele',
     category: 'Branding',
-    imageUrl: '/images/portfolio/salgueiro/capa.webp.jpeg', // Corrigido para o tipo real
+    imageUrl: '/images/portfolio/salgueiro/capa.jpeg',
     galleryImages: [
-      '/images/portfolio/salgueiro/detalhe-1.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-2.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-3.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-4.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-5.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-6.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-7.webp.jpeg',
-      '/images/portfolio/salgueiro/detalhe-8.webp.png', // Este era PNG
+      '/images/portfolio/salgueiro/detalhe-1.jpeg',
+      '/images/portfolio/salgueiro/detalhe-2.jpeg',
+      '/images/portfolio/salgueiro/detalhe-3.jpeg',
+      '/images/portfolio/salgueiro/detalhe-4.jpeg',
+      '/images/portfolio/salgueiro/detalhe-5.jpeg',
+      '/images/portfolio/salgueiro/detalhe-6.jpeg',
+      '/images/portfolio/salgueiro/detalhe-7.jpeg',
+      '/images/portfolio/salgueiro/detalhe-8.png',
     ],
     description: "Campanha publicitária para o Salgueiro Atlético Clube no lançamento da nova camisa oficial, destacando a força do Carcará do Sertão, a cultura indígena e o orgulho da torcida sertaneja.",
     featured: true,
@@ -42,7 +42,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 2,
     title: 'Dá um hut no Hexa',
     category: 'Motion',
-    imageUrl: '/images/portfolio/pizzahut/capa.webp.webp', // Este está correto
+    imageUrl: '/images/portfolio/pizzahut/capa.webp.webp',
     galleryImages: [
       '/images/portfolio/pizzahut/detalhe-1.webp.webp',
       '/images/portfolio/pizzahut/detalhe-2.webp.webp',
@@ -67,16 +67,16 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 3,
     title: 'Açaí que vem da Amazônia',
     category: 'Branding',
-    imageUrl: '/images/portfolio/acai-yasai/capa.webp.png', // Corrigido para o tipo real
+    imageUrl: '/images/portfolio/acai-yasai/capa.png',
     galleryImages: [
-      '/images/portfolio/acai-yasai/detalhe-1.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-2.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-3.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-4.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-5.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-6.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-7.webp.png',
-      '/images/portfolio/acai-yasai/detalhe-8.webp.png',
+      '/images/portfolio/acai-yasai/detalhe-1.png',
+      '/images/portfolio/acai-yasai/detalhe-2.png',
+      '/images/portfolio/acai-yasai/detalhe-3.png',
+      '/images/portfolio/acai-yasai/detalhe-4.png',
+      '/images/portfolio/acai-yasai/detalhe-5.png',
+      '/images/portfolio/acai-yasai/detalhe-6.png',
+      '/images/portfolio/acai-yasai/detalhe-7.png',
+      '/images/portfolio/acai-yasai/detalhe-8.png',
     ],
     description: "Campanha publicitária para a Yasaí, destacando a origem amazônica do produto em peças visuais impactantes, unindo natureza, cultura e energia em cada pote de açaí.",
     featured: true,
@@ -88,7 +88,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 4,
     title: 'Testemunhas de Djonga',
     category: 'Branding',
-    imageUrl: '/images/portfolio/djonga/capa.webp.webp', // Este está correto
+    imageUrl: '/images/portfolio/djonga/capa.webp.webp',
     galleryImages: [
       '/images/portfolio/djonga/detalhe-1.webp.webp',
       '/images/portfolio/djonga/detalhe-2.webp.webp',
@@ -110,7 +110,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 5,
     title: 'Website Nuria Uliana',
     category: 'Web',
-    imageUrl: '/images/portfolio/nuria-uliana/capa.webp.png', // Corrigido para o tipo real
+    imageUrl: '/images/portfolio/nuria-uliana/capa.png',
     galleryImages: [],
     description: "Criação do site oficial da produtora Nuria Uliana, com design elegante e funcional, destacando seu portfólio audiovisual e transmitindo sua identidade criativa de forma moderna e impactante.",
     technologies: ['React', 'GSAP', 'Figma', 'Headless CMS'],
@@ -120,7 +120,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 6,
     title: 'Conectando França e Brasil',
     category: 'Web',
-    imageUrl: '/images/portfolio/moohtech/capa.webp.png', // Corrigido para o tipo real
+    imageUrl: '/images/portfolio/moohtech/capa.png',
     galleryImages: [],
     description: "Campanha publicitária para a Mooh Tech, unindo inovação tecnológica e impacto social em peças visuais que mostram como a empresa conecta pessoas e soluções entre Brasil e França.",
     technologies: ['Marketing Digital', 'Landing Page', 'SEO', 'Google Ads'],
