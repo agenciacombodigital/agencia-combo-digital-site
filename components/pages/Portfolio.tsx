@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PORTFOLIO_ITEMS } from '../../constants';
-import { PortfolioItem, Page } from '../../types';
+import { PortfolioItem } from '../../types';
 import { useInView } from '../../hooks/useInView';
 
 // --- Modal Aprimorado com Galeria ---
@@ -106,10 +106,25 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
 // --- Componente Principal ---
 const FILTERS = ['Todos', 'Web', 'Branding', 'Motion'];
 
-const Portfolio: React.FC = () => {
+interface PortfolioProps {
+  initialItem: PortfolioItem | null;
+  clearInitialItem: () => void;
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem }) => {
   const [selectedItem, setSelectedItem] = useState<{ item: PortfolioItem; index: number } | null>(null);
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [ref, isInView] = useInView({ threshold: 0.1, triggerOnce: true });
+
+  useEffect(() => {
+    if (initialItem) {
+      const originalIndex = PORTFOLIO_ITEMS.findIndex(p => p.id === initialItem.id);
+      if (originalIndex !== -1) {
+        setSelectedItem({ item: initialItem, index: originalIndex });
+      }
+      clearInitialItem();
+    }
+  }, [initialItem, clearInitialItem]);
 
   const filteredItems = useMemo(() => 
     activeFilter === 'Todos' 

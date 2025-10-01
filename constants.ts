@@ -19,15 +19,18 @@ export const PAGES: NavLink[] = [
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
     id: 1,
-    title: 'Chronus Sports',
-    category: 'Web',
-    imageUrl: '/images/portfolio/Chronus Sports/Capa-Chronus-Sports.png',
-    galleryImages: [], // Adicione as imagens da galeria aqui quando disponíveis
-    description: "Desenvolvimento de um website e plataforma de e-commerce para a marca de artigos esportivos Chronus, com foco em performance e experiência do usuário.",
+    title: 'Salgueiro, Nossa Terra, Nossa Pele',
+    category: 'Branding',
+    imageUrl: '/images/portfolio/Salgueiro - Nova Camisa Salgueiro/capa.webp',
+    galleryImages: [
+      '/images/portfolio/Salgueiro - Nova Camisa Salgueiro/detalhe-1.webp',
+      '/images/portfolio/Salgueiro - Nova Camisa Salgueiro/detalhe-2.webp',
+    ],
+    description: "Campanha publicitária para o Salgueiro Atlético Clube no lançamento da nova camisa oficial, destacando a força do Carcará do Sertão, a cultura indígena e o orgulho da torcida sertaneja.",
     featured: true,
-    metric: '+150% vendas online',
-    technologies: ['React', 'Vtex', 'Figma', 'Node.js'],
-    colorPalette: ['#00a1ff', '#0d1117', '#ffffff', '#fb5626']
+    metric: 'Orgulho Sertanejo',
+    technologies: ['Branding', 'Campanha Publicitária', 'Social Media', 'Direção de Arte'],
+    colorPalette: ['#d11a22', '#00843d', '#ffffff', '#000000']
   },
   {
     id: 2,
@@ -48,14 +51,29 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
       '/images/portfolio/Dá um hut no Hexa/imagem-detalhe-11.webp',
       '/images/portfolio/Dá um hut no Hexa/imagem-detalhe-12.webp',
     ],
-    description: "Campanha de marketing digital para a Pizza Hut durante a Copa do Mundo, utilizando motion graphics e conteúdo interativo para engajar torcedores.",
+    description: "Campanha publicitária com linguagem popular e criativa, trazendo humor e irreverência para engajar torcedores na expectativa pelo título, unindo futebol, cultura brasileira e espírito de celebração.",
     featured: true,
     metric: '+2M impressões',
-    technologies: ['After Effects', 'Social Media', 'Marketing de Conteúdo'],
+    technologies: ['After Effects', 'Social Media', 'Marketing de Conteúdo', 'Motion Graphics'],
     colorPalette: ['#d92d2d', '#ffffff', '#000000', '#f2a700']
   },
   {
     id: 3,
+    title: 'Açaí que vem da Amazônia',
+    category: 'Branding',
+    imageUrl: '/images/portfolio/Campanha Yasaí/capa.webp',
+    galleryImages: [
+      '/images/portfolio/Campanha Yasaí/detalhe-1.webp',
+      '/images/portfolio/Campanha Yasaí/detalhe-2.webp',
+    ],
+    description: "Campanha publicitária para a Yasaí, destacando a origem amazônica do produto em peças visuais impactantes, unindo natureza, cultura e energia em cada pote de açaí.",
+    featured: true,
+    metric: 'Origem Destacada',
+    technologies: ['Branding', 'Embalagem', 'Fotografia', 'Social Media'],
+    colorPalette: ['#4a2c6a', '#f5d13e', '#ffffff', '#8bc34a']
+  },
+  {
+    id: 4,
     title: 'Testemunhas de Djonga',
     category: 'Branding',
     imageUrl: '/images/portfolio/Testemunhas de Djonga/capa-projeto-Testeminhas-de-Djonga-webp.webp',
@@ -70,43 +88,32 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
       '/images/portfolio/Testemunhas de Djonga/imagem-detalhe-8.webp',
       '/images/portfolio/Testemunhas de Djonga/imagem-detalhe-9.webp',
     ],
-    description: "Uma identidade visual e campanha de lançamento para o fã-clube oficial do artista Djonga, criando uma comunidade engajada e apaixonada.",
-    featured: true,
+    description: "Campanha criativa inspirada na força cultural do rap nacional, destacando a identidade, a resistência e a voz das ruas em peças visuais impactantes para engajar fãs e comunidades.",
     metric: '+500K seguidores',
-    technologies: ['Identidade Visual', 'Social Media', 'Figma'],
+    technologies: ['Identidade Visual', 'Social Media', 'Figma', 'Comunidade'],
     colorPalette: ['#000000', '#ffcc00', '#ffffff', '#cccccc']
   },
   {
-    id: 4,
-    title: 'Viajante Estelar',
-    category: 'Web',
-    imageUrl: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
-    galleryImages: [],
-    description: 'Projetando uma interface intuitiva e deslumbrante para um aplicativo de viagens, focada em microinterações e uma experiência de usuário fluida.',
-    technologies: ['React Native', 'Figma', 'Lottie', 'GraphQL'],
-    colorPalette: ['#00a1ff', '#161b22', '#ffffff', '#a0a0a0']
-  },
-    {
     id: 5,
-    title: 'Sonhos Cibernéticos',
-    category: 'Motion',
-    imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
-    galleryImages: [],
-    description: 'Criação de assets visuais e animações 3D impressionantes para o trailer de um videogame, definindo a estética visual do projeto.',
-    featured: true,
-    metric: '1M+ downloads',
-    technologies: ['Unreal Engine', 'Blender', 'Houdini', 'DaVinci Resolve'],
-    colorPalette: ['#fb5626', '#00a1ff', '#050505', '#fcc017']
+    title: 'Website Nuria Uliana',
+    category: 'Web',
+    imageUrl: '/images/portfolio/Nuria Uliana/capa.webp',
+    galleryImages: [
+      '/images/portfolio/Nuria Uliana/detalhe-1.webp',
+    ],
+    description: "Criação do site oficial da produtora Nuria Uliana, com design elegante e funcional, destacando seu portfólio audiovisual e transmitindo sua identidade criativa de forma moderna e impactante.",
+    technologies: ['React', 'GSAP', 'Figma', 'Headless CMS'],
+    colorPalette: ['#1a1a1a', '#ffffff', '#fb5626', '#a0a0a0']
   },
   {
     id: 6,
-    title: 'Iniciativa Oráculo',
+    title: 'Conectando França e Brasil',
     category: 'Web',
-    imageUrl: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=2070&auto=format&fit=crop',
     galleryImages: [],
-    description: 'Desenvolvimento de um motor de recomendação de conteúdo inteligente com IA para um gigante da mídia, personalizando a experiência para milhões de usuários.',
-    technologies: ['Python', 'TensorFlow', 'React', 'AWS'],
-    colorPalette: ['#00a1ff', '#0d1117', '#84CC16', '#ffffff']
+    description: "Campanha publicitária para a Mooh Tech, unindo inovação tecnológica e impacto social em peças visuais que mostram como a empresa conecta pessoas e soluções entre Brasil e França.",
+    technologies: ['Marketing Digital', 'Landing Page', 'SEO', 'Google Ads'],
+    colorPalette: ['#0055a4', '#ffffff', '#ef4135', '#00a1ff']
   }
 ];
 
