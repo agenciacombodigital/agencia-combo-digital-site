@@ -31,14 +31,14 @@ serve(async (req) => {
         });
     }
 
-    const body = new URLSearchParams();
-    body.append('secret', secretKey);
-    body.append('response', token);
-
+    // Enviando a verificação para a Cloudflare usando o formato JSON
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            secret: secretKey,
+            response: token,
+        }),
     });
 
     if (!verificationResponse.ok) {
