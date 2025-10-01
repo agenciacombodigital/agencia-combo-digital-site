@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, a useState, useRef } from 'react';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 
 const Contact: React.FC = () => {
@@ -6,13 +6,11 @@ const Contact: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [token, setToken] = useState<string>('');
+    const [token, setToken] = useState<string>(''); // Manteremos o estado, mas não o usaremos por enquanto
     const turnstileRef = useRef<TurnstileInstance>(null);
 
-    // Chave do site vinda do arquivo .env
     const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
-    // Se a chave não for encontrada, exibe uma mensagem de erro clara.
     if (!siteKey) {
         console.error("A chave do site do Turnstile (VITE_TURNSTILE_SITE_KEY) não está definida no arquivo .env!");
         return (
@@ -27,11 +25,20 @@ const Contact: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
+        // Verificação do token temporariamente desativada
+        /*
         if (!token) {
             setStatus('Por favor, complete a verificação de segurança.');
             return;
         }
+        */
 
+        // Mensagem temporária para indicar que o formulário está em modo de desenvolvimento
+        setStatus('O envio de formulários está temporariamente desativado durante o desenvolvimento. Será ativado no site oficial.');
+        setTimeout(() => setStatus(''), 5000);
+        return; // Impede o envio real
+
+        /* CÓDIGO DE ENVIO REAL (SERÁ REATIVADO NO LANÇAMENTO)
         setStatus('Enviando...');
         
         try {
@@ -53,15 +60,16 @@ const Contact: React.FC = () => {
             setName('');
             setEmail('');
             setMessage('');
-            turnstileRef.current?.reset(); // Reseta o widget para o próximo envio
+            turnstileRef.current?.reset();
             setTimeout(() => setStatus(''), 4000);
 
         } catch (error) {
             console.error("Erro no envio do formulário:", error);
             setStatus((error as Error).message || 'Falha no envio. Tente novamente.');
-            turnstileRef.current?.reset(); // Reseta também em caso de erro
+            turnstileRef.current?.reset();
             setTimeout(() => setStatus(''), 4000);
         }
+        */
     };
 
     const handleTurnstileError = (errorCode: string) => {
@@ -118,7 +126,10 @@ const Contact: React.FC = () => {
                         <label htmlFor="message" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Sua Mensagem</label>
                     </div>
                     
-                    <div className="flex justify-center">
+                    {/* Turnstile temporariamente desativado para desenvolvimento */}
+                    <div className="flex justify-center opacity-50">
+                        <p className="text-sm text-gray-500">Verificação de segurança será ativada no site oficial.</p>
+                        {/* 
                         <Turnstile
                             ref={turnstileRef}
                             siteKey={siteKey}
@@ -126,6 +137,7 @@ const Contact: React.FC = () => {
                             onError={handleTurnstileError}
                             options={{ theme: 'dark' }}
                         />
+                        */}
                     </div>
 
                     <div>
@@ -133,9 +145,8 @@ const Contact: React.FC = () => {
                             type="submit"
                             className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50 disabled:bg-gray-500 disabled:cursor-not-allowed"
                             data-cursor-hover
-                            disabled={status === 'Enviando...'}
                         >
-                            {status === 'Enviando...' ? 'Enviando...' : 'Enviar Proposta'}
+                            Enviar Proposta
                         </button>
                     </div>
                     {status && <p className="text-center text-yellow-400 font-semibold">{status}</p>}
