@@ -64,27 +64,6 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     colorPalette: ['#d92d2d', '#ffffff', '#000000', '#f2a700']
   },
   {
-    id: 3,
-    title: 'Açaí que vem da Amazônia',
-    category: 'Branding',
-    imageUrl: '/images/portfolio/acai-yasai/capa.webp',
-    galleryImages: [
-      '/images/portfolio/acai-yasai/detalhe-1.webp',
-      '/images/portfolio/acai-yasai/detalhe-2.webp',
-      '/images/portfolio/acai-yasai/detalhe-3.webp',
-      '/images/portfolio/acai-yasai/detalhe-4.webp',
-      '/images/portfolio/acai-yasai/detalhe-5.webp',
-      '/images/portfolio/acai-yasai/detalhe-6.webp',
-      '/images/portfolio/acai-yasai/detalhe-7.webp',
-      '/images/portfolio/acai-yasai/detalhe-8.webp',
-    ],
-    description: "Campanha publicitária para a Yasaí, destacando a origem amazônica do produto em peças visuais impactantes, unindo natureza, cultura e energia em cada pote de açaí.",
-    featured: true,
-    metric: 'Origem Destacada',
-    technologies: ['Branding', 'Embalagem', 'Fotografia', 'Social Media'],
-    colorPalette: ['#4a2c6a', '#f5d13e', '#ffffff', '#8bc34a']
-  },
-  {
     id: 4,
     title: 'Testemunhas de Djonga',
     category: 'Branding',
@@ -102,16 +81,40 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
       '/images/portfolio/djonga/detalhe-10.webp',
     ],
     description: "Campanha criativa inspirada na força cultural do rap nacional, destacando a identidade, a resistência e a voz das ruas em peças visuais impactantes para engajar fãs e comunidades.",
+    featured: true,
     metric: '+500K seguidores',
     technologies: ['Identidade Visual', 'Social Media', 'Figma', 'Comunidade'],
     colorPalette: ['#000000', '#ffcc00', '#ffffff', '#cccccc']
+  },
+  {
+    id: 3,
+    title: 'Açaí que vem da Amazônia',
+    category: 'Branding',
+    imageUrl: '/images/portfolio/acai-yasai/capa.webp',
+    galleryImages: [
+      '/images/portfolio/acai-yasai/detalhe-1.webp',
+      '/images/portfolio/acai-yasai/detalhe-2.webp',
+      '/images/portfolio/acai-yasai/detalhe-3.webp',
+      '/images/portfolio/acai-yasai/detalhe-4.webp',
+      '/images/portfolio/acai-yasai/detalhe-5.webp',
+      '/images/portfolio/acai-yasai/detalhe-6.webp',
+      '/images/portfolio/acai-yasai/detalhe-7.webp',
+      '/images/portfolio/acai-yasai/detalhe-8.webp',
+    ],
+    description: "Campanha publicitária para a Yasaí, destacando a origem amazônica do produto em peças visuais impactantes, unindo natureza, cultura e energia em cada pote de açaí.",
+    metric: 'Origem Destacada',
+    technologies: ['Branding', 'Embalagem', 'Fotografia', 'Social Media'],
+    colorPalette: ['#4a2c6a', '#f5d13e', '#ffffff', '#8bc34a']
   },
   {
     id: 5,
     title: 'Website Nuria Uliana',
     category: 'Web',
     imageUrl: '/images/portfolio/nuria-uliana/capa.webp',
-    galleryImages: [],
+    galleryImages: [
+      '/images/portfolio/nuria-uliana/detalhe-1.webp',
+      '/images/portfolio/nuria-uliana/detalhe-2.webp',
+    ],
     description: "Criação do site oficial da produtora Nuria Uliana, com design elegante e funcional, destacando seu portfólio audiovisual e transmitindo sua identidade criativa de forma moderna e impactante.",
     technologies: ['React', 'GSAP', 'Figma', 'Headless CMS'],
     colorPalette: ['#1a1a1a', '#ffffff', '#fb5626', '#a0a0a0']
