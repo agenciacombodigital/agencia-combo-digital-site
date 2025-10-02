@@ -229,7 +229,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, se
         <div className="container mx-auto px-6">
             <h2 className="text-4xl font-bold text-white mb-4">Pronto para criar algo inesquecível?</h2>
             <button 
-                onClick={() => setCurrentPage(Page.Contact)} {/* CORREÇÃO AQUI */}
+                onClick={() => setCurrentPage(Page.Contact)}
                 className="footer-cta-button text-white font-bold py-3 px-8 rounded-full mt-4"
                 data-cursor-hover
             >
