@@ -42,37 +42,55 @@ serve(async (req) => {
     body.append('secret', secretKey);
     body.append('response', token);
     
-    console.log(`Verificando token do Turnstile. Secret Key (parcial): ${secretKey.substring(0, 5)}... Token: ${token.substring(0, 10)}...`);
+    console.log(`[Turnstile] Enviando para verificação. Body: ${body.toString()}`); // Log detalhado do corpo
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString()
     });
 
-    console.log(`Status da resposta do Turnstile: ${verificationResponse.status} ${verificationResponse.statusText}`);
+    console.log(`[Turnstile] Status da resposta: ${verificationResponse.status} ${verificationResponse.statusText}`);
     const rawTurnstileResponse = await verificationResponse.text();
-    console.log("Resposta bruta do Turnstile:", rawTurnstileResponse);
+    console.log("[Turnstile] Resposta bruta:", rawTurnstileResponse);
 
     let verificationData;
     try {
       verificationData = JSON.parse(rawTurnstileResponse);
     } catch (parseError) {
-      console.error("Erro ao parsear resposta do Turnstile como JSON:", parseError);
-      // Se não for JSON, é provável que seja um erro do Cloudflare ou uma resposta inesperada.
+      console.error("[Turnstile] Erro ao parsear resposta como JSON:", parseError);
       return new Response(JSON.stringify({ error: `Resposta inválida do Turnstile. Corpo: '${rawTurnstileResponse}'` }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     if (!verificationData.success) {
-      console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
+      console.warn("[Turnstile] Falha na verificação:", verificationData['error-codes']);
       return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-    console.log("Verificação do Turnstile bem-sucedida.");
+    console.log("[Turnstile] Verificação bem-sucedida.");
 
-    // --- ETAPA 2: PULAR O BANCO DE DADOS E RETORNAR SUCESSO ---
-    console.log("TESTE: Inserção no banco de dados pulada. Retornando sucesso para diagnóstico.");
+    // --- ETAPA 2: INSERÇÃO NO BANCO DE DADOS ---
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '' // Usar service role key para operações server-side
+    );
+
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .insert([
+        { name, email, message },
+      ]);
+
+    if (error) {
+      console.error("Erro ao inserir no Supabase:", error);
+      return new Response(JSON.stringify({ error: `Erro ao salvar sua mensagem: ${error.message}` }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log("Mensagem de contato salva com sucesso no Supabase.");
     
     return new Response(
-      JSON.stringify({ message: 'Teste bem-sucedido! A verificação de segurança passou.' }),
+      JSON.stringify({ message: 'Obrigado! Sua mensagem foi enviada com sucesso.' }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
