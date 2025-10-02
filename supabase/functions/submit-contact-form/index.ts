@@ -18,12 +18,10 @@ serve(async (req) => {
 
     let parsedBody;
     try {
-      // Tenta ler o corpo da requisição diretamente como JSON
       parsedBody = await req.json();
       console.log("Corpo da requisição JSON recebido:", JSON.stringify(parsedBody));
     } catch (jsonError) {
       console.error("Erro ao fazer parse do JSON do corpo da requisição:", jsonError);
-      // Se o erro for 'Unexpected end of JSON input', significa que o corpo estava vazio ou incompleto.
       return new Response(JSON.stringify({ error: `Corpo da requisição inválido ou vazio: ${jsonError.message}.` }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
@@ -44,13 +42,19 @@ serve(async (req) => {
     body.append('secret', secretKey);
     body.append('response', token);
     
-    console.log("Verificando token do Turnstile...");
+    console.log(`Verificando token do Turnstile. Secret Key (parcial): ${secretKey.substring(0, 5)}... Token: ${token.substring(0, 10)}...`);
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString()
     });
-    const verificationData = await verificationResponse.json();
+
+    // --- NOVO: Log da resposta bruta do Cloudflare ---
+    console.log(`Status da resposta do Turnstile: ${verificationResponse.status} ${verificationResponse.statusText}`);
+    const rawTurnstileResponse = await verificationResponse.text();
+    console.log("Resposta bruta do Turnstile:", rawTurnstileResponse);
+
+    const verificationData = JSON.parse(rawTurnstileResponse); // Tenta parsear o texto bruto
 
     if (!verificationData.success) {
       console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
