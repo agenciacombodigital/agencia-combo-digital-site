@@ -6,7 +6,7 @@ const Contact: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [token, setToken] = useState<string>(''); // Manteremos o estado, mas não o usaremos por enquanto
+    const [token, setToken] = useState<string>('');
     const turnstileRef = useRef<TurnstileInstance>(null);
 
     const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
@@ -25,20 +25,11 @@ const Contact: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        // Verificação do token temporariamente desativada
-        /*
         if (!token) {
             setStatus('Por favor, complete a verificação de segurança.');
             return;
         }
-        */
 
-        // Mensagem temporária para indicar que o formulário está em modo de desenvolvimento
-        setStatus('O envio de formulários está temporariamente desativado durante o desenvolvimento. Será ativado no site oficial.');
-        setTimeout(() => setStatus(''), 5000);
-        return; // Impede o envio real
-
-        /* CÓDIGO DE ENVIO REAL (SERÁ REATIVADO NO LANÇAMENTO)
         setStatus('Enviando...');
         
         try {
@@ -69,7 +60,6 @@ const Contact: React.FC = () => {
             turnstileRef.current?.reset();
             setTimeout(() => setStatus(''), 4000);
         }
-        */
     };
 
     const handleTurnstileError = (errorCode: string) => {
@@ -126,10 +116,7 @@ const Contact: React.FC = () => {
                         <label htmlFor="message" className="absolute left-2 -top-5 text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-5 peer-focus:text-blue-400 peer-focus:text-xs">Sua Mensagem</label>
                     </div>
                     
-                    {/* Turnstile temporariamente desativado para desenvolvimento */}
-                    <div className="flex justify-center opacity-50">
-                        <p className="text-sm text-gray-500">Verificação de segurança será ativada no site oficial.</p>
-                        {/* 
+                    <div className="flex justify-center">
                         <Turnstile
                             ref={turnstileRef}
                             siteKey={siteKey}
@@ -137,7 +124,6 @@ const Contact: React.FC = () => {
                             onError={handleTurnstileError}
                             options={{ theme: 'dark' }}
                         />
-                        */}
                     </div>
 
                     <div>
