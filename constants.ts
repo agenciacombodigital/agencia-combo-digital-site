@@ -18,6 +18,30 @@ export const PAGES: NavLink[] = [
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
+    id: 7,
+    title: 'Campanha Méris Confeitaria',
+    category: 'Branding',
+    imageUrl: '/images/portfolio/méris-confeitaria/Capa.webp',
+    galleryImages: [
+      '/images/portfolio/méris-confeitaria/detalhe-1.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-2.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-3.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-4.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-5.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-6.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-7.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-8.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-9.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-10.webp',
+      '/images/portfolio/méris-confeitaria/detalhe-11.webp',
+    ],
+    description: "Campanha publicitária para a nova doceria Méris Confeitaria, unindo delicadeza e sofisticação em rosa e marrom. Destaque para doces exclusivos, embalagens personalizadas e o conceito que guia a marca: “Doce que encanta, arte que seduz.”",
+    featured: true,
+    metric: 'Arte que Seduz',
+    technologies: ['Branding', 'Identidade Visual', 'Embalagem', 'Direção de Arte', 'Social Media'],
+    colorPalette: ['#E6A4B4', '#6F4E37', '#FFFFFF', '#F3D7CA']
+  },
+  {
     id: 1,
     title: 'Salgueiro, Nossa Terra, Nossa Pele',
     category: 'Branding',
