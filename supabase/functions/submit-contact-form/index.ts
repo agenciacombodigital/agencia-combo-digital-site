@@ -9,6 +9,8 @@ const corsHeaders = {
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/api/v3/siteverify';
 
 serve(async (req) => {
+  console.log("Edge Function 'submit-contact-form' invoked."); // Nova linha de log
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
