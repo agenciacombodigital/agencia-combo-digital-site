@@ -22,6 +22,7 @@ serve(async (req) => {
     if (!token) {
       return new Response(JSON.stringify({ error: 'Token de verificação não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+    // CORREÇÃO AQUI: Usando a chave CLOUDFLARE_TURNSTILE_SECRET_KEY
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
       console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada.");
