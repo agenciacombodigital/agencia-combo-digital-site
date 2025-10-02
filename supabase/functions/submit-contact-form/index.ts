@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0' // Re-adicionado para compatibilidade futura, se necessário.
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,22 +14,20 @@ serve(async (req) => {
   }
 
   try {
-    console.log("Função de contato iniciada (Modo de Teste de Isolamento).");
-
-    // --- NOVO: Leia o corpo da requisição como texto primeiro para depuração ---
-    const rawBody = await req.text();
-    console.log("Corpo da requisição bruto recebido:", rawBody);
+    console.log("Função de contato iniciada.");
 
     let parsedBody;
     try {
-      parsedBody = JSON.parse(rawBody);
+      // Tenta ler o corpo da requisição diretamente como JSON
+      parsedBody = await req.json();
+      console.log("Corpo da requisição JSON recebido:", JSON.stringify(parsedBody));
     } catch (jsonError) {
       console.error("Erro ao fazer parse do JSON do corpo da requisição:", jsonError);
-      // Retorna uma mensagem de erro mais detalhada, incluindo o corpo bruto
-      return new Response(JSON.stringify({ error: `Corpo da requisição inválido ou vazio: ${jsonError.message}. Corpo bruto: '${rawBody}'` }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      // Se o erro for 'Unexpected end of JSON input', significa que o corpo estava vazio ou incompleto.
+      return new Response(JSON.stringify({ error: `Corpo da requisição inválido ou vazio: ${jsonError.message}.` }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const { name, email, message, token } = parsedBody; // Desestrutura do corpo parseado
+    const { name, email, message, token } = parsedBody;
 
     // --- ETAPA 1: VERIFICAÇÃO DO TURNSTILE ---
     if (!token) {
