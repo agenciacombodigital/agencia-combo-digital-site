@@ -12,7 +12,7 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
     const updateHead = () => {
       let title = "Combo Digital";
       let description = "Agência criativa de Combo Digital — experiências digitais exclusivas com criatividade audaciosa e tecnologia de ponta.";
-      let ogImage = "https://combo.digital/Logo-ComboDigitalV2.svg"; // Default OG image
+      let ogImage = "https://combo.digital/web-app-manifest-512x512.png"; // Use a PNG for better compatibility
       let ogUrl = "https://combo.digital/";
       let jsonLd: any[] = [];
 
@@ -66,7 +66,7 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
           if (selectedPortfolioItem) {
             title = `${selectedPortfolioItem.title} | Portfólio Imersivo | Combo Digital`;
             description = selectedPortfolioItem.description;
-            ogImage = selectedPortfolioItem.imageUrl;
+            ogImage = `https://combo.digital${selectedPortfolioItem.imageUrl}`; // Ensure full URL
             ogUrl = `https://combo.digital/portfolio/${selectedPortfolioItem.title.toLowerCase().replace(/\s/g, '-')}`;
             
             // CaseStudy/CreativeWork JSON-LD for selected portfolio item
@@ -75,7 +75,7 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
               "@type": "CreativeWork", // Or CaseStudy if more specific schema is available
               "name": selectedPortfolioItem.title,
               "description": selectedPortfolioItem.description,
-              "image": selectedPortfolioItem.imageUrl,
+              "image": ogImage,
               "url": ogUrl,
               "keywords": selectedPortfolioItem.technologies.join(', ') + ', ' + selectedPortfolioItem.category,
               "creator": {
@@ -119,6 +119,8 @@ const HeadManager: React.FC<HeadManagerProps> = ({ currentPage, selectedPortfoli
       updateMeta('', description, 'og:description');
       updateMeta('', ogImage, 'og:image');
       updateMeta('', ogUrl, 'og:url');
+      updateMeta('', 'website', 'og:type');
+      updateMeta('', 'Combo Digital', 'og:site_name');
       updateMeta('twitter:card', 'summary_large_image');
       updateMeta('twitter:title', title);
       updateMeta('twitter:description', description);
