@@ -14,45 +14,59 @@ serve(async (req) => {
   }
 
   try {
+    console.log("Função de contato iniciada.");
     const { name, email, message, token } = await req.json();
 
-    // 1. Verificação do Turnstile (como antes)
+    // 1. Verificação do Turnstile
     if (!token) {
       return new Response(JSON.stringify({ error: 'Token de verificação não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
-      console.error("CLOUDFLARE_TURNSTILE_SECRET_KEY não encontrado.");
+      console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada nos segredos da função.");
       return new Response(JSON.stringify({ error: "Erro de configuração do servidor." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+    
     const body = new URLSearchParams();
     body.append('secret', secretKey);
     body.append('response', token);
-    const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { method: 'POST', body });
+    
+    console.log("Verificando token do Turnstile...");
+    const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+    });
     const verificationData = await verificationResponse.json();
 
     if (!verificationData.success) {
       console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
       return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
+    console.log("Verificação do Turnstile bem-sucedida.");
 
-    // 2. Se a verificação passar, salvar no Supabase
-    console.log("Verificação bem-sucedida. Salvando no banco de dados...");
+    // 2. Conectar e salvar no Supabase
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    if (!supabaseUrl || !supabaseServiceKey) {
+        console.error("ERRO CRÍTICO: As variáveis SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY não estão configuradas.");
+        return new Response(JSON.stringify({ error: "Erro de configuração do servidor." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+    console.log("Cliente Supabase criado. Inserindo dados...");
 
     const { error: dbError } = await supabaseClient
       .from('contact_submissions')
       .insert([{ name, email, message }]);
 
     if (dbError) {
-      console.error("Erro ao salvar no banco de dados:", dbError);
+      console.error("Erro ao inserir no banco de dados:", dbError);
       throw new Error("Não foi possível salvar sua mensagem. Tente novamente.");
     }
 
+    console.log("Dados inseridos com sucesso.");
     // 3. Retornar sucesso
     return new Response(
       JSON.stringify({ message: 'Mensagem enviada com sucesso!' }),
@@ -60,7 +74,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error("Erro ao processar o formulário de contato:", error);
+    console.error("Erro capturado no bloco principal da função:", error);
     return new Response(
       JSON.stringify({ error: error.message || 'Ocorreu um erro inesperado.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
