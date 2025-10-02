@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+// O cliente Supabase não é necessário para este teste
+// import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,17 +15,17 @@ serve(async (req) => {
   }
 
   try {
-    console.log("Função de contato iniciada.");
-    const { name, email, message, token } = await req.json();
+    console.log("Função de contato iniciada (Modo de Teste de Isolamento).");
+    const { token } = await req.json();
 
-    // 1. Verificação do Turnstile
+    // --- ETAPA 1: VERIFICAÇÃO DO TURNSTILE ---
     if (!token) {
       return new Response(JSON.stringify({ error: 'Token de verificação não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
-      console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada nos segredos da função.");
-      return new Response(JSON.stringify({ error: "Erro de configuração do servidor." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada.");
+      return new Response(JSON.stringify({ error: "Erro de configuração do servidor (Turnstile Key)." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
     const body = new URLSearchParams();
@@ -45,31 +46,11 @@ serve(async (req) => {
     }
     console.log("Verificação do Turnstile bem-sucedida.");
 
-    // 2. Conectar e salvar no Supabase
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-        console.error("ERRO CRÍTICO: As variáveis SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY não estão configuradas.");
-        return new Response(JSON.stringify({ error: "Erro de configuração do servidor." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
-    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
-    console.log("Cliente Supabase criado. Inserindo dados...");
-
-    const { error: dbError } = await supabaseClient
-      .from('contact_submissions')
-      .insert([{ name, email, message }]);
-
-    if (dbError) {
-      console.error("Erro ao inserir no banco de dados:", dbError);
-      throw new Error("Não foi possível salvar sua mensagem. Tente novamente.");
-    }
-
-    console.log("Dados inseridos com sucesso.");
-    // 3. Retornar sucesso
+    // --- ETAPA 2: PULAR O BANCO DE DADOS E RETORNAR SUCESSO ---
+    console.log("TESTE: Inserção no banco de dados pulada. Retornando sucesso para diagnóstico.");
+    
     return new Response(
-      JSON.stringify({ message: 'Mensagem enviada com sucesso!' }),
+      JSON.stringify({ message: 'Teste bem-sucedido! A verificação de segurança passou.' }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
