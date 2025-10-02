@@ -40,12 +40,12 @@ serve(async (req) => {
       body.append('remoteip', remoteip);
     }
 
+    // AQUI ESTÁ A CORREÇÃO:
+    // Passamos o objeto 'body' (URLSearchParams) diretamente, sem definir o header 'Content-Type' manualmente.
+    // O sistema 'fetch' do Deno irá automaticamente configurar o header correto, o que é mais seguro e resolve o erro 405.
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body.toString(),
+        body: body,
     });
 
     if (!verificationResponse.ok) {
