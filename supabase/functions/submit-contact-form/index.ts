@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
-// O cliente Supabase não é necessário para este teste
-// import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0' // Re-adicionado para compatibilidade futura, se necessário.
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -16,13 +15,27 @@ serve(async (req) => {
 
   try {
     console.log("Função de contato iniciada (Modo de Teste de Isolamento).");
-    const { token } = await req.json();
+
+    // --- NOVO: Leia o corpo da requisição como texto primeiro para depuração ---
+    const rawBody = await req.text();
+    console.log("Corpo da requisição bruto recebido:", rawBody);
+
+    let parsedBody;
+    try {
+      parsedBody = JSON.parse(rawBody);
+    } catch (jsonError) {
+      console.error("Erro ao fazer parse do JSON do corpo da requisição:", jsonError);
+      // Retorna uma mensagem de erro mais detalhada, incluindo o corpo bruto
+      return new Response(JSON.stringify({ error: `Corpo da requisição inválido ou vazio: ${jsonError.message}. Corpo bruto: '${rawBody}'` }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const { name, email, message, token } = parsedBody; // Desestrutura do corpo parseado
 
     // --- ETAPA 1: VERIFICAÇÃO DO TURNSTILE ---
     if (!token) {
       return new Response(JSON.stringify({ error: 'Token de verificação não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-    // CORREÇÃO AQUI: Usando a chave CLOUDFLARE_TURNSTILE_SECRET_KEY
+    
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
       console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada.");
