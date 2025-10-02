@@ -9,10 +9,8 @@ const Contact: React.FC = () => {
     const [token, setToken] = useState<string>('');
     const turnstileRef = useRef<TurnstileInstance>(null);
 
-    // Usa uma chave de teste para ambientes de desenvolvimento/pré-visualização para evitar erros de domínio.
-    // A chave real do .env será usada em produção.
     const siteKey = import.meta.env.DEV 
-        ? '1x00000000000000000000AA' // Chave de teste da Cloudflare que sempre passa
+        ? '1x00000000000000000000AA'
         : import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
     if (!siteKey) {
@@ -45,26 +43,33 @@ const Contact: React.FC = () => {
                 body: JSON.stringify({ name, email, message, token }),
             });
 
-            const data = await response.json();
-
+            // Primeiro, verificamos se a resposta foi bem-sucedida (status 2xx)
             if (!response.ok) {
-                // Agora lemos a mensagem de erro específica do nosso backend
-                throw new Error(data.error || 'Ocorreu um erro ao enviar a mensagem.');
+                // Se não foi, tentamos ler o corpo como JSON para obter a mensagem de erro
+                const errorData = await response.json().catch(() => {
+                    // Se o corpo não for JSON ou estiver vazio, criamos um erro padrão
+                    throw new Error(`Erro no servidor: ${response.status}. Por favor, tente novamente.`);
+                });
+                // Se conseguimos ler o JSON, usamos a mensagem de erro dele
+                throw new Error(errorData.error || `Ocorreu um erro desconhecido (${response.status}).`);
             }
 
-            setStatus('Obrigado! Sua mensagem foi enviada com sucesso.');
+            // Se a resposta foi bem-sucedida, agora podemos ler o JSON com segurança
+            const data = await response.json();
+
+            setStatus(data.message || 'Obrigado! Sua mensagem foi enviada com sucesso.');
             setName('');
             setEmail('');
             setMessage('');
             turnstileRef.current?.reset();
-            setToken(''); // Limpa o token após o sucesso
+            setToken('');
             setTimeout(() => setStatus(''), 4000);
 
         } catch (error) {
             console.error("Erro no envio do formulário:", error);
-            setStatus((error as Error).message || 'Falha no envio. Tente novamente.');
+            setStatus((error as Error).message);
             turnstileRef.current?.reset();
-            setToken(''); // Limpa o token após o erro
+            setToken('');
             setTimeout(() => setStatus(''), 4000);
         }
     };
