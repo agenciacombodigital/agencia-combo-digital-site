@@ -63,6 +63,7 @@ serve(async (req) => {
   }
 
   try {
+    // Forçando reimplementação para garantir que a variável de ambiente seja carregada.
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY_CHATBOT');
     
     console.log(`[chat-ai Edge Function] Usando modelo: ${GEMINI_API_MODEL}`);
@@ -125,8 +126,8 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("Erro na Função Edge 'chat-ai':", error.message);
-    return new Response(JSON.stringify({ error: `Erro interno do servidor: ${error.message}` }), {
+    console.error("Erro capturado no bloco principal da função:", error);
+    return new Response(JSON.stringify({ error: error.message || 'Ocorreu um erro inesperado.' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
