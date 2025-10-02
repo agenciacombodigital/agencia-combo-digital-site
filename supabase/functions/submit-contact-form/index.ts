@@ -49,12 +49,18 @@ serve(async (req) => {
         body: body.toString()
     });
 
-    // --- NOVO: Log da resposta bruta do Cloudflare ---
     console.log(`Status da resposta do Turnstile: ${verificationResponse.status} ${verificationResponse.statusText}`);
     const rawTurnstileResponse = await verificationResponse.text();
     console.log("Resposta bruta do Turnstile:", rawTurnstileResponse);
 
-    const verificationData = JSON.parse(rawTurnstileResponse); // Tenta parsear o texto bruto
+    let verificationData;
+    try {
+      verificationData = JSON.parse(rawTurnstileResponse);
+    } catch (parseError) {
+      console.error("Erro ao parsear resposta do Turnstile como JSON:", parseError);
+      // Se não for JSON, é provável que seja um erro do Cloudflare ou uma resposta inesperada.
+      return new Response(JSON.stringify({ error: `Resposta inválida do Turnstile. Corpo: '${rawTurnstileResponse}'` }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     if (!verificationData.success) {
       console.warn("Falha na verificação do Turnstile:", verificationData['error-codes']);
