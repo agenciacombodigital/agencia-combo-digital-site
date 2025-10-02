@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PORTFOLIO_ITEMS } from '../../constants';
-import { PortfolioItem } from '../../types';
+import { Page, PortfolioItem } from '../../types'; // Importar Page
 import { useInView } from '../../hooks/useInView';
 import { X } from 'react-feather';
 
@@ -145,9 +145,10 @@ const FILTERS = ['Todos', 'Web', 'Branding', 'Motion'];
 interface PortfolioProps {
   initialItem: PortfolioItem | null;
   clearInitialItem: () => void;
+  setCurrentPage: (page: Page) => void; // Adicionado setCurrentPage
 }
 
-const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem }) => {
+const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, setCurrentPage }) => { // Recebe setCurrentPage
   const [selectedItem, setSelectedItem] = useState<{ item: PortfolioItem; index: number } | null>(null);
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [ref, isInView] = useInView({ threshold: 0.1, triggerOnce: true });
@@ -228,7 +229,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem }) 
         <div className="container mx-auto px-6">
             <h2 className="text-4xl font-bold text-white mb-4">Pronto para criar algo inesquecível?</h2>
             <button 
-                onClick={() => { /* Navigate to Contact Page */ }}
+                onClick={() => setCurrentPage(Page.Contact)} {/* CORREÇÃO AQUI */}
                 className="footer-cta-button text-white font-bold py-3 px-8 rounded-full mt-4"
                 data-cursor-hover
             >

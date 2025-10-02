@@ -40,7 +40,7 @@ const App: React.FC = () => {
       case Page.About:
         return <About setCurrentPage={setCurrentPage} />;
       case Page.Portfolio:
-        return <Portfolio initialItem={selectedPortfolioItem} clearInitialItem={() => setSelectedPortfolioItem(null)} />;
+        return <Portfolio initialItem={selectedPortfolioItem} clearInitialItem={() => setSelectedPortfolioItem(null)} setCurrentPage={setCurrentPage} />;
       case Page.Contact:
         return <Contact />;
       default:
