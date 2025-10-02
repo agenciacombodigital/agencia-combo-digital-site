@@ -40,12 +40,15 @@ serve(async (req) => {
       body.append('remoteip', remoteip);
     }
 
-    // AQUI ESTÁ A CORREÇÃO:
-    // Passamos o objeto 'body' (URLSearchParams) diretamente, sem definir o header 'Content-Type' manualmente.
-    // O sistema 'fetch' do Deno irá automaticamente configurar o header correto, o que é mais seguro e resolve o erro 405.
+    // AQUI ESTÁ A CORREÇÃO DEFINITIVA:
+    // Convertemos o corpo para uma string e definimos o cabeçalho 'Content-Type' explicitamente.
+    // Isso remove qualquer ambiguidade na requisição para a Cloudflare.
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
-        body: body,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body.toString(),
     });
 
     if (!verificationResponse.ok) {
