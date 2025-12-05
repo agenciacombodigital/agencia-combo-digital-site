@@ -1,29 +1,39 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { COLORS } from '../constants';
 
 const CustomCursor: React.FC = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  // Refs para elementos DOM
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+
+  // Refs para rastreamento de posição
+  const targetX = useRef(0);
+  const targetY = useRef(0);
+  const currentX = useRef(0);
+  const currentY = useRef(0);
+  
   const [isHovering, setIsHovering] = useState(false);
   const [isPointer, setIsPointer] = useState(false);
-  const [isQuote, setIsQuote] = useState(false);
+
+  // Fator de suavização (easing) para a fluidez
+  const easing = 0.15; 
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      targetX.current = e.clientX;
+      targetY.current = e.clientY;
     };
 
     const onMouseOver = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        if (target.closest('[data-cursor-quote]')) setIsQuote(true);
         if (target.closest('a, button, [data-cursor-hover]')) setIsHovering(true);
         if (target.closest('a, button, [data-cursor-pointer]')) setIsPointer(true);
     };
 
     const onMouseOut = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        if (target.closest('[data-cursor-quote]')) setIsQuote(false);
         if (target.closest('a, button, [data-cursor-hover]')) setIsHovering(false);
         if (target.closest('a, button, [data-cursor-pointer]')) setIsPointer(false);
     };
@@ -32,45 +42,66 @@ const CustomCursor: React.FC = () => {
     document.addEventListener('mouseover', onMouseOver);
     document.addEventListener('mouseout', onMouseOut);
 
+    // Loop de animação para movimento suave
+    let animationFrameId: number;
+    
+    const animate = () => {
+      // Interpolação de posição
+      currentX.current += (targetX.current - currentX.current) * easing;
+      currentY.current += (targetY.current - currentY.current) * easing;
+
+      // Atualiza o DOM diretamente usando transform3d para aceleração de GPU
+      if (cursorRef.current) {
+          cursorRef.current.style.transform = `translate3d(${currentX.current}px, ${currentY.current}px, 0) translate(-50%, -50%)`;
+      }
+      if (dotRef.current) {
+          dotRef.current.style.transform = `translate3d(${currentX.current}px, ${currentY.current}px, 0) translate(-50%, -50%)`;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    // Inicia o loop de animação
+    animationFrameId = requestAnimationFrame(animate);
+
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseover', onMouseOver);
       document.removeEventListener('mouseout', onMouseOut);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
+  // Lógica de tamanho do cursor (isQuote removido)
   const cursorSize = isHovering ? 60 : 24;
-  const dotSize = isPointer || isQuote ? 0 : 8;
+  const dotSize = isPointer ? 0 : 8; 
 
   return (
     <>
+      {/* Outer Ring */}
       <div
-        className="fixed pointer-events-none z-[9999] transition-all duration-250 ease-out rounded-full flex items-center justify-center"
+        ref={cursorRef}
+        className="fixed pointer-events-none z-[9999] transition-all duration-300 ease-out rounded-full flex items-center justify-center"
         style={{
-          left: position.x,
-          top: position.y,
-          width: `${isQuote ? 48 : cursorSize}px`,
-          height: `${isQuote ? 48 : cursorSize}px`,
-          transform: `translate(-50%, -50%)`,
-          border: `2px solid ${isHovering ? COLORS.orange : isQuote ? 'transparent' : COLORS.blue}`,
+          // A posição é controlada pelo JS transform
+          left: 0,
+          top: 0,
+          width: `${cursorSize}px`,
+          height: `${cursorSize}px`,
+          border: `2px solid ${isHovering ? COLORS.orange : COLORS.blue}`,
           opacity: isHovering ? 0.5 : 1,
-          backgroundColor: isQuote ? 'rgba(252, 192, 23, 0.2)' : 'transparent',
+          backgroundColor: 'transparent',
         }}
-      >
-        {isQuote && (
-            <svg width="24" height="18" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: COLORS.yellow }}>
-                <path d="M18 0L24 12V36H0V12L6 0H18ZM42 0L48 12V36H24V12L30 0H42Z" fill="currentColor"/>
-            </svg>
-        )}
-      </div>
+      />
+      {/* Inner Dot */}
       <div
+        ref={dotRef}
         className="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100"
         style={{
-          left: position.x,
-          top: position.y,
+          left: 0,
+          top: 0,
           width: `${dotSize}px`,
           height: `${dotSize}px`,
-          transform: `translate(-50%, -50%)`,
           backgroundColor: COLORS.white,
         }}
       />

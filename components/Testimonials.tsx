@@ -16,7 +16,7 @@ const QuoteIcon: React.FC = () => (
 );
 
 const TestimonialCard: React.FC<TestimonialProps> = ({ quote, author, title, imageUrl }) => (
-    <div className="testimonial-card-container w-[80vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0 snap-center" data-cursor-quote>
+    <div className="testimonial-card-container w-[80vw] md:w-[60vw] lg:w-[45vw] flex-shrink-0 snap-center" data-cursor-hover>
         <div className="testimonial-card relative bg-[#161b22]/50 backdrop-blur-sm p-8 md:p-12 rounded-2xl border border-gray-800 flex flex-col h-full shadow-lg">
             <QuoteIcon />
             <p className="text-2xl md:text-3xl font-medium text-gray-200 mb-8 italic leading-snug z-10 relative flex-grow">
