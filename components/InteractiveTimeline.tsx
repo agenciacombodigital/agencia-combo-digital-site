@@ -3,11 +3,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Page } from '../types';
 import { TIMELINE_EVENTS } from '../constants';
+import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface InteractiveTimelineProps {
-  setCurrentPage: (page: Page) => void;
+  // setCurrentPage is no longer needed, replaced by hook
 }
 
 const MagneticButton: React.FC<{ children: React.ReactNode; onClick: () => void; className?: string }> = ({ children, onClick, className }) => {
@@ -51,9 +52,10 @@ const MagneticButton: React.FC<{ children: React.ReactNode; onClick: () => void;
   );
 };
 
-const InteractiveTimeline: React.FC<InteractiveTimelineProps> = ({ setCurrentPage }) => {
+const InteractiveTimeline: React.FC<InteractiveTimelineProps> = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const { navigateToPage } = usePortfolioNavigation();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -123,7 +125,7 @@ const InteractiveTimeline: React.FC<InteractiveTimelineProps> = ({ setCurrentPag
             O próximo marco? <span className="combo-gradient-text">Criar algo épico com você.</span>
           </h3>
           <MagneticButton 
-            onClick={() => setCurrentPage(Page.Contact)}
+            onClick={() => navigateToPage(Page.Contact)}
             className="footer-cta-button text-white font-bold py-4 px-10 rounded-full text-lg"
           >
             Vamos juntos?

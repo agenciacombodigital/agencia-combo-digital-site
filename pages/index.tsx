@@ -1,18 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { Page, PortfolioItem } from '../../types';
-import { useInView } from '../../hooks/useInView';
-import AiServices from '../AiServices';
-import FeaturedProjects from '../FeaturedProjects';
-import Testimonials from '../Testimonials';
-import InteractivePillars from '../InteractivePillars';
+import Head from 'next/head';
+import { Page } from '../../types';
+import AiServices from '../../components/AiServices';
+import FeaturedProjects from '../../components/FeaturedProjects';
+import Testimonials from '../../components/Testimonials';
+import InteractivePillars from '../../components/InteractivePillars';
+import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
-interface HomeProps {
-    setCurrentPage: (page: Page) => void;
-    showPortfolioItem: (item: PortfolioItem) => void;
-}
-
-const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
+const Home: React.FC = () => {
   const heroRef = useRef<HTMLElement>(null);
+  const { showPortfolioItem, navigateToPage } = usePortfolioNavigation();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -30,7 +27,12 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
   }, []);
 
   return (
-    <div>
+    <>
+      <Head>
+        <title>Nós não seguimos, nós criamos — Combo Digital</title>
+        <meta name="description" content="A Combo Digital é uma agência criativa que une ideias audaciosas com tecnologia de ponta para construir experiências digitais exclusivas." />
+      </Head>
+      
       {/* Hero Section */}
       <section ref={heroRef} className="section-hero-combo">
         <div className="hero-interactive-bg"></div>
@@ -43,7 +45,7 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
             A Combo Digital é uma agência criativa que une ideias audaciosas com tecnologia de ponta para construir experiências digitais exclusivas.
           </p>
           <button 
-            onClick={() => setCurrentPage(Page.Portfolio)}
+            onClick={() => navigateToPage(Page.Portfolio)}
             className="mt-10 px-8 py-4 text-white font-bold uppercase tracking-widest rounded-full glass-button" 
             data-cursor-hover
             >
@@ -67,10 +69,11 @@ const Home: React.FC<HomeProps> = ({setCurrentPage, showPortfolioItem}) => {
       <Testimonials />
 
       {/* Featured Projects Section */}
-      <FeaturedProjects setCurrentPage={setCurrentPage} showPortfolioItem={showPortfolioItem} />
+      <FeaturedProjects setCurrentPage={(page) => navigateToPage(page)} showPortfolioItem={showPortfolioItem} />
 
-    </div>
+    </>
   );
 };
 
+Home.displayName = Page.Home;
 export default Home;

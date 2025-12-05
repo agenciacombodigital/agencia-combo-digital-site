@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { PORTFOLIO_ITEMS } from '../../constants';
-import { Page, PortfolioItem } from '../../types'; // Importar Page
+import { Page, PortfolioItem } from '../../types';
 import { useInView } from '../../hooks/useInView';
 import { X } from 'react-feather';
+import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 // --- Modal Aprimorado com Galeria e Lightbox ---
 const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; onClose: () => void }> = ({ items, initialIndex, onClose }) => {
@@ -142,26 +145,31 @@ const PortfolioModal: React.FC<{ items: PortfolioItem[]; initialIndex: number; o
 // --- Componente Principal ---
 const FILTERS = ['Todos', 'Web', 'Branding', 'Motion'];
 
-interface PortfolioProps {
-  initialItem: PortfolioItem | null;
-  clearInitialItem: () => void;
-  setCurrentPage: (page: Page) => void; // Adicionado setCurrentPage
-}
+const Portfolio: React.FC = () => {
+  const router = useRouter();
+  const { itemId } = router.query;
+  const { navigateToPage } = usePortfolioNavigation();
 
-const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, setCurrentPage }) => { // Recebe setCurrentPage
   const [selectedItem, setSelectedItem] = useState<{ item: PortfolioItem; index: number } | null>(null);
   const [activeFilter, setActiveFilter] = useState('Todos');
   const [ref, isInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
+  // Effect to handle initial item selection from URL query
   useEffect(() => {
-    if (initialItem) {
-      const originalIndex = PORTFOLIO_ITEMS.findIndex(p => p.id === initialItem.id);
-      if (originalIndex !== -1) {
-        setSelectedItem({ item: initialItem, index: originalIndex });
+    if (itemId) {
+      const id = parseInt(Array.isArray(itemId) ? itemId[0] : itemId);
+      const item = PORTFOLIO_ITEMS.find(p => p.id === id);
+      const index = PORTFOLIO_ITEMS.findIndex(p => p.id === id);
+      
+      if (item && index !== -1) {
+        setSelectedItem({ item, index });
       }
-      clearInitialItem();
+      
+      // Clear the query parameter after setting the state to prevent re-triggering
+      // We use replace to avoid adding a history entry
+      router.replace('/portfolio', undefined, { shallow: true });
     }
-  }, [initialItem, clearInitialItem]);
+  }, [itemId, router]);
 
   const filteredItems = useMemo(() => 
     activeFilter === 'Todos' 
@@ -174,9 +182,18 @@ const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, se
     const originalIndex = PORTFOLIO_ITEMS.findIndex(p => p.id === item.id);
     setSelectedItem({ item, index: originalIndex });
   };
+  
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+  };
 
   return (
     <div className="portfolio-page-container">
+      <Head>
+        <title>{selectedItem ? `${selectedItem.item.title} | Portfólio Imersivo | Combo Digital` : "Portfólio Imersivo | Combo Digital"}</title>
+        <meta name="description" content={selectedItem ? selectedItem.item.description : "Projetos que respiram tecnologia e arte — portfólio com cases como Projeto Alfa, Campos Elíseos e Salto Quântico."} />
+      </Head>
+      
       <div className="particle-background"></div>
       <div className="pt-24 pb-20 px-6 container mx-auto relative z-10">
         <div ref={ref} className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -223,13 +240,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, se
           ))}
         </div>
       </div>
-      {selectedItem && <PortfolioModal items={PORTFOLIO_ITEMS} initialIndex={selectedItem.index} onClose={() => setSelectedItem(null)} />}
+      {selectedItem && <PortfolioModal items={PORTFOLIO_ITEMS} initialIndex={selectedItem.index} onClose={handleCloseModal} />}
       
       <section className="py-24 text-center relative z-10">
         <div className="container mx-auto px-6">
             <h2 className="text-4xl font-bold text-white mb-4">Pronto para criar algo inesquecível?</h2>
             <button 
-                onClick={() => setCurrentPage(Page.Contact)}
+                onClick={() => navigateToPage(Page.Contact)}
                 className="footer-cta-button text-white font-bold py-3 px-8 rounded-full mt-4"
                 data-cursor-hover
             >
@@ -241,4 +258,5 @@ const Portfolio: React.FC<PortfolioProps> = ({ initialItem, clearInitialItem, se
   );
 };
 
+Portfolio.displayName = Page.Portfolio;
 export default Portfolio;

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Page } from '../types';
 import { PAGES } from '../constants';
-import { Home, Users, Layers, Send, Menu, X } from 'react-feather'; // Import X para o botão de fechar interno
+import { Home, Users, Layers, Send, Menu, X } from 'react-feather';
 
 interface HeaderProps {
-  currentPage: Page;
-  setCurrentPage: (page: Page) => void;
+  // currentPage and setCurrentPage are no longer needed for routing in Next.js, 
+  // but we keep the structure for compatibility with the component's original design.
+  // We will use the router path instead.
 }
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -15,11 +18,21 @@ const iconMap: { [key: string]: React.ElementType } = {
   [Page.Contact]: Send,
 };
 
-const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
+// Helper function to map Page enum to Next.js path
+const getPathFromPage = (pageName: Page) => {
+    const page = PAGES.find(p => p.name === pageName);
+    return page ? page.path : '/';
+};
+
+const Header: React.FC<HeaderProps> = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter();
+    
+    // Determine the current page based on the router path
+    const currentPath = router.pathname;
+    const currentPageName = PAGES.find(p => p.path === currentPath)?.name || Page.Home;
 
     useEffect(() => {
-        // Bloqueia o scroll do body quando o menu mobile está aberto
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -30,9 +43,8 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
         };
     }, [isOpen]);
 
-    const handleNavigate = (page: Page) => {
-        setCurrentPage(page);
-        setIsOpen(false); // Fecha o menu ao navegar
+    const handleNavigate = () => {
+        setIsOpen(false); // Close menu on navigation
     };
 
     return (
@@ -53,43 +65,45 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
                     <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar menu">
                         <X className="h-8 w-8" />
                     </button>
-                    <a 
-                        href="#" 
-                        onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
+                    <Link 
+                        href="/" 
+                        onClick={handleNavigate}
                         className="block"
                         data-cursor-pointer
                         aria-label="Página Inicial"
                     >
                         <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Logo Desktop - escondido no mobile */}
-                <a 
-                    href="#" 
-                    onClick={(e) => { e.preventDefault(); handleNavigate(Page.Home); }}
+                <Link 
+                    href="/" 
                     className="hidden md:block mb-20 px-[15px] py-[12px] md:p-0"
                     data-cursor-pointer
                     aria-label="Página Inicial"
                 >
                     <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
-                </a>
+                </Link>
                 <ul>
                     {PAGES.map(page => {
                         const IconComponent = iconMap[page.name];
+                        const path = getPathFromPage(page.name);
+                        const isActive = currentPath === path;
+                        
                         return (
                             <li key={page.name}>
-                                <a 
-                                    href="#" 
+                                <Link 
+                                    href={path} 
                                     data-tooltip={page.name} 
                                     aria-label={page.name}
-                                    onClick={(e) => { e.preventDefault(); handleNavigate(page.name); }}
-                                    className={currentPage === page.name ? 'active' : ''}
+                                    onClick={handleNavigate}
+                                    className={isActive ? 'active' : ''}
                                     data-cursor-pointer
                                 >
                                     {IconComponent && <IconComponent />}
                                     {/* No mobile, o texto é exibido ao lado do ícone, gerenciado via CSS */}
-                                </a>
+                                </Link>
                             </li>
                         );
                     })}

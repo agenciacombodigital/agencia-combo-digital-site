@@ -2,8 +2,11 @@ import React, { useRef } from 'react';
 import { Page, PortfolioItem } from '../types';
 import { useInView } from '../hooks/useInView';
 import { COLORS, PORTFOLIO_ITEMS } from '../constants';
+import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 interface FeaturedProjectsProps {
+    // setCurrentPage and showPortfolioItem are now handled by the hook, 
+    // but we keep the props for compatibility with the Home page structure before migration.
     setCurrentPage: (page: Page) => void;
     showPortfolioItem: (item: PortfolioItem) => void;
 }
@@ -67,8 +70,9 @@ const ProjectCard: React.FC<{ project: PortfolioItem; onClick: () => void }> = (
 };
 
 
-const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ setCurrentPage, showPortfolioItem }) => {
+const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ showPortfolioItem }) => {
     const featuredProjects = PORTFOLIO_ITEMS.filter(p => p.featured).slice(0, 3);
+    const { navigateToPage } = usePortfolioNavigation();
 
     return (
         <section className="section-projetos-destaque py-24">
@@ -95,7 +99,7 @@ const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ setCurrentPage, sho
 
                     <div className="text-center mt-16">
                         <button
-                            onClick={() => setCurrentPage(Page.Portfolio)}
+                            onClick={() => navigateToPage(Page.Portfolio)}
                             className="inline-flex items-center text-white border border-gray-700 px-8 py-3 rounded-full font-semibold transition-colors duration-300 hover:bg-white hover:text-black"
                             data-cursor-hover
                         >

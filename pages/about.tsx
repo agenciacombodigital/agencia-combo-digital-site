@@ -1,9 +1,11 @@
 import React from 'react';
+import Head from 'next/head';
 import { useInView } from '../../hooks/useInView';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
 import { COLORS } from '../../constants';
 import { Page } from '../../types';
-import InteractiveTimeline from '../InteractiveTimeline';
+import InteractiveTimeline from '../../components/InteractiveTimeline';
+import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 const AnimatedSection: React.FC<{children: React.ReactNode, className?: string}> = ({ children, className }) => {
     const [ref, isInView] = useInView({ threshold: 0.2, triggerOnce: true });
@@ -29,15 +31,17 @@ const ValueCard: React.FC<{title: string, description: string, icon: React.React
     </div>
 );
 
-interface AboutProps {
-  setCurrentPage: (page: Page) => void;
-}
-
-const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
+const About: React.FC = () => {
   const scrollProgress = useScrollProgress();
+  const { navigateToPage } = usePortfolioNavigation();
 
   return (
     <div className="about-page-container bg-black text-white">
+      <Head>
+        <title>Quem Somos — Os Arquitetos do Futuro | Combo Digital</title>
+        <meta name="description" content="Conheça a filosofia, valores e jornada da Combo Digital — fusão de criatividade e tecnologia desde 2018." />
+      </Head>
+      
       <div className="scroll-progress-bar" style={{ height: `${scrollProgress}%` }}></div>
 
       {/* Hero Section */}
@@ -108,7 +112,7 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
       </section>
 
       {/* Interactive Timeline Section */}
-      <InteractiveTimeline setCurrentPage={setCurrentPage} />
+      <InteractiveTimeline />
 
       {/* DNA Section */}
       <section className="dna-section">
@@ -124,4 +128,5 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
   );
 };
 
+About.displayName = Page.About;
 export default About;
