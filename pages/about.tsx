@@ -1,10 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
-import { useInView } from '../../hooks/useInView';
-import { useScrollProgress } from '../../hooks/useScrollProgress';
-import { COLORS } from '../../constants';
-import { Page } from '../../types';
-import InteractiveTimeline from '../../components/InteractiveTimeline';
+import { useInView } from '../hooks/useInView';
+import { useScrollProgress } from '../hooks/useScrollProgress';
+import { COLORS } from '../constants';
+import { Page } from '../types';
+import InteractiveTimeline from '../components/InteractiveTimeline';
 import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 const AnimatedSection: React.FC<{children: React.ReactNode, className?: string}> = ({ children, className }) => {

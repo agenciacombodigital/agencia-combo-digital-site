@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { PORTFOLIO_ITEMS } from '../../constants';
-import { Page, PortfolioItem } from '../../types';
-import { useInView } from '../../hooks/useInView';
+import { PORTFOLIO_ITEMS } from '../constants';
+import { Page, PortfolioItem } from '../types';
+import { useInView } from '../hooks/useInView';
 import { X } from 'react-feather';
 import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 

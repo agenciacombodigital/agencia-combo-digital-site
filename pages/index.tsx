@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
-import { Page } from '../../types';
-import AiServices from '../../components/AiServices';
-import FeaturedProjects from '../../components/FeaturedProjects';
-import Testimonials from '../../components/Testimonials';
-import InteractivePillars from '../../components/InteractivePillars';
+import { Page } from '../types';
+import AiServices from '../components/AiServices';
+import FeaturedProjects from '../components/FeaturedProjects';
+import Testimonials from '../components/Testimonials';
+import InteractivePillars from '../components/InteractivePillars';
 import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
 
 const Home: React.FC = () => {
