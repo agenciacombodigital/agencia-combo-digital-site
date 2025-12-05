@@ -114,7 +114,6 @@ const About: React.FC<AboutProps> = ({ setCurrentPage }) => {
       <section className="dna-section">
         <div className="container mx-auto px-6">
             <AnimatedSection>
-                <img src="https://picsum.photos/seed/brain/600/600" alt="Cérebro digital representando o DNA criativo da Combo Digital" className="w-64 h-64 mx-auto mb-8" />
                 <h2 className="text-3xl md:text-5xl font-bold max-w-4xl mx-auto leading-tight">
                     Mais que uma agência, somos um <span className="combo-gradient-text">coletivo criativo</span> que hackeia o futuro.
                 </h2>
