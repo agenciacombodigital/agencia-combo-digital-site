@@ -45,7 +45,7 @@ serve(async (req) => {
     body.append('secret', secretKey);
     body.append('response', token);
     
-    console.log(`[Turnstile] Enviando para verificação. Body: ${body.toString()}`);
+    console.log(`[Turnstile] Enviando para verificação.`);
     
     // Requisição POST para o endpoint de verificação
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
@@ -63,7 +63,6 @@ serve(async (req) => {
       verificationData = JSON.parse(rawTurnstileResponse);
     } catch (parseError) {
       console.error("[Turnstile] Erro ao parsear resposta como JSON:", parseError);
-      // Se a resposta bruta estiver vazia (como no log 405), lançamos um erro mais claro.
       if (rawTurnstileResponse.trim() === '') {
           throw new Error(`Falha na comunicação com o Turnstile. Status: ${verificationResponse.status}. Resposta vazia.`);
       }
@@ -71,8 +70,16 @@ serve(async (req) => {
     }
 
     if (!verificationData.success) {
-      console.warn("[Turnstile] Falha na verificação:", verificationData['error-codes']);
-      return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      const errorCodes = verificationData['error-codes']?.join(', ') || 'código desconhecido';
+      console.warn("[Turnstile] Falha na verificação. Códigos:", errorCodes);
+      
+      // Retorna os códigos de erro para o frontend
+      return new Response(JSON.stringify({ 
+          error: `Falha na verificação de segurança. Código(s): ${errorCodes}. Por favor, verifique se as chaves Turnstile (Site Key e Secret Key) estão configuradas corretamente.` 
+      }), { 
+          status: 403, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      });
     }
     console.log("[Turnstile] Verificação bem-sucedida.");
 
