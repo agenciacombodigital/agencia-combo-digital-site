@@ -11,18 +11,21 @@ const Contato: React.FC = () => {
     const [token, setToken] = useState<string>('');
     const turnstileRef = useRef<TurnstileInstance>(null);
 
-    // Usando a chave de teste universal do Cloudflare para garantir que o widget seja renderizado
-    // e o botão de envio seja ativado no ambiente de desenvolvimento.
-    const siteKey = '1x00000000000000000000AA'; 
+    // Lendo a chave de site real da variável de ambiente do Next.js
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY; 
 
     if (!siteKey) {
-        // Este bloco não deve ser alcançado com a chave de teste, mas mantido por segurança.
-        console.error("ERRO: A variável NEXT_PUBLIC_TURNSTILE_SITE_KEY não está definida!");
+        // Se a chave não estiver definida, mostramos um erro e desabilitamos o formulário.
+        // Isso garante que o formulário não seja enviado sem a verificação de segurança.
         return (
-            <div className="min-h-screen flex items-center justify-center text-center">
-                <p className="text-red-500 text-xl">
-                    Erro de configuração: Chave de segurança não encontrada.
-                </p>
+            <div className="min-h-screen flex items-center justify-center text-center pt-24 pb-20 px-6 contact-bg">
+                <div className="max-w-md bg-black/50 p-8 rounded-xl border border-red-800">
+                    <h1 className="text-4xl font-bold text-red-500 mb-4">Erro de Configuração</h1>
+                    <p className="text-gray-300">
+                        A chave de segurança do Cloudflare Turnstile (NEXT_PUBLIC_TURNSTILE_SITE_KEY) não foi definida. 
+                        O formulário de contato está desabilitado por segurança.
+                    </p>
+                </div>
             </div>
         );
     }
