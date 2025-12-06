@@ -10,28 +10,23 @@ const corsHeaders = {
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 serve(async (req) => {
-  // 1. Log inicial para debug
-  console.log(`[Edge Function] Iniciada. Método: ${req.method}`);
-
-  // 2. Tratamento de CORS (Preflight)
+  // 1. Tratamento de CORS (Preflight)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // 3. Bloqueio de Métodos Incorretos (Se chegar GET, rejeita aqui e não quebra)
+  // 2. Bloqueio de Métodos Incorretos (Rejeita GET/PUT/DELETE)
   if (req.method !== 'POST') {
-    console.error(`[Erro] Método não permitido: ${req.method}`);
-    return new Response(JSON.stringify({ error: 'Método não permitido. Use POST.' }), {
+    return new Response(JSON.stringify({ error: 'Método não permitido. Utilize POST.' }), {
       status: 405,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
   try {
-    // 4. Leitura Segura do Body (Lê texto primeiro para evitar SyntaxError)
+    // 3. Leitura Segura do Body
     const rawBody = await req.text();
     if (!rawBody) {
-      console.error("[Erro] Corpo da requisição está vazio.");
       return new Response(JSON.stringify({ error: 'O corpo da requisição está vazio.' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -39,8 +34,6 @@ serve(async (req) => {
     }
 
     const parsedBody = JSON.parse(rawBody);
-    console.log("[Debug] Payload recebido:", JSON.stringify(parsedBody));
-
     const { name, email, message, token } = parsedBody;
 
     // --- VALIDAÇÃO DO TURNSTILE ---
@@ -65,9 +58,9 @@ serve(async (req) => {
     });
 
     const verification = await turnstileResult.json();
-    console.log("[Turnstile] Resultado:", verification);
 
     if (!verification.success) {
+        console.warn(`[Turnstile] Falha: ${verification['error-codes']}`);
         return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.', details: verification['error-codes'] }), {
             status: 403,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
