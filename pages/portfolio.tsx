@@ -197,7 +197,7 @@ const Portfolio: React.FC = () => {
       <div className="particle-background"></div>
       <div className="pt-24 pb-20 px-6 container mx-auto relative z-10">
         <div ref={ref} className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-6xl md:text-8xl font-extrabold uppercase tracking-tighter animated-portfolio-title">
+          <h1 className="text-6xl md:text-8xl font-bold uppercase tracking-tighter animated-portfolio-title">
             Portfólio Imersivo
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-300">
