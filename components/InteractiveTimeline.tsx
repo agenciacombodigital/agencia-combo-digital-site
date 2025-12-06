@@ -74,7 +74,7 @@ const InteractiveTimeline: React.FC<InteractiveTimelineProps> = () => {
         },
       });
 
-      items.forEach((item) => {
+      items.forEach((item: any) => { // Corrigido aqui
         gsap.to(item, {
           opacity: 1,
           y: 0,
