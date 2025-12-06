@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Head from 'next/head';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
+import { Page } from '../types'; // Importação adicionada
 
 const Contact: React.FC = () => {
     const [status, setStatus] = useState('');
