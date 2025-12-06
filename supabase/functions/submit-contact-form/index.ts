@@ -75,7 +75,7 @@ serve(async (req) => {
       
       // Retorna os códigos de erro para o frontend
       return new Response(JSON.stringify({ 
-          error: `Falha na verificação de segurança. Código(s): ${errorCodes}. Por favor, verifique se as chaves Turnstile (Site Key e Secret Key) estão configuradas corretamente.` 
+          error: `Falha na verificação de segurança. Código(s): ${errorCodes}. Por favor, tente novamente.` 
       }), { 
           status: 403, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
