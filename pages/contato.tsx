@@ -36,7 +36,10 @@ const Contato: React.FC = () => {
         e.preventDefault();
         
         if (!token) {
-            setStatus('Por favor, aguarde a verificação de segurança.');
+            // Se o token não estiver presente, tentamos resetar o Turnstile e pedimos ao usuário para tentar novamente.
+            setStatus('Por favor, aguarde a verificação de segurança e tente novamente.');
+            turnstileRef.current?.reset();
+            setTimeout(() => setStatus(''), 5000);
             return;
         }
 
@@ -149,7 +152,7 @@ const Contato: React.FC = () => {
                     <div>
                         <button 
                             type="submit"
-                            disabled={!token || status === 'Enviando...'}
+                            disabled={status === 'Enviando...'} // Removida a dependência do token
                             // Revertendo para a cor azul primária com hover
                             className="w-full py-4 bg-blue-600 text-white font-bold uppercase tracking-widest rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:bg-blue-500 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:transform-none"
                             data-cursor-hover
