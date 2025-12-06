@@ -8,7 +8,7 @@ const nextConfig = {
   },
   // Ensure Tailwind CSS is correctly configured
   experimental: {
-    appDir: true,
+    // appDir: true, // Removed as it's deprecated or causing warnings in this context
   },
 };
 
