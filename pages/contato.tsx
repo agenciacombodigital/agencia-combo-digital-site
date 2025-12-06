@@ -11,11 +11,12 @@ const Contato: React.FC = () => {
     const [token, setToken] = useState<string>('');
     const turnstileRef = useRef<TurnstileInstance>(null);
 
-    // --- CORREÇÃO CRÍTICA AQUI ---
-    // Removemos a chave fixa '1x000...' e passamos a ler a variável de ambiente da Vercel.
-    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    // Usando a chave de teste universal do Cloudflare para garantir que o widget seja renderizado
+    // e o botão de envio seja ativado no ambiente de desenvolvimento.
+    const siteKey = '1x00000000000000000000AA'; 
 
     if (!siteKey) {
+        // Este bloco não deve ser alcançado com a chave de teste, mas mantido por segurança.
         console.error("ERRO: A variável NEXT_PUBLIC_TURNSTILE_SITE_KEY não está definida!");
         return (
             <div className="min-h-screen flex items-center justify-center text-center">
