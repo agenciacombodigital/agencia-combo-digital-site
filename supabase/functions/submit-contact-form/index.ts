@@ -10,64 +10,67 @@ const corsHeaders = {
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 serve(async (req) => {
-  // 1. Tratamento de CORS (Preflight) - Responde rápido e sai
+  // 1. Tratamento de CORS (Preflight)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // 2. Bloqueio de Métodos Incorretos (Só aceita POST)
+  // 2. Segurança: Aceitar apenas POST
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Método não permitido. Use POST.' }), {
+    return new Response(JSON.stringify({ error: 'Método não permitido.' }), {
       status: 405,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
   try {
-    // 3. Leitura Segura do Body (Evita o erro "Unexpected end of JSON input")
+    // 3. Leitura Segura do Body (Evita Crash "Unexpected end of JSON")
     const rawBody = await req.text();
     if (!rawBody || rawBody.trim() === "") {
-      return new Response(JSON.stringify({ error: 'O corpo da requisição está vazio.' }), {
+      return new Response(JSON.stringify({ error: 'Payload vazio.' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    const parsedBody = JSON.parse(rawBody);
-    const { name, email, message, token } = parsedBody;
+    const { name, email, message, token } = JSON.parse(rawBody);
 
-    // --- VALIDAÇÃO DO TURNSTILE ---
+    // 4. Validação do Token
     if (!token) {
-      return new Response(JSON.stringify({ error: 'Token de segurança não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Token de segurança ausente.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
-        console.error("ERRO CRÍTICO: Variável CLOUDFLARE_TURNSTILE_SECRET_KEY não definida.");
-        return new Response(JSON.stringify({ error: "Erro interno de configuração." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        console.error("ERRO CRÍTICO: Chave secreta não configurada no Supabase.");
+        throw new Error("Erro de configuração do servidor.");
     }
 
+    // Envio para Cloudflare
     const formData = new URLSearchParams();
     formData.append('secret', secretKey);
     formData.append('response', token);
     formData.append('remoteip', req.headers.get('x-forwarded-for') || '');
 
-    const turnstileResult = await fetch(TURNSTILE_VERIFY_URL, {
+    const turnstileRes = await fetch(TURNSTILE_VERIFY_URL, {
         method: 'POST',
         body: formData,
     });
 
-    const verification = await turnstileResult.json();
+    const verification = await turnstileRes.json();
 
     if (!verification.success) {
-        console.warn(`[Turnstile] Falha: ${verification['error-codes']}`);
-        return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.', details: verification['error-codes'] }), {
+        console.error('Falha Turnstile:', verification['error-codes']);
+        return new Response(JSON.stringify({ 
+            error: 'Falha na verificação de segurança.', 
+            details: verification['error-codes'] 
+        }), {
             status: 403,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
     }
 
-    // --- SALVAR NO SUPABASE ---
+    // 5. Sucesso - Gravar no Banco
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -78,7 +81,7 @@ serve(async (req) => {
       .insert([{ name, email, message }]);
 
     if (dbError) {
-      console.error("[Supabase] Erro ao salvar:", dbError);
+      console.error("Erro Supabase:", dbError);
       throw new Error("Erro ao salvar no banco de dados.");
     }
 
@@ -88,7 +91,7 @@ serve(async (req) => {
     );
 
   } catch (err) {
-    console.error("[Exception]", err);
+    console.error("Exception:", err);
     return new Response(
       JSON.stringify({ error: err.message || 'Erro interno no servidor.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
