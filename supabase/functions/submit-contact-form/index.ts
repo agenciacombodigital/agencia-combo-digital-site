@@ -10,23 +10,23 @@ const corsHeaders = {
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 serve(async (req) => {
-  // 1. Tratamento de CORS (Preflight)
+  // 1. Tratamento de CORS (Preflight) - Responde rápido e sai
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // 2. Bloqueio de Métodos Incorretos (Rejeita GET/PUT/DELETE)
+  // 2. Bloqueio de Métodos Incorretos (Só aceita POST)
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Método não permitido. Utilize POST.' }), {
+    return new Response(JSON.stringify({ error: 'Método não permitido. Use POST.' }), {
       status: 405,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
   try {
-    // 3. Leitura Segura do Body
+    // 3. Leitura Segura do Body (Evita o erro "Unexpected end of JSON input")
     const rawBody = await req.text();
-    if (!rawBody) {
+    if (!rawBody || rawBody.trim() === "") {
       return new Response(JSON.stringify({ error: 'O corpo da requisição está vazio.' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
