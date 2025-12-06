@@ -39,7 +39,8 @@ const ChatWidget: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([initialWelcomeMessage]); // Inicializa com a saudação automática
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionContext, setSessionContext] = useState<SessionContext>({ 
+  // Removendo setSessionContext, pois o estado não é atualizado após a inicialização
+  const [sessionContext] = useState<SessionContext>({ 
     greeted: true, // Já saudado pelo cliente
     timeOfDay: initialTimeOfDay 
   });
