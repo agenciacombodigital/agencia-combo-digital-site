@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = () => {
     
     // Determine the current page based on the router path
     const currentPath = router.pathname;
-    const currentPageName = PAGES.find(p => p.path === currentPath)?.name || Page.Home;
+    // const currentPageName = PAGES.find(p => p.path === currentPath)?.name || Page.Home; // Removido
 
     useEffect(() => {
         if (isOpen) {
