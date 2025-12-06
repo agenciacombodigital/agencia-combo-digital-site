@@ -18,7 +18,7 @@ const CustomCursor: React.FC = () => {
   const [isPointer, setIsPointer] = useState(false);
 
   // Fator de suavização (easing) para a fluidez
-  const easing = 0.15; 
+  const easing = 0.3; // Aumentado de 0.15 para 0.3 para maior velocidade de resposta
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
