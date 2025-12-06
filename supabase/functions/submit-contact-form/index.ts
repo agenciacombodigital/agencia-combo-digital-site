@@ -6,8 +6,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// CORREÇÃO: Usando o endpoint correto do Turnstile v3
-const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/api/v3/siteverify';
+// URL correta para verificação do Cloudflare Turnstile
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 serve(async (req) => {
   console.log("Edge Function 'submit-contact-form' invoked.");
@@ -46,6 +46,8 @@ serve(async (req) => {
     body.append('response', token);
     
     console.log(`[Turnstile] Enviando para verificação. Body: ${body.toString()}`);
+    
+    // Requisição POST para o endpoint de verificação
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -61,6 +63,10 @@ serve(async (req) => {
       verificationData = JSON.parse(rawTurnstileResponse);
     } catch (parseError) {
       console.error("[Turnstile] Erro ao parsear resposta como JSON:", parseError);
+      // Se a resposta bruta estiver vazia (como no log 405), lançamos um erro mais claro.
+      if (rawTurnstileResponse.trim() === '') {
+          throw new Error(`Falha na comunicação com o Turnstile. Status: ${verificationResponse.status}. Resposta vazia.`);
+      }
       return new Response(JSON.stringify({ error: `Resposta inválida do Turnstile. Corpo: '${rawTurnstileResponse}'` }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
