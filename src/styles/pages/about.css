@@ -21,7 +21,7 @@
 }
 .fluid-title {
   font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 900;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.05em;
 }

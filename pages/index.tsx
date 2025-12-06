@@ -37,7 +37,7 @@ const Home: React.FC = () => {
       <section ref={heroRef} className="section-hero-combo">
         <div className="hero-interactive-bg"></div>
         <div className="text-center z-10 px-4">
-          <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none kinetic-title">
+          <h1 className="text-5xl md:text-8xl font-extrabold uppercase tracking-tighter leading-none kinetic-title">
             <span className="block">Nós não seguimos,</span>
             <span className="block combo-gradient-text">nós criamos.</span>
           </h1>

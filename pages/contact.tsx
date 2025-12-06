@@ -91,7 +91,7 @@ const Contact: React.FC = () => {
       </Head>
       <div className="container mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
+          <h1 className="text-6xl md:text-8xl font-extrabold uppercase tracking-tighter">
             Vamos Criar o <span className="combo-gradient-text">Impossível</span>
           </h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-300">
