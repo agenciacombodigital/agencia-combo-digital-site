@@ -14,12 +14,8 @@ const Contato: React.FC = () => {
     // Lendo a chave de site real da variável de ambiente do Next.js
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY; 
     
-    // Chave de teste do Cloudflare que funciona em qualquer domínio
-    const fallbackSiteKey = '1x0000000000000000000000000000000AA';
-    const finalSiteKey = siteKey || fallbackSiteKey;
-
-    if (!finalSiteKey) {
-        // Este bloco só deve ser alcançado se nem a chave de ambiente nem a chave de fallback estiverem disponíveis
+    // Se a chave não estiver definida, o formulário não deve ser renderizado por segurança.
+    if (!siteKey) {
         return (
             <div className="min-h-screen flex items-center justify-center text-center pt-24 pb-20 px-6 contact-bg">
                 <div className="max-w-md bg-black/50 p-8 rounded-xl border border-red-800">
@@ -138,7 +134,7 @@ const Contato: React.FC = () => {
                     <div className="flex justify-center pt-4">
                         <Turnstile
                             ref={turnstileRef}
-                            siteKey={finalSiteKey} // Usando a chave de fallback se a chave de ambiente falhar
+                            siteKey={siteKey}
                             onSuccess={setToken}
                             onError={handleTurnstileError}
                             options={{ theme: 'dark' }}
