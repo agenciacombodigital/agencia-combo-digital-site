@@ -6,10 +6,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// CORREÇÃO: Usando o endpoint correto do Turnstile v3
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/api/v3/siteverify';
 
 serve(async (req) => {
-  console.log("Edge Function 'submit-contact-form' invoked."); // Nova linha de log
+  console.log("Edge Function 'submit-contact-form' invoked.");
 
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -44,7 +45,7 @@ serve(async (req) => {
     body.append('secret', secretKey);
     body.append('response', token);
     
-    console.log(`[Turnstile] Enviando para verificação. Body: ${body.toString()}`); // Log detalhado do corpo
+    console.log(`[Turnstile] Enviando para verificação. Body: ${body.toString()}`);
     const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
