@@ -14,8 +14,11 @@ const Contato: React.FC = () => {
     // Lendo a chave de site real da variável de ambiente do Next.js
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY; 
     
-    // Se a chave não estiver definida, o formulário não deve ser renderizado por segurança.
-    if (!siteKey) {
+    // Chave de teste do Cloudflare que funciona em qualquer domínio (para desenvolvimento/preview)
+    const fallbackSiteKey = '1x0000000000000000000000000000000AA';
+    const finalSiteKey = siteKey || fallbackSiteKey;
+
+    if (!finalSiteKey) {
         return (
             <div className="min-h-screen flex items-center justify-center text-center pt-24 pb-20 px-6 contact-bg">
                 <div className="max-w-md bg-black/50 p-8 rounded-xl border border-red-800">
@@ -40,6 +43,7 @@ const Contato: React.FC = () => {
         setStatus('Enviando...');
         
         try {
+            // A Edge Function usará a chave SECRETA para verificar este token
             const response = await fetch('https://sisvmbkwwmawnjhwydxh.supabase.co/functions/v1/submit-contact-form', {
                 method: 'POST',
                 headers: {
@@ -74,6 +78,7 @@ const Contato: React.FC = () => {
 
     const handleTurnstileError = (errorCode: string) => {
         console.error(`Erro no Turnstile: ${errorCode}`);
+        // Esta mensagem é exibida quando o widget falha ao carregar ou verificar no frontend
         setStatus(`Falha na verificação de segurança. Por favor, atualize a página.`);
     };
 
@@ -134,7 +139,7 @@ const Contato: React.FC = () => {
                     <div className="flex justify-center pt-4">
                         <Turnstile
                             ref={turnstileRef}
-                            siteKey={siteKey}
+                            siteKey={finalSiteKey}
                             onSuccess={setToken}
                             onError={handleTurnstileError}
                             options={{ theme: 'dark' }}
