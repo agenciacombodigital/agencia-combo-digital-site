@@ -7,7 +7,6 @@ import { useInView } from '../hooks/useInView';
 
 interface FooterProps {
   // setCurrentPage is no longer needed for routing in Next.js
-  setCurrentPage: (page: Page) => void; // Kept for compatibility, but will use router internally
 }
 
 const SocialLink: React.FC<{href: string, children: React.ReactNode, 'aria-label': string}> = ({ href, children, 'aria-label': ariaLabel }) => (
@@ -97,7 +96,7 @@ const Footer: React.FC<FooterProps> = () => {
                     <p className="text-gray-300 mb-6">Vamos transformar sua visão em uma realidade digital impactante.</p>
                     <button 
                         onClick={navigateToContact}
-                        className="footer-cta-button text-white font-bold py-3 px-8 rounded-full"
+                        className="footer-cta-button text-white font-bold py-4 px-10 rounded-full"
                         data-cursor-hover
                     >
                         Entre em Contato

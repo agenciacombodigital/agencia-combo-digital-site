@@ -34,13 +34,13 @@ export default function App({ Component, pageProps }: AppProps) {
       
       <CustomCursor />
       {/* Header now uses Next.js Link for navigation */}
-      <Header currentPage={Component.displayName as any} setCurrentPage={() => {}} /> 
+      <Header /> 
       
       <main>
         <Component {...pageProps} />
       </main>
       
-      <Footer setCurrentPage={() => {}} />
+      <Footer />
       <ChatWidget />
       <WhatsAppBubble />
     </div>
