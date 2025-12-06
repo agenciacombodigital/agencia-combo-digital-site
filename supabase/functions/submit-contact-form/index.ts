@@ -4,117 +4,101 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0'
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
-// URL correta para verificação do Cloudflare Turnstile
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 serve(async (req) => {
-  console.log("Edge Function 'submit-contact-form' invoked.");
+  // 1. Log inicial para debug
+  console.log(`[Edge Function] Iniciada. Método: ${req.method}`);
 
+  // 2. Tratamento de CORS (Preflight)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  try {
-    console.log("Função de contato iniciada.");
+  // 3. Bloqueio de Métodos Incorretos (Se chegar GET, rejeita aqui e não quebra)
+  if (req.method !== 'POST') {
+    console.error(`[Erro] Método não permitido: ${req.method}`);
+    return new Response(JSON.stringify({ error: 'Método não permitido. Use POST.' }), {
+      status: 405,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
 
-    let parsedBody;
-    try {
-      parsedBody = await req.json();
-      console.log("Corpo da requisição JSON recebido:", JSON.stringify(parsedBody));
-    } catch (jsonError) {
-      console.error("Erro ao fazer parse do JSON do corpo da requisição:", jsonError);
-      return new Response(JSON.stringify({ error: `Corpo da requisição inválido ou vazio: ${jsonError.message}.` }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  try {
+    // 4. Leitura Segura do Body (Lê texto primeiro para evitar SyntaxError)
+    const rawBody = await req.text();
+    if (!rawBody) {
+      console.error("[Erro] Corpo da requisição está vazio.");
+      return new Response(JSON.stringify({ error: 'O corpo da requisição está vazio.' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
+
+    const parsedBody = JSON.parse(rawBody);
+    console.log("[Debug] Payload recebido:", JSON.stringify(parsedBody));
 
     const { name, email, message, token } = parsedBody;
 
-    // --- ETAPA 1: VERIFICAÇÃO DO TURNSTILE ---
+    // --- VALIDAÇÃO DO TURNSTILE ---
     if (!token) {
-      return new Response(JSON.stringify({ error: 'Token de verificação não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ error: 'Token de segurança não fornecido.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
     const secretKey = Deno.env.get('CLOUDFLARE_TURNSTILE_SECRET_KEY');
     if (!secretKey) {
-      console.error("ERRO CRÍTICO: A variável CLOUDFLARE_TURNSTILE_SECRET_KEY não está configurada.");
-      return new Response(JSON.stringify({ error: "Erro de configuração do servidor (Turnstile Key)." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        console.error("ERRO CRÍTICO: Variável CLOUDFLARE_TURNSTILE_SECRET_KEY não definida.");
+        return new Response(JSON.stringify({ error: "Erro interno de configuração." }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-    
-    const body = new URLSearchParams();
-    body.append('secret', secretKey);
-    body.append('response', token);
-    
-    console.log(`[Turnstile] Enviando para verificação.`);
-    
-    // Requisição POST para o endpoint de verificação
-    const verificationResponse = await fetch(TURNSTILE_VERIFY_URL, { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString()
+
+    const formData = new URLSearchParams();
+    formData.append('secret', secretKey);
+    formData.append('response', token);
+    formData.append('remoteip', req.headers.get('x-forwarded-for') || '');
+
+    const turnstileResult = await fetch(TURNSTILE_VERIFY_URL, {
+        method: 'POST',
+        body: formData,
     });
 
-    console.log(`[Turnstile] Status da resposta: ${verificationResponse.status} ${verificationResponse.statusText}`);
-    const rawTurnstileResponse = await verificationResponse.text();
-    console.log("[Turnstile] Resposta bruta:", rawTurnstileResponse);
+    const verification = await turnstileResult.json();
+    console.log("[Turnstile] Resultado:", verification);
 
-    let verificationData;
-    try {
-      verificationData = JSON.parse(rawTurnstileResponse);
-    } catch (parseError) {
-      console.error("[Turnstile] Erro ao parsear resposta como JSON:", parseError);
-      if (rawTurnstileResponse.trim() === '') {
-          throw new Error(`Falha na comunicação com o Turnstile. Status: ${verificationResponse.status}. Resposta vazia.`);
-      }
-      return new Response(JSON.stringify({ error: `Resposta inválida do Turnstile. Corpo: '${rawTurnstileResponse}'` }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    if (!verification.success) {
+        return new Response(JSON.stringify({ error: 'Falha na verificação de segurança.', details: verification['error-codes'] }), {
+            status: 403,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
     }
 
-    if (!verificationData.success) {
-      const errorCodes = verificationData['error-codes']?.join(', ') || 'código desconhecido';
-      console.warn("[Turnstile] Falha na verificação. Códigos:", errorCodes);
-      
-      // Retorna os códigos de erro para o frontend
-      return new Response(JSON.stringify({ 
-          error: `Falha na verificação de segurança. Código(s): ${errorCodes}. Por favor, tente novamente.` 
-      }), { 
-          status: 403, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      });
-    }
-    console.log("[Turnstile] Verificação bem-sucedida.");
-
-    // --- ETAPA 2: INSERÇÃO NO BANCO DE DADOS ---
+    // --- SALVAR NO SUPABASE ---
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '' // Usar service role key para operações server-side
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { data, error } = await supabase
+    const { error: dbError } = await supabase
       .from('contact_submissions')
-      .insert([
-        { name, email, message },
-      ]);
+      .insert([{ name, email, message }]);
 
-    if (error) {
-      console.error("Erro ao inserir no Supabase:", error);
-      return new Response(JSON.stringify({ error: `Erro ao salvar sua mensagem: ${error.message}` }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    if (dbError) {
+      console.error("[Supabase] Erro ao salvar:", dbError);
+      throw new Error("Erro ao salvar no banco de dados.");
     }
 
-    console.log("Mensagem de contato salva com sucesso no Supabase.");
-    
     return new Response(
       JSON.stringify({ message: 'Obrigado! Sua mensagem foi enviada com sucesso.' }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
-  } catch (error) {
-    console.error("Erro capturado no bloco principal da função:", error);
+  } catch (err) {
+    console.error("[Exception]", err);
     return new Response(
-      JSON.stringify({ error: error.message || 'Ocorreu um erro inesperado.' }),
+      JSON.stringify({ error: err.message || 'Erro interno no servidor.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
-})
+});
