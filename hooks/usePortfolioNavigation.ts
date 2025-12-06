@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { PortfolioItem, Page } from '../types';
-import { PORTFOLIO_ITEMS } from '../constants';
+import { PAGES } from '../constants'; // Importando PAGES
 
 export const usePortfolioNavigation = () => {
   const router = useRouter();
@@ -14,8 +14,9 @@ export const usePortfolioNavigation = () => {
   };
 
   const navigateToPage = (page: Page) => {
-    // Helper to map Page enum to path defined in constants (e.g., 'Início' -> '/')
-    const path = PORTFOLIO_ITEMS.find(p => p.name === page)?.path || `/${page.toLowerCase().replace(/\s/g, '-')}`;
+    // Busca o caminho correto na constante PAGES
+    const navLink = PAGES.find(p => p.name === page);
+    const path = navLink ? navLink.path : '/'; // Fallback para '/'
     router.push(path);
   };
 

@@ -31,7 +31,7 @@ const ValueCard: React.FC<{title: string, description: string, icon: React.React
     </div>
 );
 
-const About: React.FC = () => {
+const QuemSomos: React.FC = () => {
   const scrollProgress = useScrollProgress();
   const { navigateToPage } = usePortfolioNavigation();
 
@@ -128,5 +128,5 @@ const About: React.FC = () => {
   );
 };
 
-About.displayName = Page.About;
-export default About;
+QuemSomos.displayName = Page.About;
+export default QuemSomos;

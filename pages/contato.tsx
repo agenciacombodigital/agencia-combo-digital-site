@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { Page } from '../types'; // Importação adicionada
 
-const Contact: React.FC = () => {
+const Contato: React.FC = () => {
     const [status, setStatus] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -157,5 +157,5 @@ const Contact: React.FC = () => {
   );
 };
 
-Contact.displayName = Page.Contact;
-export default Contact;
+Contato.displayName = Page.Contact;
+export default Contato;

@@ -11,9 +11,9 @@ export const COLORS = {
 
 export const PAGES: NavLink[] = [
   { name: Page.Home, path: '/' },
-  { name: Page.About, path: '/about' },
+  { name: Page.About, path: '/quem-somos' }, // Updated path
   { name: Page.Portfolio, path: '/portfolio' },
-  { name: Page.Contact, path: '/contact' },
+  { name: Page.Contact, path: '/contato' }, // Updated path
 ];
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
