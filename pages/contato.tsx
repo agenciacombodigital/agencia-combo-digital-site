@@ -109,11 +109,10 @@ const Contato: React.FC = () => {
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-5 gap-16 bg-black/30 backdrop-blur-sm p-8 md:p-12 rounded-2xl border border-gray-800">
             <div className="md:col-span-2">
-                 <h2 className="text-3xl font-bold mb-6">Inicie uma Conversa</h2>
+                 <h2 className="text-3xl font-bold mb-6">Conecte sua marca ao futuro</h2>
                  <p className="text-gray-400 mb-8">
-                    Use o formulário para nos enviar uma mensagem ou conecte-se conosco através de nossos canais diretos. A vanguarda digital espera por você.
+                    Não estamos aqui para seguir tendências, estamos aqui para criá-las junto com você. Utilize o formulário ou nossos canais diretos para dar o primeiro passo rumo ao extraordinário.
                  </p>
-                 {/* Removido o bloco de email e telefone */}
                  <div className="flex space-x-6">
                     <SocialLink href="https://www.instagram.com/agenciacombodigital/" aria-label="Visite nosso perfil no Instagram">
                         <svg role="img" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
