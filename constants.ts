@@ -157,28 +157,34 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
 
 export const TESTIMONIALS = [
     {
-        quote: "A parceria com a Combo no projeto 'Testemunhas de Djonga' foi um divisor de águas. A identidade visual e a campanha de lançamento resultaram em uma comunidade com mais de 500 mil seguidores. Eles não seguem tendências, eles as criam.",
-        author: "Ana Souza",
-        title: "Diretora de Marketing - Djonga Corp",
-        imageUrl: "https://picsum.photos/seed/ana/100/100"
+        quote: "A Combo não entregou apenas marketing, entregou clareza estratégica. A consultoria reformulou nossa presença digital e o marketing trouxe leads qualificados que realmente fecham negócio. Deixamos de ser apenas mais um escritório para nos tornarmos referência em contabilidade consultiva.",
+        author: "Wagner Marcelo",
+        title: "CEO - Black Contábil",
+        imageUrl: "https://picsum.photos/seed/wagner-marcelo/100/100"
     },
     {
-        quote: "A campanha 'Dá um hut no Hexa' para a Pizza Hut foi executada com maestria. O conteúdo interativo e os motion graphics foram cruciais para alcançarmos mais de 2 milhões de impressões. Uma agência que realmente entende de engajamento.",
-        author: "Carlos Pereira",
-        title: "CMO - Pizza Hut Brasil",
-        imageUrl: "https://picsum.photos/seed/carlos/100/100"
+        quote: "Precisávamos de barulho e impacto para nossa startup, e a campanha da Combo foi ensurdecedora no melhor sentido. A criatividade deles conectou nossa tecnologia com o público de uma forma humana e viral. O resultado foi um salto imediato em downloads e reconhecimento de marca.",
+        author: "Everton Cruz",
+        title: "CEO - MoohTech",
+        imageUrl: "https://picsum.photos/seed/everton-cruz/100/100"
     },
     {
-        quote: "A equipe da Combo é o motor criativo que toda marca precisa. Eles transformaram nossa visão em uma realidade digital impactante, superando todas as metas.",
-        author: "Juliana V.",
-        title: "Chefe de Inovação - Quantum Dynamics",
-        imageUrl: "https://picsum.photos/seed/juliana/100/100"
+        quote: "A Combo entendeu a alma do Espaço Vip. As campanhas capturaram a elegância da nossa marca e trouxeram um fluxo constante de novas clientes para a loja. Eles transformaram seguidores em compradoras fiéis. É incrível ver o retorno sobre o investimento mês após mês.",
+        author: "Adriana Morais",
+        title: "Proprietária - Espaço Vip Cosméticos",
+        imageUrl: "https://picsum.photos/seed/adriana-morais/100/100"
     },
     {
-        quote: "Trabalhar com a Combo Digital elevou nosso jogo. A abordagem deles para UI/UX no nosso aplicativo móvel foi revolucionária, resultando em um engajamento recorde.",
-        author: "Marcos Andrade",
-        title: "CTO - Viajante Estelar App",
-        imageUrl: "https://picsum.photos/seed/marcos/100/100"
+        quote: "Eu tinha o trabalho, mas não tinha a 'cara'. A Combo criou um site que é uma verdadeira vitrine de luxo para minhas produções e definiu um posicionamento que me colocou em outro patamar no mercado. Hoje, minha marca pessoal fala por mim antes mesmo de eu entrar na sala.",
+        author: "Nuria Uliana",
+        title: "Produtora",
+        imageUrl: "https://picsum.photos/seed/nuria-uliana/100/100"
+    },
+    {
+        quote: "A otimização que a Combo implementou no nosso processo de busca foi revolucionária. O que levava horas agora é instantâneo. Eles não só desenvolveram um sistema impecável, mas entenderam nossa complexidade interna e entregaram uma solução que poupa tempo e gera inteligência comercial.",
+        author: "Katya Erdmann",
+        title: "Gerente Comercial - IQVIA",
+        imageUrl: "https://picsum.photos/seed/katya-erdmann/100/100"
     }
 ];
 
