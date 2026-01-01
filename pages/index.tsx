@@ -47,11 +47,11 @@ const Home: React.FC = () => {
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[70vh] bg-blue-600/10 blur-[120px] rounded-full mix-blend-screen"></div>
         </div>
 
-        {/* A Frase Principal com tipografia refinada */}
+        {/* A Frase Principal com o gradiente restaurado do print */}
         <div className="relative z-10 max-w-[90rem] mx-auto text-center">
           <h1 ref={titleRef} className="text-[12vw] md:text-[10vw] lg:text-[8.5rem] font-extrabold text-white tracking-[-0.06em] leading-[0.85] uppercase opacity-0">
             Nós não seguimos,<br />
-            <span className="text-transparent bg-clip-text bg-[linear-gradient(90deg,#3b82f6,#9333ea,#3b82f6)] animate-gradient-flow">
+            <span className="text-transparent bg-clip-text bg-[linear-gradient(90deg,#00a1ff,#fb5626,#fcc017,#00a1ff)] animate-gradient-flow">
               nós criamos.
             </span>
           </h1>
