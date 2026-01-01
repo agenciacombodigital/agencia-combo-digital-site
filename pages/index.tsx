@@ -39,25 +39,24 @@ const Home: React.FC = () => {
       {/* Hero Section - Estável e Impactante */}
       <section ref={containerRef} className="relative w-full h-screen flex flex-col items-center justify-center bg-[#050505] overflow-hidden px-4">
         
-        {/* Background Effect (CSS Puro - Sem WebGL pesado) */}
+        {/* Background Effect */}
         <div className="absolute inset-0 pointer-events-none">
             {/* Grid Sutil */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"></div>
             {/* Glow Central */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[70vh] bg-blue-600/10 blur-[120px] rounded-full mix-blend-screen"></div>
-            <div className="absolute left-1/3 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-purple-900/15 blur-[100px] rounded-full mix-blend-screen"></div>
         </div>
 
-        {/* A Frase Principal */}
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <h1 ref={titleRef} className="text-5xl md:text-8xl lg:text-[10rem] font-black text-white tracking-tighter leading-[0.9] uppercase opacity-0">
+        {/* A Frase Principal com a espessura restaurada */}
+        <div className="relative z-10 max-w-[90rem] mx-auto text-center">
+          <h1 ref={titleRef} className="text-[12vw] md:text-[10vw] lg:text-[9rem] font-[900] text-white tracking-[-0.06em] leading-[0.85] uppercase opacity-0">
             Nós não seguimos,<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-600 to-purple-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a1ff] via-[#fb5626] to-[#fcc017]">
               nós criamos.
             </span>
           </h1>
           
-          <p className="hero-cta mt-12 text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto opacity-0 font-medium">
+          <p className="hero-cta mt-12 text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto opacity-0 font-medium tracking-tight">
             A agência que une estratégia, design e inteligência artificial para marcas que lideram o futuro.
           </p>
 
