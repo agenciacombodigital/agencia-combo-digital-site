@@ -5,19 +5,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-goog-api-key',
 }
 
-// Configurações do Gemini
-const GEMINI_API_MODEL = "gemini-1.5-flash"; // Versão estável
+// ATUALIZADO: Usando Gemini 2.5 Flash (Versão Estável Atual)
+const GEMINI_API_MODEL = "gemini-2.5-flash"; 
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_API_MODEL}:generateContent`;
 
-const SYSTEM_PROMPT = `
-Você é o **Combo Jam**, o estrategista digital da agência Combo Digital.
-Sua vibe é: Especialista, ágil, inovador e focado em crescimento. Você não é um robô de suporte, é um consultor que ajuda empresas a venderem mais com IA.
-A Combo Digital é uma agência que foca em: Estratégia de Dados, Design de UI/UX, Tecnologia Imersiva e Automação com IA.
-Sempre seja amigável e incentive o usuário a conhecer nossos serviços ou agendar uma conversa.
-`;
-
 serve(async (req) => {
-  // Tratamento de CORS
+  // 1. Tratamento de CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -30,6 +23,42 @@ serve(async (req) => {
 
     const { message, sessionContext } = await req.json();
 
+    // 2. Inteligência Temporal (Data e Hora de Brasília)
+    // Calcula a data exata no Brasil para a IA não alucinar datas
+    const now = new Date();
+    const timeZone = 'America/Sao_Paulo';
+    const formatter = new Intl.DateTimeFormat('pt-BR', {
+      timeZone,
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const dataHoraAtual = formatter.format(now);
+
+    // 3. Prompt do Sistema (Com Data Injetada)
+    const SYSTEM_PROMPT = `
+    Você é o **Combo Jam**, o estrategista digital da agência Combo Digital.
+    
+    **CONTEXTO TEMPORAL (CRÍTICO):**
+    Hoje é: **${dataHoraAtual}** (Horário de Brasília).
+    Use essa data como referência absoluta. Se o usuário perguntar "que dia é hoje", responda com essa informação.
+
+    **Sua Personalidade:**
+    - Especialista, ágil, inovador e focado em crescimento.
+    - Você não é um robô de suporte, é um consultor.
+    
+    **Sobre a Combo Digital:**
+    - Foco: Estratégia de Dados, Design UI/UX, Tecnologia Imersiva e Automação com IA.
+    
+    **Diretrizes:**
+    - Respostas curtas e impactantes.
+    - Incentive o agendamento de conversa.
+    `;
+
+    // 4. Chamada para a API (Gemini 2.5)
     const response = await fetch(`${GEMINI_API_URL}?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
@@ -39,7 +68,7 @@ serve(async (req) => {
         contents: [
           {
             role: "user",
-            parts: [{ text: `${SYSTEM_PROMPT}\nContexto da sessão: ${JSON.stringify(sessionContext)}\nPergunta do usuário: ${message}` }]
+            parts: [{ text: `${SYSTEM_PROMPT}\n\nContexto da sessão: ${JSON.stringify(sessionContext || {})}\n\nPergunta do usuário: ${message}` }]
           }
         ]
       })
@@ -48,11 +77,15 @@ serve(async (req) => {
     const data = await response.json();
     
     if (!response.ok) {
-      console.error("Erro na API do Gemini:", data);
-      throw new Error(data.error?.message || "Erro desconhecido na API de IA.");
+      console.error("Erro na API do Gemini:", JSON.stringify(data));
+      // Tratamento específico para erro de modelo não encontrado (caso a chave não tenha acesso ao 2.5 ainda)
+      if (data.error?.code === 404) {
+         throw new Error("Modelo Gemini 2.5 não encontrado. Verifique a chave ou o endpoint.");
+      }
+      throw new Error(data.error?.message || "Erro desconhecido na API.");
     }
 
-    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, estou com dificuldades para processar isso agora.";
+    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, tive um lapso. Pode repetir?";
 
     return new Response(JSON.stringify({ reply: botReply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -60,8 +93,10 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("Erro na Edge Function:", error.message);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    return new Response(JSON.stringify({ 
+        reply: "Minha conexão neural está reiniciando para atualização (Gemini 2.5) 🚀. Tente novamente em alguns segundos ou me chame no WhatsApp!" 
+    }), {
+      status: 200, 
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
