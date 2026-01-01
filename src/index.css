@@ -1,0 +1,19 @@
+/* Base Styles */
+@import './styles/base/globals.css';
+@import './styles/base/animations.css';
+
+/* Page-Specific Styles */
+@import './styles/pages/home.css';
+@import './styles/pages/about.css';
+@import './styles/pages/portfolio.css';
+@import './styles/pages/contact.css';
+
+/* Component Styles */
+@import './styles/components/header.css';
+@import './styles/components/footer.css';
+@import './styles/components/featured-projects.css';
+@import './styles/components/testimonials.css';
+@import './styles/components/interactive-pillars.css';
+@import './styles/components/ai-services.css';
+@import './styles/components/interactive-timeline.css';
+@import './styles/components/chat.css';

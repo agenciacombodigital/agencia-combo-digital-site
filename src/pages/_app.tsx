@@ -9,14 +9,11 @@ import WhatsAppBubble from '@/components/WhatsAppBubble';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useState, useEffect } from 'react';
 
-// Note: In Next.js, we use the built-in router for navigation, 
-// so the custom routing logic from App.tsx is removed here.
-
 export default function App({ Component, pageProps }: AppProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2500); // Simulate loading time
+    const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -27,13 +24,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className="bg-black text-white min-h-screen font-manrope">
       <Head>
-        {/* Next.js handles most SEO via Head component in pages, but we keep global meta here */}
         <title>Combo Digital</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       
       <CustomCursor />
-      {/* Header now uses Next.js Link for navigation */}
       <Header /> 
       
       <main>
