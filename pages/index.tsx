@@ -1,114 +1,89 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import { gsap } from 'gsap';
 import { Page } from '../src/types';
 import AiServices from '../components/AiServices';
 import FeaturedProjects from '../components/FeaturedProjects';
 import Testimonials from '../components/Testimonials';
 import InteractivePillars from '../components/InteractivePillars';
-import MagneticButton from '../components/MagneticButton';
 import { usePortfolioNavigation } from '../hooks/usePortfolioNavigation';
-
-// Importação dinâmica para evitar erro de SSR com Three.js
-const HeroBackground = dynamic(() => import('../components/HeroBackground'), { 
-  ssr: false 
-});
 
 const Home: React.FC = () => {
   const { showPortfolioItem, navigateToPage } = usePortfolioNavigation();
-  const heroRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Entrance Animation
     const ctx = gsap.context(() => {
-      const chars = titleRef.current?.querySelectorAll('.char');
+      // Animação de entrada simples e elegante
+      gsap.fromTo(titleRef.current,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power4.out", delay: 0.2 }
+      );
       
-      const tl = gsap.timeline();
+      gsap.fromTo(".hero-cta",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power2.out", delay: 0.8 }
+      );
+    }, containerRef);
 
-      if (chars) {
-        tl.to(chars, {
-          y: '0%',
-          stagger: 0.05,
-          duration: 1.5,
-          ease: "expo.out",
-          delay: 0.5
-        });
-      }
-
-      tl.to([subtitleRef.current, ctaRef.current], {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out"
-      }, "-=1");
-    }, heroRef);
-
-    // Interactive Distortion (Mouse Follow)
-    const handleMouseMove = (e: MouseEvent) => {
-        const { clientX, clientY } = e;
-        const xPos = (clientX / window.innerWidth - 0.5) * 20;
-        const yPos = (clientY / window.innerHeight - 0.5) * 20;
-        
-        gsap.to(".massive-typography", {
-            x: xPos,
-            y: yPos,
-            duration: 1,
-            ease: "power2.out"
-        });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-        ctx.revert();
-        window.removeEventListener('mousemove', handleMouseMove);
-    };
+    return () => ctx.revert();
   }, []);
-
-  const splitText = (text: string) => {
-    return text.split('').map((char, i) => (
-      <span key={i} className="char">
-        {char === ' ' ? '\u00A0' : char}
-      </span>
-    ));
-  };
 
   return (
     <>
       <Head>
-        <title>Combo Digital — Além do Digital</title>
+        <title>Combo Digital — Nós Criamos.</title>
       </Head>
       
-      <section ref={heroRef} className="hero-massive-container">
-        <HeroBackground />
+      {/* Hero Section - Estável e Impactante */}
+      <section ref={containerRef} className="relative w-full h-screen flex flex-col items-center justify-center bg-[#050505] overflow-hidden px-4">
         
-        <div className="relative z-10 text-center flex flex-col items-center">
-          <h1 ref={titleRef} className="massive-typography">
-            <div className="massive-typography-row">
-                {splitText("COMBO")}
-            </div>
-          </h1>
-          
-          <div ref={subtitleRef} className="hero-subtitle px-6">
-            Estrategistas digitais criando experiências que não seguem tendências, elas as definem.
-          </div>
-
-          <div ref={ctaRef} className="magnetic-cta-wrap">
-            <MagneticButton 
-              className="w-48 h-48 md:w-56 md:h-56"
-              onClick={() => navigateToPage(Page.Portfolio)}
-            >
-              Projetos
-            </MagneticButton>
-          </div>
+        {/* Background Effect (CSS Puro - Sem WebGL pesado) */}
+        <div className="absolute inset-0 pointer-events-none">
+            {/* Grid Sutil */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+            {/* Glow Central */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[70vh] bg-blue-600/10 blur-[120px] rounded-full mix-blend-screen"></div>
+            <div className="absolute left-1/3 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-purple-900/15 blur-[100px] rounded-full mix-blend-screen"></div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 animate-bounce opacity-40">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+        {/* A Frase Principal */}
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
+          <h1 ref={titleRef} className="text-5xl md:text-8xl lg:text-[10rem] font-black text-white tracking-tighter leading-[0.9] uppercase opacity-0">
+            Nós não seguimos,<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-600 to-purple-600">
+              nós criamos.
+            </span>
+          </h1>
+          
+          <p className="hero-cta mt-12 text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto opacity-0 font-medium">
+            A agência que une estratégia, design e inteligência artificial para marcas que lideram o futuro.
+          </p>
+
+          <div className="hero-cta mt-12 flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0">
+            <button 
+                onClick={() => navigateToPage(Page.Contact)}
+                className="px-10 py-5 bg-white text-black text-lg font-bold rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl shadow-white/5"
+                data-cursor-pointer
+            >
+                Iniciar Projeto
+            </button>
+            <button 
+                onClick={() => navigateToPage(Page.Portfolio)}
+                className="px-10 py-5 border border-white/20 text-white text-lg font-bold rounded-full hover:bg-white/10 active:scale-95 transition-all duration-300"
+                data-cursor-pointer
+            >
+                Ver Cases
+            </button>
+          </div>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-20 hero-cta">
+            <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">
+                <div className="w-1 h-2 bg-white rounded-full animate-bounce"></div>
+            </div>
         </div>
       </section>
 
