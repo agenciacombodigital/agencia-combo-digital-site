@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useInView } from '../hooks/useInView';
-import { COLORS, TESTIMONIALS } from '../constants';
+import { COLORS, TESTIMONIALS } from '../src/constants';
 
 interface TestimonialProps {
     quote: string;
@@ -69,8 +69,8 @@ const Testimonials: React.FC = () => {
         const container = scrollContainerRef.current;
         if (container) {
             const scrollableWidth = container.scrollWidth - container.clientWidth;
-            setCanScrollLeft(container.scrollLeft > 5); // Buffer de 5px
-            setCanScrollRight(container.scrollLeft < scrollableWidth - 5); // Buffer de 5px
+            setCanScrollLeft(container.scrollLeft > 5);
+            setCanScrollRight(container.scrollLeft < scrollableWidth - 5);
         }
     };
 
@@ -86,9 +86,9 @@ const Testimonials: React.FC = () => {
 
     useEffect(() => {
         const container = scrollContainerRef.current;
-        checkScrollability(); // Checagem inicial
+        checkScrollability();
         container?.addEventListener('scroll', handleScroll, { passive: true });
-        window.addEventListener('resize', checkScrollability); // Checagem no redimensionamento da janela
+        window.addEventListener('resize', checkScrollability);
 
         return () => {
             container?.removeEventListener('scroll', handleScroll);
@@ -143,7 +143,6 @@ const Testimonials: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* Navigation Arrows */}
                     <button 
                         onClick={() => scroll('left')}
                         disabled={!canScrollLeft}

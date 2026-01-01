@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useInView } from '../hooks/useInView';
-import { COLORS } from '../constants';
+import { COLORS } from '../src/constants';
 
-// --- SVG Icons as Components ---
 const StrategyIcon = ({ inView }: { inView: boolean }) => (
     <svg className={`w-16 h-16 mb-6 ${inView ? 'animated-icon' : ''}`} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M32 52C43.0457 52 52 43.0457 52 32C52 20.9543 43.0457 12 32 12C20.9543 12 12 20.9543 12 32C12 43.0457 20.9543 52 32 52Z" stroke="url(#paint0_linear_strategy)" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
@@ -92,7 +91,7 @@ const InteractivePillars: React.FC = () => {
     return (
         <section ref={sectionRef} className="interactive-pillars-section py-24 bg-black relative overflow-hidden">
             <div className="container mx-auto px-6">
-                <h2 className="sr-only">Nossos Pilares de Atuação</h2> {/* H2 para acessibilidade */}
+                <h2 className="sr-only">Nossos Pilares de Atuação</h2>
                 <div className="grid md:grid-cols-3 gap-12">
                     {pillars.map((pillar, index) => (
                         <PillarCard key={index} pillar={pillar} />

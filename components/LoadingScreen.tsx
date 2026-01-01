@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLORS } from '../constants';
+import { COLORS } from '../src/constants';
 
 const LoadingScreen: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ const LoadingScreen: React.FC = () => {
           <img 
             src="/Logo-ComboDigitalV2.svg" 
             alt="Logo Combo Digital animado" 
-            className="w-24 h-24 animate-pulse" // Adicionando o logo e a animação de pulsação
+            className="w-24 h-24 animate-pulse"
             style={{ animationDuration: '2s', animationIterationCount: 'infinite' }}
           />
         </div>

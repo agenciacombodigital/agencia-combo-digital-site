@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { Page } from '../types';
-import { PAGES } from '../constants';
+import { Page } from '../src/types';
+import { PAGES } from '../src/constants';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -18,13 +17,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, currentPage, o
       role="dialog"
       aria-modal="true"
     >
-      {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       ></div>
 
-      {/* Menu Panel */}
       <nav
         className={`fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 shadow-2xl p-8 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         onClick={(e) => e.stopPropagation()}

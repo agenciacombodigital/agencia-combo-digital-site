@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useInView } from '../hooks/useInView';
-import { COLORS } from '../constants';
+import { COLORS } from '../src/constants';
 
 // --- Animated Section Wrapper ---
 const AnimatedSection: React.FC<{children: React.ReactNode; delay?: number}> = ({ children, delay = 0 }) => {

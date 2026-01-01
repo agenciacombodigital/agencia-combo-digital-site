@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { COLORS } from '../constants';
+import { COLORS } from '../src/constants';
 
 const CustomCursor: React.FC = () => {
-  // Refs para elementos DOM
   const cursorRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
 
-  // Refs para rastreamento de posição
   const targetX = useRef(0);
   const targetY = useRef(0);
   const currentX = useRef(0);
@@ -17,8 +15,7 @@ const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isPointer, setIsPointer] = useState(false);
 
-  // Fator de suavização (easing) para a fluidez
-  const easing = 0.3; // Aumentado de 0.15 para 0.3 para maior velocidade de resposta
+  const easing = 0.3;
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
@@ -42,15 +39,12 @@ const CustomCursor: React.FC = () => {
     document.addEventListener('mouseover', onMouseOver);
     document.addEventListener('mouseout', onMouseOut);
 
-    // Loop de animação para movimento suave
     let animationFrameId: number;
     
     const animate = () => {
-      // Interpolação de posição
       currentX.current += (targetX.current - currentX.current) * easing;
       currentY.current += (targetY.current - currentY.current) * easing;
 
-      // Atualiza o DOM diretamente usando transform3d para aceleração de GPU
       if (cursorRef.current) {
           cursorRef.current.style.transform = `translate3d(${currentX.current}px, ${currentY.current}px, 0) translate(-50%, -50%)`;
       }
@@ -61,7 +55,6 @@ const CustomCursor: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // Inicia o loop de animação
     animationFrameId = requestAnimationFrame(animate);
 
     return () => {
@@ -72,18 +65,15 @@ const CustomCursor: React.FC = () => {
     };
   }, []);
 
-  // Lógica de tamanho do cursor (isQuote removido)
   const cursorSize = isHovering ? 60 : 24;
   const dotSize = isPointer ? 0 : 8; 
 
   return (
     <>
-      {/* Outer Ring */}
       <div
         ref={cursorRef}
         className="fixed pointer-events-none z-[9999] transition-all duration-300 ease-out rounded-full flex items-center justify-center"
         style={{
-          // A posição é controlada pelo JS transform
           left: 0,
           top: 0,
           width: `${cursorSize}px`,
@@ -93,7 +83,6 @@ const CustomCursor: React.FC = () => {
           backgroundColor: 'transparent',
         }}
       />
-      {/* Inner Dot */}
       <div
         ref={dotRef}
         className="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100"

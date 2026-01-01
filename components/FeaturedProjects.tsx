@@ -1,12 +1,10 @@
 import React, { useRef } from 'react';
-import { Page, PortfolioItem } from '../types';
+import { Page, PortfolioItem } from '../src/types';
 import { useInView } from '../hooks/useInView';
-import { COLORS, PORTFOLIO_ITEMS } from '../constants';
-import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
+import { COLORS, PORTFOLIO_ITEMS } from '../src/constants';
+import { usePortfolioNavigation } from '../hooks/usePortfolioNavigation';
 
 interface FeaturedProjectsProps {
-    // setCurrentPage and showPortfolioItem are now handled by the hook, 
-    // but we keep the props for compatibility with the Home page structure before migration.
     setCurrentPage: (page: Page) => void;
     showPortfolioItem: (item: PortfolioItem) => void;
 }

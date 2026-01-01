@@ -1,15 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Page } from '../types';
-import { TIMELINE_EVENTS } from '../constants';
-import { usePortfolioNavigation } from '@/hooks/usePortfolioNavigation';
+import { Page } from '../src/types';
+import { TIMELINE_EVENTS } from '../src/constants';
+import { usePortfolioNavigation } from '../hooks/usePortfolioNavigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface InteractiveTimelineProps {
-  // setCurrentPage is no longer needed, replaced by hook
-}
+interface InteractiveTimelineProps {}
 
 const MagneticButton: React.FC<{ children: React.ReactNode; onClick: () => void; className?: string }> = ({ children, onClick, className }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +28,6 @@ const MagneticButton: React.FC<{ children: React.ReactNode; onClick: () => void;
       gsap.to(button, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
     };
 
-    // Apply effect only on devices that support hover
     const mediaQuery = window.matchMedia('(hover: hover)');
     if (mediaQuery.matches) {
         document.addEventListener('mousemove', handleMouseMove);
@@ -74,7 +71,7 @@ const InteractiveTimeline: React.FC<InteractiveTimelineProps> = () => {
         },
       });
 
-      items.forEach((item: any) => { // Corrigido aqui
+      items.forEach((item: any) => {
         gsap.to(item, {
           opacity: 1,
           y: 0,

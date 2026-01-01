@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Page } from '../types';
-import { PAGES } from '../constants';
+import { Page } from '../src/types';
+import { PAGES } from '../src/constants';
 import { useInView } from '../hooks/useInView';
 
-interface FooterProps {
-  // setCurrentPage is no longer needed for routing in Next.js
-}
+interface FooterProps {}
 
 const SocialLink: React.FC<{href: string, children: React.ReactNode, 'aria-label': string}> = ({ href, children, 'aria-label': ariaLabel }) => (
     <a href={href} target="_blank" rel="noopener noreferrer" className="footer-social-link" data-cursor-hover aria-label={ariaLabel}>
