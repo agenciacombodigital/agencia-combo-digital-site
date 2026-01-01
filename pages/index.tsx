@@ -1,51 +1,109 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
+import { gsap } from 'gsap';
 import { Page } from '../src/types';
 import AiServices from '../components/AiServices';
 import FeaturedProjects from '../components/FeaturedProjects';
 import Testimonials from '../components/Testimonials';
 import InteractivePillars from '../components/InteractivePillars';
+import HeroBackground from '../components/HeroBackground';
+import MagneticButton from '../components/MagneticButton';
 import { usePortfolioNavigation } from '../hooks/usePortfolioNavigation';
 
 const Home: React.FC = () => {
-  const heroRef = useRef<HTMLElement>(null);
   const { showPortfolioItem, navigateToPage } = usePortfolioNavigation();
+  const heroRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const { clientX, clientY } = e;
-        const { offsetWidth, offsetHeight } = heroRef.current;
-        const x = (clientX / offsetWidth) * 100;
-        const y = (clientY / offsetHeight) * 100;
-        heroRef.current.style.setProperty('--mouse-x', `${x}%`);
-        heroRef.current.style.setProperty('--mouse-y', `${y}%`);
+    // Entrance Animation
+    const ctx = gsap.context(() => {
+      const chars = titleRef.current?.querySelectorAll('.char');
+      
+      const tl = gsap.timeline();
+
+      if (chars) {
+        tl.to(chars, {
+          y: '0%',
+          stagger: 0.05,
+          duration: 1.5,
+          ease: "expo.out",
+          delay: 0.5
+        });
       }
+
+      tl.to([subtitleRef.current, ctaRef.current], {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out"
+      }, "-=1");
+    }, heroRef);
+
+    // Interactive Distortion (Mouse Follow)
+    const handleMouseMove = (e: MouseEvent) => {
+        const { clientX, clientY } = e;
+        const xPos = (clientX / window.innerWidth - 0.5) * 20;
+        const yPos = (clientY / window.innerHeight - 0.5) * 20;
+        
+        gsap.to(".massive-typography", {
+            x: xPos,
+            y: yPos,
+            duration: 1,
+            ease: "power2.out"
+        });
     };
+
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+        ctx.revert();
+        window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
+
+  const splitText = (text: string) => {
+    return text.split('').map((char, i) => (
+      <span key={i} className="char">
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
 
   return (
     <>
       <Head>
-        <title>Nós não seguimos, nós criamos — Combo Digital</title>
+        <title>Combo Digital — Além do Digital</title>
       </Head>
       
-      <section ref={heroRef} className="section-hero-combo">
-        <div className="hero-interactive-bg"></div>
-        <div className="text-center z-10 px-4">
-          <h1 className="text-5xl md:text-8xl font-bold uppercase tracking-tighter leading-none kinetic-title">
-            <span className="block">Nós não seguimos,</span>
-            <span className="block combo-gradient-text">nós criamos.</span>
+      <section ref={heroRef} className="hero-massive-container">
+        <HeroBackground />
+        
+        <div className="relative z-10 text-center flex flex-col items-center">
+          <h1 ref={titleRef} className="massive-typography">
+            <div className="massive-typography-row">
+                {splitText("COMBO")}
+            </div>
           </h1>
-          <button 
-            onClick={() => navigateToPage(Page.Home)} // Ajustado para exemplo, use a navegação correta conforme necessário
-            className="mt-10 px-8 py-4 text-white font-bold uppercase tracking-widest rounded-full glass-button" 
-            data-cursor-hover
+          
+          <div ref={subtitleRef} className="hero-subtitle px-6">
+            Estrategistas digitais criando experiências que não seguem tendências, elas as definem.
+          </div>
+
+          <div ref={ctaRef} className="magnetic-cta-wrap">
+            <MagneticButton 
+              className="w-48 h-48 md:w-56 md:h-56"
+              onClick={() => navigateToPage(Page.Portfolio)}
             >
-            Explore Nosso Trabalho
-          </button>
+              Projetos
+            </MagneticButton>
+          </div>
+        </div>
+
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 animate-bounce opacity-40">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
         </div>
       </section>
 

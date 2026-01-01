@@ -15,7 +15,7 @@ const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isPointer, setIsPointer] = useState(false);
 
-  const easing = 0.3;
+  const easing = 0.2;
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
@@ -65,33 +65,31 @@ const CustomCursor: React.FC = () => {
     };
   }, []);
 
-  const cursorSize = isHovering ? 60 : 24;
-  const dotSize = isPointer ? 0 : 8; 
+  const cursorSize = isHovering ? 80 : 20;
 
   return (
     <>
       <div
         ref={cursorRef}
-        className="fixed pointer-events-none z-[9999] transition-all duration-300 ease-out rounded-full flex items-center justify-center"
+        className="fixed pointer-events-none z-[9999] transition-all duration-300 ease-out rounded-full flex items-center justify-center mix-blend-difference"
         style={{
           left: 0,
           top: 0,
           width: `${cursorSize}px`,
           height: `${cursorSize}px`,
-          border: `2px solid ${isHovering ? COLORS.orange : COLORS.blue}`,
-          opacity: isHovering ? 0.5 : 1,
-          backgroundColor: 'transparent',
+          border: `1.5px solid ${COLORS.white}`,
+          opacity: isHovering ? 0.8 : 0.4,
+          backgroundColor: isHovering ? 'white' : 'transparent',
         }}
       />
       <div
         ref={dotRef}
-        className="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100"
+        className="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100 bg-white mix-blend-difference"
         style={{
           left: 0,
           top: 0,
-          width: `${dotSize}px`,
-          height: `${dotSize}px`,
-          backgroundColor: COLORS.white,
+          width: '6px',
+          height: '6px',
         }}
       />
     </>

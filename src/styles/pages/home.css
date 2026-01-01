@@ -1,63 +1,53 @@
-/* --- Hero Section --- */
-.section-hero-combo {
+/* --- Hero Section Refactor --- */
+.hero-massive-container {
   position: relative;
   height: 100vh;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-.hero-interactive-bg {
-  position: absolute;
-  inset: 0;
   background-color: #000;
-  z-index: 0;
-}
-.hero-interactive-bg::before {
-  content: '';
-  position: absolute;
-  inset: -50%; /* Make it larger to avoid hard edges */
-  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-    rgba(0, 161, 255, 0.2), 
-    rgba(251, 86, 38, 0.15) 25%, 
-    transparent 50%
-  );
-  animation: rotate-gradient 40s linear infinite;
 }
 
-.kinetic-title {
-  animation: text-focus-in 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+.massive-typography {
+  font-size: clamp(5rem, 18vw, 25rem);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+  mix-blend-mode: difference;
 }
 
-.kinetic-title span {
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: #a0a0a0;
+  max-width: 600px;
+  margin-top: 2rem;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.magnetic-cta-wrap {
+  margin-top: 4rem;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Character Stagger Animation */
+.char {
   display: inline-block;
-  animation: liquid-breathing 6s ease-in-out infinite;
+  transform: translateY(100%);
 }
 
-.kinetic-title .combo-gradient-text {
-  background-size: 200% auto;
-  animation: gradient-flow 10s linear infinite;
-}
-
-.glass-button {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.3s, border-color 0.3s;
-  transform-style: preserve-3d;
-}
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: perspective(1000px) rotateY(-5deg) rotateX(10deg) scale(1.1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
+.massive-typography-row {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
