@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"pages\\\\index.tsx -> ../components/HeroBackground\":{\"id\":\"pages\\\\index.tsx -> ../components/HeroBackground\",\"files\":[\"static/chunks/components_HeroBackground_tsx.js\"]}}"

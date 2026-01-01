@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { gsap } from 'gsap';
 import { Page } from '../src/types';
 import AiServices from '../components/AiServices';
 import FeaturedProjects from '../components/FeaturedProjects';
 import Testimonials from '../components/Testimonials';
 import InteractivePillars from '../components/InteractivePillars';
-import HeroBackground from '../components/HeroBackground';
 import MagneticButton from '../components/MagneticButton';
 import { usePortfolioNavigation } from '../hooks/usePortfolioNavigation';
+
+// Importação dinâmica para evitar erro de SSR com Three.js
+const HeroBackground = dynamic(() => import('../components/HeroBackground'), { 
+  ssr: false 
+});
 
 const Home: React.FC = () => {
   const { showPortfolioItem, navigateToPage } = usePortfolioNavigation();
