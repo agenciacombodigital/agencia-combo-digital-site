@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -20,11 +22,11 @@ const FluidBackground: React.FC = () => {
     if (!meshRef.current || !meshRef.current.material) return;
     
     const material = meshRef.current.material as THREE.ShaderMaterial;
-    material.uniforms.uTime.value = clock.getElapsedTime();
-    
-    // Suavização do movimento do mouse
-    material.uniforms.uMouse.value.x += (mouse.x * 0.5 + 0.5 - material.uniforms.uMouse.value.x) * 0.05;
-    material.uniforms.uMouse.value.y += (mouse.y * 0.5 + 0.5 - material.uniforms.uMouse.value.y) * 0.05;
+    if (material.uniforms) {
+      material.uniforms.uTime.value = clock.getElapsedTime();
+      material.uniforms.uMouse.value.x += (mouse.x * 0.5 + 0.5 - material.uniforms.uMouse.value.x) * 0.05;
+      material.uniforms.uMouse.value.y += (mouse.y * 0.5 + 0.5 - material.uniforms.uMouse.value.y) * 0.05;
+    }
   });
 
   const vertexShader = `
@@ -44,9 +46,9 @@ const FluidBackground: React.FC = () => {
       vec2 p = vUv;
       float d = distance(p, uMouse);
       
-      vec3 color1 = vec3(0.0, 0.39, 1.0); // Azul Combo
-      vec3 color2 = vec3(0.98, 0.34, 0.15); // Laranja Combo
-      vec3 color3 = vec3(0.0, 0.0, 0.0); // Preto
+      vec3 color1 = vec3(0.0, 0.39, 1.0); 
+      vec3 color2 = vec3(0.98, 0.34, 0.15); 
+      vec3 color3 = vec3(0.0, 0.0, 0.0); 
 
       float noiseVal = sin(p.x * 8.0 + uTime * 0.3) * cos(p.y * 8.0 + uTime * 0.3);
       float finalNoise = smoothstep(0.3, 0.7, d + noiseVal * 0.15);
@@ -85,7 +87,7 @@ const HeroBackground: React.FC = () => {
       <Canvas 
         camera={{ position: [0, 0, 1] }}
         gl={{ antialias: false, alpha: true }}
-        dpr={[1, 2]} // Otimização de performance
+        dpr={[1, 2]}
       >
         <FluidBackground />
       </Canvas>
