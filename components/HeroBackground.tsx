@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -17,10 +17,14 @@ const FluidBackground: React.FC = () => {
 
   useFrame((state) => {
     const { clock, mouse } = state;
-    meshRef.current.material.uniforms.uTime.value = clock.getElapsedTime();
-    // Lerp mouse position for smoothness
-    meshRef.current.material.uniforms.uMouse.value.x += (mouse.x * 0.5 + 0.5 - meshRef.current.material.uniforms.uMouse.value.x) * 0.05;
-    meshRef.current.material.uniforms.uMouse.value.y += (mouse.y * 0.5 + 0.5 - meshRef.current.material.uniforms.uMouse.value.y) * 0.05;
+    if (!meshRef.current || !meshRef.current.material) return;
+    
+    const material = meshRef.current.material as THREE.ShaderMaterial;
+    material.uniforms.uTime.value = clock.getElapsedTime();
+    
+    // Suavização do movimento do mouse
+    material.uniforms.uMouse.value.x += (mouse.x * 0.5 + 0.5 - material.uniforms.uMouse.value.x) * 0.05;
+    material.uniforms.uMouse.value.y += (mouse.y * 0.5 + 0.5 - material.uniforms.uMouse.value.y) * 0.05;
   });
 
   const vertexShader = `
@@ -33,37 +37,30 @@ const FluidBackground: React.FC = () => {
 
   const fragmentShader = `
     uniform float uTime;
-    uniform vec2 uResolution;
     uniform vec2 uMouse;
     varying vec2 vUv;
-
-    // Simple noise function
-    float noise(vec2 p) {
-      return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-    }
 
     void main() {
       vec2 p = vUv;
       float d = distance(p, uMouse);
       
-      // Fluid colors based on palette
-      vec3 color1 = vec3(0.0, 0.63, 1.0); // Blue
-      vec3 color2 = vec3(0.98, 0.34, 0.15); // Orange
-      vec3 color3 = vec3(0.0, 0.0, 0.0); // Black
+      vec3 color1 = vec3(0.0, 0.39, 1.0); // Azul Combo
+      vec3 color2 = vec3(0.98, 0.34, 0.15); // Laranja Combo
+      vec3 color3 = vec3(0.0, 0.0, 0.0); // Preto
 
-      float noiseVal = sin(p.x * 10.0 + uTime * 0.5) * cos(p.y * 10.0 + uTime * 0.5);
-      float finalNoise = smoothstep(0.4, 0.6, d + noiseVal * 0.1);
+      float noiseVal = sin(p.x * 8.0 + uTime * 0.3) * cos(p.y * 8.0 + uTime * 0.3);
+      float finalNoise = smoothstep(0.3, 0.7, d + noiseVal * 0.15);
       
       vec3 finalColor = mix(color1, color2, finalNoise);
-      finalColor = mix(finalColor, color3, smoothstep(0.3, 0.9, d));
+      finalColor = mix(finalColor, color3, smoothstep(0.2, 1.0, d));
 
-      gl_FragColor = vec4(finalColor * 0.15, 1.0);
+      gl_FragColor = vec4(finalColor * 0.12, 1.0);
     }
   `;
 
   return (
     <mesh ref={meshRef} scale={[viewport.width, viewport.height, 1]}>
-      <planeGeometry args={[1, 1, 32, 32]} />
+      <planeGeometry args={[1, 1, 16, 16]} />
       <shaderMaterial
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
@@ -75,9 +72,21 @@ const FluidBackground: React.FC = () => {
 };
 
 const HeroBackground: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div className="absolute inset-0 bg-black" />;
+
   return (
     <div className="absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 0, 1] }}>
+      <Canvas 
+        camera={{ position: [0, 0, 1] }}
+        gl={{ antialias: false, alpha: true }}
+        dpr={[1, 2]} // Otimização de performance
+      >
         <FluidBackground />
       </Canvas>
     </div>
