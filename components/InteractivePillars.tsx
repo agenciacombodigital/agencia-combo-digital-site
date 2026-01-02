@@ -91,7 +91,7 @@ const InteractivePillars: React.FC = () => {
     return (
         <section ref={sectionRef} className="interactive-pillars-section py-24 bg-black relative overflow-hidden">
             <div className="container mx-auto px-6">
-                <h2 className="sr-only">Nossos Pilares de Atuação</h2>
+                <h2 className="text-center text-4xl font-bold text-white mb-16">Nossos Pilares de Atuação</h2>
                 <div className="grid md:grid-cols-3 gap-12">
                     {pillars.map((pillar, index) => (
                         <PillarCard key={index} pillar={pillar} />

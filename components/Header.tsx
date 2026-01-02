@@ -47,23 +47,23 @@ const Header: React.FC<HeaderProps> = () => {
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
             ></div>
-            <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(true)} aria-label="Abrir menu" aria-expanded={isOpen} data-cursor-pointer>
-                <Menu />
+            <button id="mobile-menu-toggle" className="mobile-menu-toggle" onClick={() => setIsOpen(true)} aria-label="Abrir menu de navegação" aria-expanded={isOpen} data-cursor-pointer>
+                <Menu aria-hidden="true" />
             </button>
 
             <nav className={`sidebar-nav ${isOpen ? 'is-open' : ''}`} aria-label="Navegação principal">
                 <div className="mobile-menu-header md:hidden flex justify-between items-center w-full p-4 pb-8">
-                    <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar menu">
-                        <X className="h-8 w-8" />
+                    <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white" data-cursor-pointer aria-label="Fechar menu de navegação">
+                        <X className="h-8 w-8" aria-hidden="true" />
                     </button>
                     <Link 
                         href="/" 
                         onClick={handleNavigate}
                         className="block"
                         data-cursor-pointer
-                        aria-label="Página Inicial"
+                        aria-label="Combo Digital - Home"
                     >
-                        <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
+                        <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital - Agência de Marketing e IA" className="w-10 h-10" />
                     </Link>
                 </div>
 
@@ -71,9 +71,9 @@ const Header: React.FC<HeaderProps> = () => {
                     href="/" 
                     className="hidden md:block mb-20 px-[15px] py-[12px] md:p-0"
                     data-cursor-pointer
-                    aria-label="Página Inicial"
+                    aria-label="Combo Digital - Home"
                 >
-                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-10 h-10" />
+                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital - Agência de Marketing e IA" className="w-10 h-10" />
                 </Link>
                 <ul>
                     {PAGES.map(page => {
@@ -91,7 +91,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     className={isActive ? 'active' : ''}
                                     data-cursor-pointer
                                 >
-                                    {IconComponent && <IconComponent />}
+                                    {IconComponent && <IconComponent aria-hidden="true" />}
                                 </Link>
                             </li>
                         );

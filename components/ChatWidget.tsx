@@ -35,22 +35,34 @@ const ChatWidget: React.FC = () => {
     text: `${getSaudacao()}! Sou o Combo Jam, seja bem-vindo à Combo Digital! Em que posso te ajudar?` 
   };
 
+  const [shouldLoadChat, setShouldLoadChat] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([initialWelcomeMessage]); // Inicializa com a saudação automática
+  const [messages, setMessages] = useState<Message[]>([initialWelcomeMessage]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  // Removendo setSessionContext, pois o estado não é atualizado após a inicialização
   const [sessionContext] = useState<SessionContext>({ 
-    greeted: true, // Já saudado pelo cliente
+    greeted: true,
     timeOfDay: initialTimeOfDay 
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Lazy Load Logic: Carrega 3.5s depois do site abrir
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldLoadChat(true);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+    if (isOpen) {
+        scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   const toggleChat = () => setIsOpen(!isOpen);
 
@@ -74,7 +86,7 @@ const ChatWidget: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: messageToSend, sessionContext }), // Envia sessionContext
+          body: JSON.stringify({ message: messageToSend, sessionContext }),
         }
       );
 
@@ -88,7 +100,6 @@ const ChatWidget: React.FC = () => {
       const botResponseText = data.reply || "Desculpe, não consegui processar sua resposta.";
       const botResponse: Message = { sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botResponse]);
-      // sessionContext.greeted já é true, não precisa mudar aqui.
 
     } catch (error) {
       console.error("Erro ao se comunicar com o assistente:", error);
@@ -98,6 +109,8 @@ const ChatWidget: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (!shouldLoadChat) return null;
 
   return (
     <>

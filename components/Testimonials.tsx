@@ -23,7 +23,12 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ quote, author, title, ima
                 {quote}
             </p>
             <div className="mt-auto z-10 relative flex items-center gap-4">
-                <img src={imageUrl} alt={`Foto de ${author}`} className="w-16 h-16 rounded-full object-cover border-2 border-gray-700 grayscale transition-all duration-300 group-hover:grayscale-0" />
+                <img 
+                    src={imageUrl} 
+                    alt={`Foto de ${author} - ${title}`} 
+                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-700 grayscale transition-all duration-300 group-hover:grayscale-0" 
+                    loading="lazy"
+                />
                 <div>
                     <h4 className="text-white font-bold text-lg" style={{color: COLORS.yellow}}>{author}</h4>
                     <p className="text-gray-400 text-sm">{title}</p>

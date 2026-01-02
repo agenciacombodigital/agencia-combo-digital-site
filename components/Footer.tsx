@@ -57,7 +57,7 @@ const Footer: React.FC<FooterProps> = () => {
         <div className="container mx-auto px-6 py-20 footer-content">
             <AnimatedSection>
                 <div className="text-center mb-16">
-                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital" className="w-16 h-16 mx-auto mb-6 footer-logo" />
+                    <img src="/Logo-ComboDigitalV2.svg" alt="Logo Combo Digital - Agência de Marketing e IA" className="w-16 h-16 mx-auto mb-6 footer-logo" />
                     <p className="text-2xl font-medium text-gray-300 max-w-2xl mx-auto">
                         Construindo o futuro digital com criatividade e tecnologia.
                     </p>
@@ -74,8 +74,8 @@ const Footer: React.FC<FooterProps> = () => {
 
                     <div className="flex justify-center order-first md:order-none">
                         <div className="flex space-x-6">
-                            <SocialLink href="https://www.instagram.com/agenciacombodigital/" aria-label="Visite nosso Instagram">
-                                <svg role="img" viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <SocialLink href="https://www.instagram.com/agenciacombodigital/" aria-label="Siga-nos no Instagram">
+                                <svg role="img" viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                     <title>Instagram</title>
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -101,6 +101,7 @@ const Footer: React.FC<FooterProps> = () => {
                         onClick={navigateToContact}
                         className="footer-cta-button text-white font-bold py-4 px-10 rounded-full"
                         data-cursor-hover
+                        aria-label="Ir para a página de contato"
                     >
                         Entre em Contato
                     </button>

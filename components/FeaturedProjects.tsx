@@ -47,11 +47,16 @@ const ProjectCard: React.FC<{ project: PortfolioItem; onClick: () => void }> = (
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onClick()}
-            aria-label={`Ver projeto ${project.title}`}
+            aria-label={`Ver detalhes do projeto: ${project.title}`}
             data-cursor-hover
         >
             <div ref={cardRef} className="projeto-card-content">
-                <img src={project.imageUrl} alt={`Capa do projeto ${project.title}`} className="projeto-card-bg" />
+                <img 
+                    src={project.imageUrl} 
+                    alt={`Case de Sucesso: ${project.title} - ${project.category}`} 
+                    className="projeto-card-bg" 
+                    loading="lazy"
+                />
                 <div className="projeto-card-overlay"></div>
                 <div className="projeto-card-text-wrapper">
                     <span className="block text-sm font-semibold mb-2" style={{color: COLORS.yellow}}>{project.category}</span>
@@ -100,8 +105,9 @@ const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ showPortfolioItem }
                             onClick={() => navigateToPage(Page.Portfolio)}
                             className="inline-flex items-center text-white border border-gray-700 px-8 py-3 rounded-full font-semibold transition-colors duration-300 hover:bg-white hover:text-black"
                             data-cursor-hover
+                            aria-label="Ver todos os projetos do portfólio"
                         >
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="mr-2"><path d="M1.5 13.5H13.5V1.5H7.5V0H13.5C14.325 0 15 0.675 15 1.5V13.5C15 14.325 14.325 15 13.5 15H1.5C0.675 15 0 14.325 0 13.5V7.5H1.5V13.5ZM3 0V1.5H11.595L0 13.095L1.4025 14.5L13.5 2.4075V12H15V0H3Z" fill="currentColor"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="mr-2" aria-hidden="true"><path d="M1.5 13.5H13.5V1.5H7.5V0H13.5C14.325 0 15 0.675 15 1.5V13.5C15 14.325 14.325 15 13.5 15H1.5C0.675 15 0 14.325 0 13.5V7.5H1.5V13.5ZM3 0V1.5H11.595L0 13.095L1.4025 14.5L13.5 2.4075V12H15V0H3Z" fill="currentColor"/></svg>
                             Ver Todos os Projetos
                         </button>
                     </div>
