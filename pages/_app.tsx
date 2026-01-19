@@ -1,7 +1,6 @@
 import '../src/index.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import CustomCursor from '../components/CustomCursor';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ChatWidget from '../components/ChatWidget';
@@ -64,7 +63,6 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       
-      <CustomCursor />
       <Header /> 
       
       <main>
